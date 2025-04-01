@@ -1,0 +1,24 @@
+.navigation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 0;
+    background-color: #f1f5f9;
+    border-radius: 12px;
+  }
+  
+  .nav-btn {
+    padding: 10px 16px;
+    background-color: white;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .nav-btn:hover {
+    background-color: #e1ecf4;
+  }
+  

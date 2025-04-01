@@ -1,0 +1,60 @@
+.approval-container {
+    padding: 24px;
+    background: linear-gradient(to right, #f2f7fa, #e9f1f4);
+    border-radius: 12px;
+  }
+  
+  .approval-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  
+  .approval-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    flex: 1 1 240px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+  }
+  
+  .approval-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .approval-card h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .status {
+    margin-top: 8px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  
+  .status-대기 {
+    background: #fff7e6;
+    color: #f0ad4e;
+  }
+  
+  .status-진행 {
+    background: #e6f7ff;
+    color: #5bc0de;
+  }
+  
+  .status-완료 {
+    background: #e6ffed;
+    color: #5cb85c;
+  }
+  
+  .date {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #777;
+  }
+  
