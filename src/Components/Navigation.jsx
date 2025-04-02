@@ -9,11 +9,12 @@ const Navigation = () => {
 
   return (
     <nav className="navigation">
-      {navItems.map((item, index) => (
-        <button key={index} className="nav-btn" onClick={() => setSelectedMenu(item)}>
-          {item}
-        </button>
-      ))}
+        <button className="nav-btn">전자결제</button>
+        <button className="nav-btn">게시판</button>
+        <button className="nav-btn">인사관리</button>
+        <button className="nav-btn">메신저</button>
+        <button className="nav-btn">예약</button>
+        <button className="nav-btn">일정</button>
     </nav>
   );
 };

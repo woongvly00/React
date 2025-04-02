@@ -1,21 +1,17 @@
 import React from 'react';
-import Header from './Components/Header';
-import Navigation from './Components/Navigation';
-import MainContent from './Components/MainContent';
-import Sidebar from './Components/Sidebar';
 import './App.css';
+import Mainpage from './pages/MainPage/Mainpage.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
+
+
   return (
     <div className="app-container">
-      <div className="app-wrapper">
-        <Header />
-        <Navigation />
-        <div className="content-wrapper">
-          <Sidebar />
-          <MainContent />
-        </div>
-      </div>
+        <Routes>
+          {/* <Route path="/mainpage" element={<Index />}></Route> path / 로 수정하고 아래 path 에 mainpage 넣어야함*/}
+          <Route path="/" element={<Mainpage/>}></Route>
+        </Routes>
     </div>
   );
 };
