@@ -8,12 +8,10 @@ const Home = () => {
 
 
     return (
-      <div className={style.container}>
-        <div>
-            <Navigation />
-        </div>
-        <div className={style.contents}>
-          <div className={style.sidebar}>
+      <div className={style.homeContainer}>
+        <Navigation />
+        <div className={style.homeContents}>
+          <div className={style.homeSidebar}>
             <Sidebar />
           </div>
           <div>

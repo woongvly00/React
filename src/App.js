@@ -18,9 +18,9 @@ const App = () => {
       <div className="app-container">
         <Routes>
           <Route path='/' element={<Index />}></Route>
-          <Route element={<RouteFilter/>}>
+          {/* <Route element={<RouteFilter/>}> */}
             <Route path='/mainpage/*' element={<Mainpage/>}></Route>
-          </Route>
+          {/* </Route> */}
         </Routes>
       </div>
   );

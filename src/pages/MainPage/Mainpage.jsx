@@ -11,7 +11,7 @@ const Mainpage = () => {
   return (
     <div className={style.container}>
         <Header />
-        <div className={style.contents}>
+        <div className={style.mainpageContents}>
         <Routes>
           <Route path="/" element={<Home/>}></Route>
           <Route path="maincontent/*" element={<MainContent/>}></Route>

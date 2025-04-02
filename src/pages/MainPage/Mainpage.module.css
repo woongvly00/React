@@ -1,15 +1,13 @@
-body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #e0ebee, #ffffff);
-  }
+
   
   .container {
     width: 100%;
-    min-height: 100vh;
     display: flex;
-    justify-content: center;
     background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
     flex-direction: column;
+  }
+
+  .mainpageContents{
+    width: 100%;
   }
   
