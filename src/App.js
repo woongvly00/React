@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Index from './pages/Index/Index';
+import MainPage from './pages/MainPage/MainPage';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import useAuthStore from '../src/store/useAuthStore';
@@ -19,7 +20,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Index />}></Route>
           <Route element={<RouteFilter/>}>
-            <Route path='/mainpage' element={<Mainpage/>}></Route>
+            <Route path='/mainpage/*' element={<Mainpage/>}></Route>
           </Route>
         </Routes>
       </div>
