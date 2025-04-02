@@ -27,3 +27,30 @@
     color: #333;
   }
   
+
+  -------------------
+  .sidebar {
+    padding: 20px;
+  }
+  
+  .sidebar-item {
+    margin-bottom: 10px;
+  }
+  
+  button {
+    margin-right: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .current-activity {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+  }
+  
