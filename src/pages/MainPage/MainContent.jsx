@@ -1,6 +1,8 @@
 import React from 'react';
-import useMenuStore from '../store/useMenuStore';
-import ApprovalMain from '../pages/Approval/ApprovalMain'
+import useMenuStore from '../../store/useMenuStore.js';
+import ApprovalMain from '../Approval/ApprovalMain';
+import ScheduleMain from '../Schedule/ScheduleMain';
+import style from './MainContent.module.css';
 
 const MainContent = () => {
   const selectedMenu = useMenuStore((state) => state.selectedMenu);
@@ -18,39 +20,27 @@ const MainContent = () => {
       case '예약':
         return <div>📅 자원예약 기능 준비 중입니다.</div>;
       case '일정':
-        return <div>📆 일정관리 기능 준비 중입니다.</div>;
+        return <ScheduleMain/>;
       default:
         return <div>🏠 기본 화면입니다.</div>;
     }
   };
 
   return (
-    <main style={styles.main}>
-      <h2 style={styles.title}>{selectedMenu}</h2>
-      <div style={styles.card}>
-        {renderContent()}
-      </div>
-    </main>
+
+    <div className={style.container}>
+  <main style={style.main}>
+        <h2 style={style.title}>{selectedMenu}</h2>
+        <div style={style.card}>
+          {renderContent()}
+        </div>
+      </main>
+
+    </div>
+    
   );
 };
 
-const styles = {
-  main: {
-    flex: 1,
-    padding: '20px',
-  },
-  title: {
-    marginBottom: '20px',
-    fontSize: '22px',
-    fontWeight: 600,
-  },
-  card: {
-    background: 'rgba(255,255,255,0.6)',
-    borderRadius: '12px',
-    padding: '20px',
-    backdropFilter: 'blur(10px)',
-    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-  },
-};
+
 
 export default MainContent;
