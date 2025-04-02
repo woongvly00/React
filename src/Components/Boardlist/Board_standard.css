@@ -205,6 +205,11 @@
 
 
 
+
+
+
+
+
   /* 스탠다드 글쓰기 입력창 */
   .container2 {
     width: 80%; 
@@ -353,6 +358,8 @@ input[type="file"] {
 
 
 
+
+
 /* 댓글부분 */
 .comment2 {
   padding: 10px;
@@ -416,4 +423,9 @@ input[type="file"] {
  margin:20px;
   width:80%;
   height:80px;
+}
+
+.commentwrite2 >button {
+  width:20px;
+  height:20px;
 }
