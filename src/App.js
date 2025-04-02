@@ -4,7 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import useAuthStore from '../src/store/useAuthStore';
 import RouteFilter from './Components/filters/RouteFilter';
-import Mainpage from './pages/MainPage/Mainpage.jsx';
+import Mainpage from './pages/MainPage/MainPage.jsx';
 
 
 const App = () => {
