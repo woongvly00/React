@@ -10,7 +10,20 @@ const Boardlist = () => {
 
     return (
 
-        <table className="cotainer">
+
+
+        <div className="SBoardContainer">
+        <div>
+          ur li 쓰세요
+        </div>
+        <div className="subcontainer">
+  
+  
+  
+          <h2>📄 예약</h2>
+          <div className="approval-grid"></div>
+      
+          <table className="cotainer">
 
 
 
@@ -151,7 +164,16 @@ const Boardlist = () => {
                 </div>
             </div>
 
-        </table>
+            </table>
+  
+  
+  
+  
+        </div>
+      </div>
+
+
+       
 
 
 
