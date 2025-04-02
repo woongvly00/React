@@ -1,0 +1,19 @@
+.main {
+    flex: 1;
+    padding: 20px;
+  }
+
+
+  .title {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+.card {
+    background: rgba(255,255,255,0.6);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter:blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
