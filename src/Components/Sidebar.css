@@ -1,20 +1,9 @@
+.container{
+  width: 500px;
+}
+
 .sidebar {
-    flex: 1;
-    min-width: 280px;
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.05);
-  }
-  
-  .sidebar-item {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #333;
-  }
-  .sidebar {
-    flex: 1;
-    min-width: 280px;
+    width: 100%;
     background: white;
     border-radius: 12px;
     padding: 20px;
@@ -29,13 +18,7 @@
   
 
   -------------------
-  .sidebar {
-    padding: 20px;
-  }
-  
-  .sidebar-item {
-    margin-bottom: 10px;
-  }
+ 
   
   button {
     margin-right: 10px;

@@ -1,10 +1,13 @@
 .approval-container {
-    padding: 24px;
-    background: linear-gradient(to right, #f2f7fa, #e9f1f4);
+    
     border-radius: 12px;
+    display: flex;
+    flex-direction: row;
   }
   
   .approval-grid {
+    padding: 24px;
+    background: linear-gradient(to right, #f2f7fa, #e9f1f4);
     display: flex;
     flex-wrap: wrap;
     gap: 16px;

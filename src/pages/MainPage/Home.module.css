@@ -1,0 +1,16 @@
+.homeContainer{
+    width:100%;
+}
+
+.homeSidebar{
+    width:300px;
+    height:100%;
+}
+
+.homeContents{
+    width:100%;
+    padding-left: 100px;
+    padding-right: 100px;
+    margin-top: 20px;;
+    display:flex;
+}
