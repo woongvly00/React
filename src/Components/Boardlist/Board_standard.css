@@ -1,0 +1,419 @@
+
+
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-collapse: collapse;
+   
+  }
+  
+  .container th {
+    background-color: #f4f4f4;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+
+  .gaysipan {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+
+    text-align: left;       
+    padding: 15px;          
+    font-size: 1.5rem;         
+    font-weight: bold;          
+    
+    border-radius: 8px;         
+  }
+  
+ 
+  .navi {
+   
+    color: #333;               
+    text-align: left;           
+    font-size: 1.2rem;          
+    font-weight: normal;        
+    border: 1px solid #ccc;    
+    padding: 10px;              
+  }
+  
+ 
+  
+ 
+  .navi th {
+    padding-top:30px;
+    padding-left: 10px;  
+   
+  }
+
+
+  
+  
+  
+  hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+   
+  }
+  
+ 
+  .list {
+    width: 100%;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    border-collapse: collapse;
+  }
+  
+  .list th, .list td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+  
+  .list th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .list td {
+    background-color: #fafafa;
+  }
+  
+  .list tr:nth-child(even) td {
+    background-color: #f9f9f9;
+  }
+  
+  .list tr:hover td {
+    background-color: #f0f0f0;
+  }
+
+
+
+
+
+
+
+
+/* 자유/동아리 게시판 */
+
+*{box-sizing: border-box;}
+
+
+.navi {
+   
+  color: #333;               
+  text-align: left;           
+  font-size: 1.2rem;          
+  font-weight: normal;        
+  border: 1px solid #ccc;    
+  padding: 10px;              
+}
+
+
+.navi th {
+  padding-top:30px;
+  padding-left: 10px;  
+ 
+}
+
+.navibelow{
+  display: flex;
+}
+
+.navibelowleft{
+  flex:9;
+}
+
+.navibelowright{
+  flex:1;
+}
+
+  .freelist {
+    display: flex;
+    width: 100%;  
+    padding: 20px;
+    border:1px solid black;
+  }
+  
+  .photo {
+    flex: 1.5;  
+    background-color: #f0f0f0;  
+    margin-right: 20px;  
+    border:1px solid black;
+  }
+  
+  .write {
+    flex: 4.5;  
+    display: flex;
+    flex-direction: column;
+    border:1px solid black;
+  }
+  
+  .title {
+    flex: 1;  
+    padding: 10px;
+    border:1px solid black;
+  }
+  
+  .content {
+    flex: 3;  
+    padding: 10px;
+    border:1px solid black;
+  }
+  
+  .writeElse {
+    flex: 2;  
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border:1px solid black;
+  }
+  
+  .writer,
+  .good,
+  .look,
+  .writeTime {
+    flex: 1;  
+    background-color: #dcdcdc;  
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border:1px solid black;
+  }
+  
+  .writer {
+    background-color: #ffcccb;
+  }
+  
+  .good {
+    background-color: #c6e7d0;
+  }
+  
+  .look {
+    background-color: #cce7f7;
+  }
+  
+  .writeTime {
+    background-color: #e7e7e7;
+  }
+
+
+
+
+  /* 스탠다드 글쓰기 입력창 */
+  .container2 {
+    width: 80%; 
+    margin: 0 auto; 
+    padding: 20px;
+}
+
+
+.signcancel {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px; 
+    margin-bottom: 20px;
+}
+
+
+.signcancel >button{
+  padding: 10px 20px;
+  background-color: lightcoral; 
+  color: white; 
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
+
+.gasyselect {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.gasywrite {
+    font-weight: bold; 
+    flex:1;
+}
+
+.selects{
+  flex:6;
+}
+
+.selects select {
+    width: 40%; 
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+ 
+
+.titlewrite {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px;
+}
+
+.title2 {
+    font-weight: bold; 
+    flex:1;
+}
+
+.text2 {
+  flex:5;
+}
+.text2 input {
+    width: 95%; 
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc; 
+}
+
+
+.checkbox2 label {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    font-size:15px;
+}
+
+
+
+.file {
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    padding: 10px;
+}
+
+
+.contentwrite {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.good2{
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
+
+.thumbs-button {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 5px 20px; 
+  border: 2px solid lightcoral; 
+  border-radius: 50%; 
+  width: 50px;
+  height: 50px; 
+  background-color: white; 
+  cursor: pointer; 
+  font-size: 24px; 
+  text-align: center; 
+  margin:10px;
+}
+
+.finger{
+  font-size: 18px; 
+  flex:1;
+  margin-bottom:0px;
+}
+
+.plus{
+  flex:1;
+  margin-top:0px;
+  font-size: 15px;
+}
+
+.list2{
+  position: relative;
+  
+}
+
+.list2>button{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
+
+/* 댓글부분 */
+.comment2 {
+  padding: 10px;
+  border-bottom: 1px solid #ccc; 
+  margin-bottom: 15px; 
+}
+
+ 
+.comment3 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
+.commentwrite {
+  display: flex; 
+  align-items: flex-start;
+}
+
+
+.profile {
+  width: 50px; 
+  height: 50px; 
+  background-color: lightgray; 
+  border-radius: 50%; 
+  margin-right: 15px; 
+}
+
+
+.userwrite {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+}
+
+.nametime {
+  display: flex; 
+  width: 100%; 
+  justify-content: space-between; 
+}
+
+.name3 {
+  flex: 4; 
+  text-align: left; 
+}
+
+.writetime3 {
+  flex: 1; 
+  text-align: right; 
+  margin-left: auto; 
+}
+
+
+.content4 {
+  font-size: 16px;
+  color: #666; 
+  margin-top: 5px; 
+}
+
+.commentwrite2 input{
+ margin:20px;
+  width:80%;
+  height:80px;
+}
