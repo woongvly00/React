@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import useAuthStore from '../src/store/useAuthStore';
 import RouteFilter from './Components/filters/RouteFilter';
+import Mainpage from './pages/MainPage/Mainpage.jsx';
 
 
 const App = () => {
@@ -14,26 +15,14 @@ const App = () => {
   }, []);
 
   return (
-    <Router>
       <div className="app-container">
         <Routes>
           <Route path='/' element={<Index />}></Route>
-          
           <Route element={<RouteFilter/>}>
-            {/* <Route path='/mainpage' element={<Mainpage/>}></Route> */}
-    
-
-
+            <Route path='/mainpage' element={<Mainpage/>}></Route>
           </Route>
         </Routes>
       </div>
-    </Router>
-    // <Routes>
-
-    //     <Route path="/" element={<Index />}></Route>
-    //     {/* <Route path="/mainpage" element={<Mainpage />}></Route> */}
-    //   </div>
-    // </Routes>
   );
 };
 
