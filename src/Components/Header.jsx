@@ -12,6 +12,7 @@ const Header = () => {
         <button className="login-button">로그인</button>
       </div>
     </header>
+    
   );
 };
 

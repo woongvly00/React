@@ -10,13 +10,11 @@ const Mainpage = () => {
 
   return (
     <div className={style.container}>
-        <div className={style.header}>
-            <Header />
-        </div>
+        <Header />
         <div className={style.contents}>
         <Routes>
-          <Route path="" element={<Home/>}></Route>
-          <Route path="" element={<MainContent/>}></Route>
+          <Route path="/" element={<Home/>}></Route>
+          <Route path="maincontent/*" element={<MainContent/>}></Route>
         </Routes>
         </div>
     </div>

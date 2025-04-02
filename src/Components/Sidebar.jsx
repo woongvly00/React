@@ -57,31 +57,27 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar">
-      <h3>근무체크</h3>
-      <div className="sidebar-item">🕒 출근시간: 09:00</div>
-      <div className="sidebar-item">🏠 퇴근시간: 18:00</div>
-      <div className="sidebar-item">📅 일정 없음</div>
-
-      <button onClick={handleCheckIn} disabled={isCheckedIn || isCheckedOut}>출근</button>
-
-      <button onClick={handleCheckOut} disabled={!isCheckedIn || isCheckedOut}>퇴근</button>
-
-      <button onClick={handleOuting} disabled={!isCheckedIn || isCheckedOut}>외근</button>
-
-      <button onClick={handleWork} disabled={!isCheckedIn || isCheckedOut}>업무</button>
-
-      <div className="current-activity">
-        {currentActivity && <p>현재 활동: {currentActivity}</p>}
+    <div className="container">
+      <div className="sidebar">
+        <h3>근무체크</h3>
+        <div className="sidebar-item">🕒 출근시간: 09:00</div>
+        <div className="sidebar-item">🏠 퇴근시간: 18:00</div>
+        <div className="sidebar-item">📅 일정 없음</div>
+        <button onClick={handleCheckIn} disabled={isCheckedIn || isCheckedOut}>출근</button>
+        <button onClick={handleCheckOut} disabled={!isCheckedIn || isCheckedOut}>퇴근</button>
+        <button onClick={handleOuting} disabled={!isCheckedIn || isCheckedOut}>외근</button>
+        <button onClick={handleWork} disabled={!isCheckedIn || isCheckedOut}>업무</button>
+        <div className="current-activity">
+          {currentActivity && <p>현재 활동: {currentActivity}</p>}
+        </div>
+        <div className="time-logs">
+          {checkInTime && <p>출근 시간: {new Date(checkInTime).toLocaleString()}</p>}
+          {checkOutTime && <p>퇴근 시간: {new Date(checkOutTime).toLocaleString()}</p>}
+          {outingTime && <p>외근 시간: {new Date(outingTime).toLocaleString()}</p>}
+          {workTime && <p>업무 시간: {new Date(workTime).toLocaleString()}</p>}
+        </div>
       </div>
-
-      <div className="time-logs">
-        {checkInTime && <p>출근 시간: {new Date(checkInTime).toLocaleString()}</p>}
-        {checkOutTime && <p>퇴근 시간: {new Date(checkOutTime).toLocaleString()}</p>}
-        {outingTime && <p>외근 시간: {new Date(outingTime).toLocaleString()}</p>}
-        {workTime && <p>업무 시간: {new Date(workTime).toLocaleString()}</p>}
-      </div>
-    </aside>
+    </div>
   );
 };
 

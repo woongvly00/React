@@ -11,15 +11,21 @@ const approvalData = [
 const ApprovalMain = () => {
   return (
     <div className="approval-container">
-      <h2>📄 전자결재</h2>
-      <div className="approval-grid">
-        {approvalData.map((doc, idx) => (
-          <div className="approval-card" key={idx}>
-            <h3>{doc.title}</h3>
-            <p className={`status status-${doc.status}`}>{doc.status}</p>
-            <p className="date">{doc.date}</p>
-          </div>
-        ))}
+      <div>
+        사이드컬럼
+      </div>
+      <div>
+        <h2>📄 전자결재</h2>
+        <div className="approval-grid">
+          
+          {approvalData.map((doc, idx) => (
+            <div className="approval-card" key={idx}>
+              <h3>{doc.title}</h3>
+              <p className={`status status-${doc.status}`}>{doc.status}</p>
+              <p className="date">{doc.date}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
