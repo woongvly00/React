@@ -1,6 +1,6 @@
 import React from 'react';
 import useMenuStore from '../store/useMenuStore';
-import ApprovalMain from './Approval/ApprovalMain'
+import ApprovalMain from '../pages/Approval/ApprovalMain'
 
 const MainContent = () => {
   const selectedMenu = useMenuStore((state) => state.selectedMenu);
