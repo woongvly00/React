@@ -6,8 +6,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainContent from './MainContent.jsx';
 
 const Mainpage = () => {
-
-
   return (
     <div className={style.container}>
         <Header />

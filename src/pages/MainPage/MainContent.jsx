@@ -14,6 +14,12 @@ const MainContent = () => {
     <div className={style.container}>
       <div className={style.sidebar}>
         <Link to="/mainpage/maincontent/approval"><i className="fa-solid fa-house"></i></Link>
+        <Link to="/mainpage/maincontent/approval"></Link><i className="fa-solid fa-calendar"></i>
+        <Link to="/mainpage/maincontent/approval"></Link><i className="fa-solid fa-inbox"></i>
+        <Link to="/mainpage/maincontent/approval"></Link>
+        <Link to="/mainpage/maincontent/approval"></Link>
+        <Link to="/mainpage/maincontent/approval"></Link>
+
       </div>
       <div>
         <Routes>
