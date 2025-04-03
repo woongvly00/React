@@ -2,6 +2,7 @@ import React from 'react';
 import ApprovalMain from '../Approval/ApprovalMain';
 import ScheduleMain from '../Schedule/ScheduleMain';
 import Boardlist from '../Boardlist/Board_standard';
+import Sidelist from '../../Components/Sidelist';
 import ReserveMain from '../Reserve/ReserveMain';
 import style from './MainContent.module.css';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
@@ -21,6 +22,7 @@ const MainContent = () => {
         <Link to="/mainpage/maincontent/reserve"><i className="fa-solid fa-2x fa-clock" style={{ color: '#FFFFFF', margin: '20px 0'  }}></i></Link>
         <Link to="/mainpage/maincontent/msg"><i className="fa-solid fa-2x fa-comment" style={{ color: '#FFFFFF', margin: '20px 0'  }}></i></Link>
       </div>
+      <Sidelist/>
       <div className={style.mainContents}>
         <Routes>
           <Route path="approval" element={<ApprovalMain/>}></Route>

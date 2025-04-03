@@ -15,11 +15,7 @@ const Index = () => {
 
     const handleLogin = (e)=>{
         e.preventDefault();
-        axios.post("http://10.10.55.69/auth/login", login).then(resp=>{
-            //
-            // 시큐어 코드
-            // 펑션
-            // 디코드 라이브러리
+        axios.post("http://10.10.55.22/auth/login", login).then(resp=>{
             setAuth(resp.data, login.id);
             navi("/mainpage");
         }).catch((error) => {
