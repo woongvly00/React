@@ -1,7 +1,7 @@
 import React from 'react';
 import ApprovalMain from '../Approval/ApprovalMain';
 import ScheduleMain from '../Schedule/ScheduleMain';
-import BoardMain from '../Boardlist/BoardMain';
+import Boardlist from '../Boardlist/Board_standard';
 import ReserveMain from '../Reserve/ReserveMain';
 import style from './MainContent.module.css';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
@@ -25,8 +25,7 @@ const MainContent = () => {
         <Routes>
           <Route path="approval" element={<ApprovalMain/>}></Route>
           <Route path="schedule" element={<ScheduleMain/>}></Route>
-
-          <Route path="board" element={<BoardMain/>}></Route>
+          <Route path="board" element={<Boardlist/>}></Route>
           <Route path="hr" element={<ApprovalMain/>}></Route>
           <Route path="reserve" element={<ReserveMain/>}></Route>
           <Route path="msg" element={<ApprovalMain/>}></Route>
