@@ -19,7 +19,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Index />}></Route>
           {/* <Route element={<RouteFilter/>}> */}
-            <Route path='/mainpage' element={<Mainpage/>}></Route>
+            <Route path='/mainpage/*' element={<Mainpage/>}></Route>
           {/* </Route> */}
         </Routes>
       </div>

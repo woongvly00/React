@@ -6,17 +6,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainContent from './MainContent.jsx';
 
 const Mainpage = () => {
-
-
   return (
     <div className={style.container}>
-        <div className={style.header}>
-            <Header />
-        </div>
-        <div className={style.contents}>
+        <Header />
+        <div className={style.mainpageContents}>
         <Routes>
-          <Route path="" element={<Home/>}></Route>
-          <Route path="" element={<MainContent/>}></Route>
+          <Route path="/" element={<Home/>}></Route>
+          <Route path="maincontent/*" element={<MainContent/>}></Route>
         </Routes>
         </div>
     </div>

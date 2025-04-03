@@ -9,9 +9,10 @@ const Header = () => {
         <button>🔍</button>
         <button>💬</button>
         <button>⚙️</button>
-        <button className="login-button">로그인</button>
+        <button><i className="fa-solid fa-circle-user"></i></button>
       </div>
     </header>
+    
   );
 };
 

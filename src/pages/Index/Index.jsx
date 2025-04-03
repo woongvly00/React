@@ -15,9 +15,9 @@ const Index = () => {
 
     const handleLogin = (e)=>{
         e.preventDefault();
-        axios.post("http://10.10.59.69/auth.login", login).then(resp=>{
+        axios.post("http://10.10.55.69/auth/login", login).then(resp=>{
             setAuth(resp.data, login.id);
-            navi("/MainContent");
+            navi("/mainpage");
         }).catch((error) => {
             console.error("로그인 실패", error);
         });
@@ -35,12 +35,12 @@ const Index = () => {
                 <form className={style.form}>
                     <div className={style.inputGroup}>
                         <input type="text" placeholder="아이디" name='id'
-                        className={style.input} onClick={handleChange} required/>
+                        className={style.input} onChange={handleChange} required/>
                     </div>
 
                     <div className={style.inputGroup}>
                         <input type="password" placeholder="비밀번호" name='pw'
-                            className={style.input} onClick={handleChange} required/>
+                            className={style.input} onChange={handleChange} required/>
                     </div>
                     <button type="submit" onClick={handleLogin} className={style.loginButton}>로그인</button>
                 </form>
