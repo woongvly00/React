@@ -1,0 +1,73 @@
+.main{
+    overflow-y: auto;
+    height: 540px;
+   
+ 
+}
+
+.myprofile{
+ 
+    height: 90px;
+    display: flex;
+    
+}
+
+.imgbox{
+   
+    width: 30%;
+}
+
+.img{
+    border: 1px solid black;
+    border-radius: 40%;
+    width: 50px;
+    height: 50px;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.namebox{
+   
+    width: 70%;
+}
+
+.name{
+
+   
+    margin-top: 28px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+p{  
+    padding-left: 10px;
+    padding-top: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    margin: auto;
+    color:grey;
+}
+
+.another{
+   
+    height: 60px;
+    display: flex;
+}
+
+.anotherimg{
+    border: 1px solid black;
+    border-radius: 40%;
+    width: 40px;
+    height: 40px;
+    margin-top: 10px;
+    margin-left: 20px;
+
+}
+
+.anothername{
+    margin-top: 18px;
+    font-weight: bold;
+    cursor: default;
+    
+}
+

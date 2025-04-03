@@ -29,6 +29,7 @@ const Index = () => {
             console.log(decodedToken);
 
             setAuth(token, login.id, per_function,per_secure );
+
             navi("/mainpage");
         }).catch((error) => {
             console.error("로그인 실패", error);
