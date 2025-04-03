@@ -58,6 +58,8 @@ const Sidebar = () => {
 
   return (
     <div className="container">
+
+
       <div className="sidebar">
         <h3>근무체크</h3>
         <div className="sidebar-item">🕒 출근시간: 09:00</div>
@@ -77,6 +79,21 @@ const Sidebar = () => {
           {workTime && <p>업무 시간: {new Date(workTime).toLocaleString()}</p>}
         </div>
       </div>
+
+      <div className="sidebar">
+        <h3>전자결제</h3>
+        <div>내용 알아서 추가해주세요!</div>
+      </div>
+
+
+      <div className="sidebar">
+        <h3>일정</h3>
+        <div>내용 알아서 추가해주세요!</div>
+        
+      </div>
+
+
+
     </div>
   );
 };

@@ -1,4 +1,7 @@
-
+.SBoardContainer{
+  display: flex;
+  flex-direction: row;
+}
 
 
 .container {

@@ -1,16 +1,29 @@
-import './Board_standard.css';
+import './BoardMain.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import React from 'react';
 
 
 
 
-const Boardlist = () => {
+const BoardMain = () => {
 
 
     return (
 
-        <table className="cotainer">
+
+
+        <div className="SBoardContainer">
+        <div>
+          ur li 쓰세요
+        </div>
+        <div className="subcontainer">
+  
+  
+  
+          <h2>📄 예약</h2>
+          <div className="approval-grid"></div>
+      
+          <table className="cotainer">
 
 
 
@@ -151,7 +164,16 @@ const Boardlist = () => {
                 </div>
             </div>
 
-        </table>
+            </table>
+  
+  
+  
+  
+        </div>
+      </div>
+
+
+       
 
 
 
@@ -159,4 +181,4 @@ const Boardlist = () => {
     );
 };
 
-export default Boardlist;
+export default BoardMain;
