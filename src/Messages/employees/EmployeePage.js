@@ -8,11 +8,12 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react
 function EmployeePage({openChat}) {
     const [employees,setEmployees] = useState([]);
     const [groupedEmployees, setGroupedEmployees] = useState({});
+    const [groupedRooms, setGroupedRooms ] = useState({});
     const Navigate = useNavigate();
     
     //사원목록 가져오기
     useEffect(() => {
-        axios.get("http://10.5.5.2/Employee").then((resp) => {
+        axios.get("http://10.5.5.2/Employee/SelectEmp").then((resp) => {
           setEmployees(resp.data);
           console.log(resp.data);
     
@@ -26,7 +27,11 @@ function EmployeePage({openChat}) {
           }, {});
     
           setGroupedEmployees(grouped);
-        });
+
+          return axios.get("http://10.5.5.2/Employee/SelectGroupId");
+        }).then((groupIdResp)=>{
+            console.log(groupIdResp.data);
+        })
       }, []);
 
      

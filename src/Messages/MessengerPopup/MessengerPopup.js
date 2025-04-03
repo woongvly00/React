@@ -17,6 +17,9 @@ function MessengerPopup({ onClose }) {
     const [currentChat, setCurrentChat] = useState(initialChat);
 
     const openChatWindow = (name) => {
+      // axios.put("http://10.5.5.2/Employee/insert").then((resp)=>{
+        
+      //  })
       setCurrentChat(name);
       navigate(`/messenger/chatting?chat=${name}`);
   };
