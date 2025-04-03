@@ -23,6 +23,7 @@ export default function DemoApp() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedInfo, setSelectedInfo] = useState(null)
   const [newTitle, setNewTitle] = useState('')
+  const [newContent, setNewContent] = useState('')
 
   function handleDateSelect(selectInfo) {
 
@@ -65,10 +66,41 @@ export default function DemoApp() {
   
 
 
-  // 이벤트 삭제 기능
+  // 이벤트 클릭시
   function handleEventClick(clickInfo) {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
+    const event = clickInfo.event;
+    const mouseX = clickInfo.jsEvent.clientX; 
+    const mouseY = clickInfo.jsEvent.clientY - 90; 
+    this.setState({ selectedEvent: event, mouseX, mouseY });
+
+    showEventDetails = () => {
+        const { selectedEvent, mouseX, mouseY } = this.state;
+        if (selectedEvent && mouseX !== undefined && mouseY !== undefined) {
+            console.log("Start Date:", selectedEvent.start);
+            console.log("End Date:", selectedEvent.end);
+            
+            const startDate = selectedEvent.start && format(selectedEvent.start, 'HH:mm', { timeZone: 'Asia/Seoul' });
+            const endDate = selectedEvent.end && format(selectedEvent.end, 'HH:mm', { timeZone: 'Asia/Seoul' });
+            
+            return (
+                <div className="event-details" style={{ position: 'absolute', left: mouseX, top: mouseY }}>
+                    <h2>{selectedEvent.title}</h2>
+                    <div className='time_place'>
+                    <p>장소: {selectedEvent.extendedProps && selectedEvent.extendedProps.location}</p> 
+                    <p>시간: {startDate} ~ {endDate}</p>
+                    </div>
+                    <button onClick={() => this.setState({ selectedEvent: null, mouseX: undefined, mouseY: undefined })}>닫기</button>
+                </div>
+            );
+        }
+        return null;
+
+  }
+
+  // 삭제 버튼 클릭시 삭제
+  function CancleBtnClick(deleteEvent) {
+    if (window.confirm(`Are you sure you want to delete the event '${deleteEvent.event.title}'`)) {
+      deleteEvent.event.remove()
     }
   }
 
@@ -129,11 +161,26 @@ export default function DemoApp() {
             />
             </div>
             <div>
-              <input
-                type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                placeholder="일정 제목 입력"
+              시작
+              <input type="date"></input>
+              <select>
+                <option>오전 09:00</option>
+              </select>
+            </div>
+            <div>
+              종료
+              <input type="date"></input>
+              <select>
+                <option>오전 09:00</option>
+              </select>
+            </div>
+            <div>
+              일정 내용
+              <textarea
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
+                placeholder="내용 입력"
+                style={{ width: '300px;', height: '150px', resize: 'none' }}
               />
             </div>
             <div className={calenderStyle['modal-buttons']}>
@@ -162,14 +209,7 @@ function renderEventContent(eventInfo) {
 function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
   return (
     <div className='demo-app-sidebar'>
-      <div className='demo-app-sidebar-section'>
-        <h2>Instructions</h2>
-        <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
-        </ul>
-      </div>
+      
       <div className='demo-app-sidebar-section'>
         <label>
           <input
@@ -201,4 +241,5 @@ function SidebarEvent({ event }) {
       <i>{event.title}</i>
     </li>
   )
+}
 }

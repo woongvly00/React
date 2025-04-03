@@ -15,12 +15,11 @@
   /* 모달 컨테이너: 박스 */
   .modal-container {
     background: white;
-    padding: 2rem;
+    padding:50px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    min-width: 300px;
-    max-width: 90%;
-    text-align: center;
+    min-width: 500px;
+    min-height: 600px;
   }
   
   /* 버튼 영역 */
