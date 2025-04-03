@@ -8,7 +8,7 @@ const events = [
   { title: 'Meeting', start: new Date() }
 ]
 
-export function ScheduleMain() {
+export default function ScheduleMain() {
   return (
     <div className={style.ScheContainer}>
       <div className={style.sideList}>
@@ -65,4 +65,4 @@ function renderEventContent(eventInfo) {
 //   );
 // };
 
-export default ScheduleMain;
+// export default ScheduleMain;
