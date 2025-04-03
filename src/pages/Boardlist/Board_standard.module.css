@@ -1,6 +1,10 @@
 .SBoardContainer{
   display: flex;
   flex-direction: row;
+  justify-content: center;  
+  align-items: center;
+  flex-wrap: wrap;      
+
 }
 
 
@@ -551,4 +555,13 @@ flex:5;
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+
+
+
+
+
+.mainContents{
+  width:100%;
 }

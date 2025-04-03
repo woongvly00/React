@@ -4,86 +4,54 @@ const Board_free = () => {
     return (
 
 
-        <div className="boardContainer">
-            <div>
-                사이드컬럼
-            </div>
-            <div className={style.subcontainer}>
+        <div className="SBoardContainer">
 
-                <table className="cotainer">
-                    
-
-                    <tr className="gaysipan">
-                        <th>📝게시판</th>
-                    </tr>
-                    <tr className="navi">
-                        <th>자유 게시판, 동아리 게시판</th>
-                
-                    </tr>
-                    <hr></hr>
-                    <tr className="list">
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                            <th>조회수</th>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                        </tr>
-                        <tr>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                        </tr>
-                    </tr>
-                    {/* <tr className="navi2">
-                        <th>자유게시판</th>
-                    </tr>
-                    <hr></hr>
-                    <tr className="list">
-
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                            <th>조회수</th>
-                            <th>추천</th>
-                        </tr>
-                        <tr>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>👍+n</td>
-
-                        </tr>
-                        <tr>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>글</td>
-                            <td>👍+n</td>
-                        </tr>
+            <div className="subcontainer">
 
 
-                    </tr> */}
-                </table>
+
+                <h2>📄 게시판</h2>
+                <div className="approval-grid"></div>
+
+
+                <div className="navi">
+                    <th>자유 게시판, 동아리 게시판</th>
+
+                </div>
+                <div className="navibelow">
+                    <div className="navibelowleft"><input type="text" placeholder="🔍게시글 입력"></input></div>
+                    <div className="navibelowright">
+                        <select>
+                            <option value="option1">최신순</option>
+                            <option value="option2">조회순</option>
+                            <option value="option3">추천순</option>
+                        </select>
+                    </div>
+                </div>
+                <hr></hr>
+                <div className="freelist">
+
+                    <div className="photo">
+
+                        사진
+                    </div>
+                    <div className="write">
+                        <div className="title">제목</div>
+                        <div className="content">내용</div>
+                        <div className="writeElse">
+                            <div className="writer">작성자</div>
+                            <div className="good">추천수</div>
+                            <div className="look">조회수</div>
+                            <div className="writeTime">현재 시간</div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
-       
-                
+
+
 
 
     );
