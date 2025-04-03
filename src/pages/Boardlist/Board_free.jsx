@@ -10,10 +10,6 @@ const Board_free = () => {
             </div>
             <div className={style.subcontainer}>
 
-
-
-                <h2>📄 예약</h2>
-                <div className="approval-grid"></div>
                 <table className="cotainer">
                     
 

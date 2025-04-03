@@ -12,7 +12,7 @@ const Home = () => {
         <Navigation />
         <div className={style.homeContents}>
           <div className={style.homeSidebar}>
-            <Sidebar />
+            <Sidebar/>
           </div>
           <div>
             <div>공지</div>
