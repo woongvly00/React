@@ -17,7 +17,7 @@ const Sidebar = () => {
     const currentTime = new Date().toISOString();
 
     try {
-      const response = await axios.post("http://10.10.55.69/work/checkIn", { checkInTime: currentTime });
+      const response = await axios.post("http://10.10.55.22/work/checkIn", { checkInTime: currentTime });
       console.log('서버 응답:', response.data);
       setIsCheckedIn(true);
       setCurrentActivity("출근");
