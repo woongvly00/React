@@ -15,7 +15,7 @@ const Index = () => {
 
     const handleLogin = (e)=>{
         e.preventDefault();
-        axios.post("http://10.10.55.69/auth/login", login).then(resp=>{
+        axios.post("http://10.10.55.22/auth/login", login).then(resp=>{
             setAuth(resp.data, login.id);
             navi("/mainpage");
         }).catch((error) => {
