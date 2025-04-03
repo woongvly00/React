@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import DashboardCard from './DashboardCard';
 import DashboardList from './DashboardList';
+import { useNavigate } from 'react-router-dom'; // ✅ 추가
+import ApprovalForm from './ApprovalForm';
 
 const ApprovalDashboard = () => {
   const [waitCount, setWaitCount] = useState(0);
   const [draftCount, setDraftCount] = useState(0);
   const [documents, setDocuments] = useState([]);
+
+  const navigate = useNavigate(); // ✅ useNavigate 훅 정의
+
+  const goToForm = () => {
+    navigate('/approval/form'); // ✅ ApprovalForm 으로 이동
+  };
 
   useEffect(() => {
     // TODO: 실제 API 연동 필요
@@ -25,6 +33,11 @@ const ApprovalDashboard = () => {
         <DashboardCard title="작성중인 문서" count={draftCount} />
       </div>
       <DashboardList items={documents} />
+
+      {/* ✅ 이동 버튼 */}
+      <div style={{ marginTop: '2rem' }}>
+        <ApprovalForm/>
+      </div>
     </div>
   );
 };
