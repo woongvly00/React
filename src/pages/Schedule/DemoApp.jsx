@@ -4,8 +4,9 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId } from './event-utils'
+import { createEventId } from './event-utils'
 import calenderStyle from './DemoApp.module.css';
+import caxios from '../../Utils/caxios';
 
 export default function DemoApp() {
 
@@ -19,11 +20,12 @@ export default function DemoApp() {
   }
 
 
-  // 캘린더의 날짜 드래그/클릭 하면 새로운 일정 추가
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedInfo, setSelectedInfo] = useState(null)
-  const [newTitle, setNewTitle] = useState('')
-  const [newContent, setNewContent] = useState('')
+  // 캘린더 주요 기능
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedInfo, setSelectedInfo] = useState(null);
+  const [newTitle, setNewTitle] = useState('');
+  const [newContent, setNewContent] = useState('');
+  const [event, setEvent] = useState({});
 
   function handleDateSelect(selectInfo) {
 
@@ -50,13 +52,31 @@ export default function DemoApp() {
     calendarApi.unselect()
   
     if (newTitle) {
-      calendarApi.addEvent({
+      const newEvent = {
         id: createEventId(),
         title: newTitle,
         start: selectedInfo.startStr,
         end: selectedInfo.endStr,
         allDay: selectedInfo.allDay
-      })
+      };
+
+      calendarApi.addEvent(newEvent);
+
+      const handleInput = (e) => {
+        const { name, value } = e.target;
+        setEvent((prev) => ({ ...prev, [name]: value }));
+    }
+      
+
+      caxios.post(`/schedule`, event).then(resp => {
+      }).catch((error)=>{
+          if(error.response.status == 404){
+              alert("등록에 실패했습니다.");
+          }
+        })
+
+        setCurrentEvents((prev) => [...prev, newEvent]);
+
     }
   
     // 초기화
@@ -148,13 +168,14 @@ export default function DemoApp() {
             <div>
               캘린더
               <select>
-                <option>캘린더 list 넣기</option>
+                <option name="s_category_id" value="111" onChange={handleInput}>캘린더 list 넣기</option>
               </select>
             </div>
             <div>
               일정 제목
             <input
               type="text"
+              name="schedule_title"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
               placeholder="일정 제목 입력"
@@ -163,23 +184,25 @@ export default function DemoApp() {
             </div>
             <div>
               시작
-              <input type="date"></input>
+              <input name="start_date" type="date"  onChange={handleInput}></input>
               <select>
-                <option>오전 09:00</option>
+                <option name="start_date" value="2025-04-03T09:00">오전 09:00</option>
               </select>
             </div>
             <div>
               종료
-              <input type="date"></input>
+              <input name="end_date" type="date" onChange={handleInput}></input>
               <select>
-                <option>오전 09:00</option>
+                <option name="end_date" value="2025-04-03T10:00">오전 10:00</option>
               </select>
             </div>
             <div>
               일정 내용
               <textarea
+                name="schedule_content"
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
+                
                 placeholder="내용 입력"
                 style={{ width: '300px;', height: '150px', resize: 'none' }}
               />
