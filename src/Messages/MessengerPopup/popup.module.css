@@ -1,0 +1,84 @@
+
+.popupStyle  {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 400px;
+    
+    background-Color: white;
+    border: 1px solid black;
+    border-Radius: 10px;
+    box-Shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+
+.bigPopupStyle {
+    width: 80vw;
+    height: 80vh;
+    position: fixed;
+    top: 10%;
+    left: 10%;
+}
+
+.headerStyle{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #007aff;
+    color: white;
+    font-Weight: bold;
+  }
+
+  .controlButton {
+    background: transparent;
+    border: none;
+    color: white;
+    font-Size: 16px;
+    cursor: pointer;
+  }
+
+.contentStyle  {
+    display: flex;
+    height: 540px;
+    border: 1px solid black;
+    
+
+  }
+
+.left{
+    width: 20%;
+    height: 100%;
+    border-right: 1px solid black;
+}
+
+.empbtn{
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    margin-top: 30px;
+    margin-left: 15px;
+    border: none;
+    background-color: #66B2FF;
+    color: white;
+    font-Weight: bold;
+    cursor: pointer;
+}
+
+.chatbtn{
+    margin-top: 20px;
+    margin-left: 15px;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    border: none;
+    background-color: #66B2FF;
+    color: white;
+    font-Weight: bold;
+    cursor: pointer;
+}
+
+.right{
+    width: 80%;
+    height: 100%;
+   
+}
