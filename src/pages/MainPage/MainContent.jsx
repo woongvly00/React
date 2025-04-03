@@ -21,7 +21,7 @@ const MainContent = () => {
         <Link to="/mainpage/maincontent/reserve"><i className="fa-solid fa-2x fa-clock" style={{ color: '#FFFFFF', margin: '20px 0'  }}></i></Link>
         <Link to="/mainpage/maincontent/msg"><i className="fa-solid fa-2x fa-comment" style={{ color: '#FFFFFF', margin: '20px 0'  }}></i></Link>
       </div>
-      <div>
+      <div className={style.mainContents}>
         <Routes>
           <Route path="approval" element={<ApprovalMain/>}></Route>
           <Route path="schedule" element={<ScheduleMain/>}></Route>
