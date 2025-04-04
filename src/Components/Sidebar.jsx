@@ -2,54 +2,83 @@ import React, { useState } from 'react';
 import './Sidebar.css';
 import axios from 'axios';
 import { format } from 'date-fns';
+import useAuthStore from '../store/useAuthStore';
 
 const Sidebar = () => {
 
-  const [isCheckedIn, setIsCheckedIn] = useState(false); 
-  const [isCheckedOut, setIsCheckedOut] = useState(false); 
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [isCheckedOut, setIsCheckedOut] = useState(false);
   const [currentActivity, setCurrentActivity] = useState("");
   const [checkInTime, setCheckInTime] = useState("");
   const [checkOutTime, setCheckOutTime] = useState("");
   const [outingTime, setOutingTime] = useState("");
-  const [workTime, setWorkTime] = useState(""); 
+  const [workTime, setWorkTime] = useState("");
 
-  const handleCheckIn = async () => {
+  const handleCheckIn = async () => {   // 출근
     const currentTime = new Date().toISOString();
+    // Zustand 스토어에서 토큰 가져오기
+    const token = useAuthStore.getState().token;
+    console.log(token, " : token ddd");
 
     try {
-      const response = await axios.post("http://10.10.55.69/work/checkIn", { checkInTime: currentTime });
+      const response = await axios.post(
+        "http://10.10.55.69/work/checkIn",
+        { checkInTime: currentTime },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`  // 토큰 추가
+          }
+        }
+      );
       console.log('서버 응답:', response.data);
       setIsCheckedIn(true);
       setCurrentActivity("출근");
-      setCheckInTime(currentTime); 
+      setCheckInTime(currentTime);
     } catch (error) {
       console.log('출근 시간 전송 오류', error);
     }
   };
 
-  const handleCheckOut = async () => {
+  const handleCheckOut = async () => {  // 퇴근
     const currentTime = new Date().toISOString();
 
+    const { token, userId } = useAuthStore.getState();
+
     try {
-      const response = await axios.post("http://10.10.55.69/work/checkOut", { checkOutTime: currentTime });
+      const response = await axios.post(
+        "http://10.10.55.69/work/checkOut",
+        {
+          checkOutTime: currentTime,
+          emp_loginId: userId  // ✅ 여기에 로그인 아이디를 명시적으로 보내줘야 해
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`  // ✅ 이건 headers로 보내는 게 맞아
+          }
+        }
+      );
+
       console.log('서버 응답:', response.data);
       setIsCheckedOut(true);
       setIsCheckedIn(false);
       setCurrentActivity("퇴근");
-      setCheckOutTime(currentTime); 
+      setCheckOutTime(currentTime);
     } catch (error) {
       console.log('퇴근 시간 전송 오류', error);
     }
   };
 
-  const handleOuting = async () => {
+
+  const handleOuting = async () => {  //업무
     const currentTime = new Date();
 
     const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
     setOutingTime(formattedTime);
     setCurrentActivity("외근");
     console.log("외근 시간:", formattedTime);
-  
+
     try {
       const response = await axios.post("http://10.10.55.69/work/outing", { outingTime: formattedTime });
       console.log('서버 응답:', response.data);
@@ -57,15 +86,15 @@ const Sidebar = () => {
       console.log('외근 시간 전송 오류', error);
     }
   };
-  
-  const handleWork = async () => {
+
+  const handleWork = async () => {  // 외근 
     const currentTime = new Date();
 
     const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
-    setWorkTime(formattedTime); 
+    setWorkTime(formattedTime);
     setCurrentActivity("업무");
     console.log("업무 시간:", formattedTime);
-  
+
     try {
       const response = await axios.post("http://10.10.55.69/work/work", { workTime: formattedTime });
       console.log('서버 응답:', response.data);
@@ -107,7 +136,7 @@ const Sidebar = () => {
       <div className="sidebar">
         <h3>일정</h3>
         <div>내용 알아서 추가해주세요!</div>
-        
+
       </div>
 
 

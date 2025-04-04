@@ -1,4 +1,10 @@
-.sidebar {
+.sideList{
+    min-width:300px;
+  }
+
+  /* 보드 부분 */
+  
+  .sidebar {
     flex: 0.31;
     min-width: 150px;
     background: white;
@@ -14,11 +20,6 @@
   }
 
 
-
-
-
-
-
   .button {
     background-color: lightblue; 
     padding: 20px 80px; 
@@ -31,7 +32,7 @@
     cursor: pointer; 
     transition: background-color 0.3s, transform 0.2s; 
     margin:20px;
-    margin-top:50px;
+    /* margin-top:50px; */
   }
 
   .boardsidebar {
@@ -78,3 +79,6 @@
     cursor: pointer;     
   }
   
+
+  
+
