@@ -8,6 +8,7 @@ const useAuthStore = create((set)=>({
     isAuth: false,
     per_function :"U",
     per_secure:3,
+    
 
 
     setAuth: (token, userId, per_function, per_secure)=>{

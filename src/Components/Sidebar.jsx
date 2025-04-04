@@ -14,7 +14,7 @@ const Sidebar = () => {
   const [outingTime, setOutingTime] = useState("");
   const [workTime, setWorkTime] = useState("");
 
-  const handleCheckIn = async () => {
+  const handleCheckIn = async () => {   // 출근
     const currentTime = new Date().toISOString();
     // Zustand 스토어에서 토큰 가져오기
     const token = useAuthStore.getState().token;
@@ -40,7 +40,7 @@ const Sidebar = () => {
     }
   };
 
-  const handleCheckOut = async () => {
+  const handleCheckOut = async () => {  // 퇴근근
     const currentTime = new Date().toISOString();
 
     try {
@@ -55,7 +55,7 @@ const Sidebar = () => {
     }
   };
 
-  const handleOuting = async () => {
+  const handleOuting = async () => {  //업무
     const currentTime = new Date();
 
     const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
@@ -71,7 +71,7 @@ const Sidebar = () => {
     }
   };
 
-  const handleWork = async () => {
+  const handleWork = async () => {  // 외근 
     const currentTime = new Date();
 
     const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
