@@ -39,29 +39,37 @@ const Sidelist = () => {
 
       // 전자결제 list
       case 'approval':
-        return <div>전자결제 내용</div>;
+        return <div className={sideliststyle.sideList}>
+                전자결제 내용
+               </div>;
 
 
 
        // 인사관리 list
        case 'hr':
-        return <div>인사관리</div>;  
+        return <div className={sideliststyle.sideList}>
+                인사관리
+              </div>;  
 
 
       // 일정 list
       case 'schedule':
-        return <div>일정</div>;
+        return <div className={sideliststyle.sideList}>
+                일정
+              </div>;
 
 
 
       // 예약 list
       case 'reserve':
-        return <div>예약</div>;
+        return <div className={sideliststyle.sideList}>
+                예약
+              </div>;
       
 
       // 디폴트값
       default:
-        return <div></div>;
+        return <div className={sideliststyle.sideList}></div>;
     }
   };
 
