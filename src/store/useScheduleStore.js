@@ -2,13 +2,18 @@ import {create} from 'zustand';
 
 const useScheduleStore = create((set) => ({
     events: [],
-    setEvents: (NewEvent) => set({events: NewEvent}),
 
-    addEvnet: (event) => {
+    setEvents: (events) => set({ events }),
+
+    addEvent: (event) => 
         set((state) => ({
             events:[...state.events, event]
+        })),
+
+    removeEvent: (id) => 
+        set((state) => ({
+            events: state.events.filter((e) => e.id !== id)
         }))
-    }
 }));
 
 export default useScheduleStore;
