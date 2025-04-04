@@ -51,6 +51,7 @@ const MainContent = () => {
 
 
           {/* 게시판 */}
+          <Route path="write_button" element={<Board_write_button/>}></Route>
           <Route path="standard" element={<Boardlist />}></Route>
           <Route path="listmanager" element={<Board_listmanager />}></Route>
           <Route path="reference" element={<Board_reference />}></Route>
@@ -59,7 +60,7 @@ const MainContent = () => {
           <Route path="department" element={<Board_department />}></Route>
           <Route path="business" element={<Board_business />}></Route>
           <Route path="support" element={<Board_support />}></Route>
-          <Route path="write_button" element={<Board_write_button/>}></Route>
+          
 
 
 

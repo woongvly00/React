@@ -11,9 +11,7 @@ const approvalData = [
 const ApprovalMain = () => {
   return (
     <div className="approval-container">
-      <div>
-        사이드컬럼
-      </div>
+      
       <div>
         <h2>📄 전자결재</h2>
         <div className="approval-grid">
