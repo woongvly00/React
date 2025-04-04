@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import React from 'react';
+import './Board_reference.css';
 
 const Board_reference = () => {
 
@@ -12,10 +13,10 @@ return(
 
 
         <h2>📄 게시판</h2>
-        <div className="approval-grid"></div>
+        <div className="approval-grid">
         <table className="cotainer">
             <tr className="navi">
-                <th>공지사항, 자료실, 부서 게시판, 거래처별 변경사항, 업체교육/업무지원보고서</th>
+                <th>자료실</th>
             </tr>
             <tr>
                 <td><input type="text" placeholder="🔍게시글 입력"></input></td>
@@ -53,7 +54,7 @@ return(
             </tr>
         </table>
     </div>
-
+    </div>
   
 </div>
 
