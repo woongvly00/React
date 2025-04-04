@@ -1,6 +1,10 @@
 .SBoardContainer{
   display: flex;
   flex-direction: row;
+  justify-content: center;  
+  align-items: center;
+  flex-wrap: wrap;      
+
 }
 
 
@@ -208,6 +212,11 @@
 
 
 
+
+
+
+
+
   /* 스탠다드 글쓰기 입력창 */
   .container2 {
     width: 80%; 
@@ -215,6 +224,11 @@
     padding: 20px;
 }
 
+.standardwrite10{
+  font-weight:bold;
+  font-size: 20px;
+  margin-bottom:50px;
+}
 
 .signcancel {
     display: flex;
@@ -308,6 +322,193 @@ input[type="file"] {
     border-radius: 5px;
 }
 
+
+
+.list2{
+  position: relative;
+  /* border: 1px solid black; */
+  width: 100%;
+  height: 40px;
+}
+
+.list2>button{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+
+
+
+
+/* 댓글부분 */
+.comment2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 700px;
+}
+
+.comment3 {
+  font-weight: bold;
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+
+.commentwrite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+.profile {
+  width: 50px;
+  height: 50px;
+  background-color: gray;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  margin-left:10px;
+}
+
+.userwrite {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left:20px;
+  gap:10px;
+}
+
+.nametime {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name3 {
+  font-weight: bold;
+}
+
+.writetime3 {
+  font-size: 12px;
+  color: gray;
+}
+
+.content4 {
+  margin-top: 5px;
+}
+
+.commentwrite2 {
+  display: flex;
+  gap: 10px;
+}
+
+
+
+textarea {
+  width: 100%;
+  min-height: 70px;  /* 최소 높이 설정 */
+  max-height: 150px; /* 최대 높이 설정 (선택 사항) */
+  resize: vertical;  /* 세로 크기 조절 가능 */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+
+  flex: 5;
+}
+
+
+
+.okbutton {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 0.5;
+}
+
+
+
+
+/* 게시글 클릭시 화면 */
+.standardwrite10{
+  font-weight:bold;
+  font-size: 20px;
+  margin-bottom:50px;
+}
+
+/* .gasyselect, .titlewrite, .file {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+} */
+
+
+.titlewrite {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px;
+}
+
+.title2 {
+  font-weight: bold; 
+  flex:1;
+}
+
+.text2 {
+flex:5;
+}
+.text2 input {
+  width: 95%; 
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc; 
+}
+
+
+
+.title2 {
+  font-weight: bold;
+  color: #333;
+}
+
+.text2 {
+  color: #555;
+}
+
+/* .file .text2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #007bff;
+} */
+
+.download-icon {
+  font-size: 18px;
+}
+
+.contentwrite {
+  margin-top: 15px;
+  padding: 15px;
+  min-height: 120px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
+}
+
+
 .good2{
   display: flex; 
   flex-direction: column; 
@@ -328,7 +529,7 @@ input[type="file"] {
   cursor: pointer; 
   font-size: 24px; 
   text-align: center; 
-  margin:10px;
+  margin-top:20px;
 }
 
 .finger{
@@ -343,12 +544,14 @@ input[type="file"] {
   font-size: 15px;
 }
 
-.list2{
+.list3{
   position: relative;
-  
+  /* border: 1px solid black; */
+  width: 100%;
+  height: 40px;
 }
 
-.list2>button{
+.list3>button{
   position: absolute;
   bottom: 0;
   right: 0;
@@ -356,67 +559,9 @@ input[type="file"] {
 
 
 
-/* 댓글부분 */
-.comment2 {
-  padding: 10px;
-  border-bottom: 1px solid #ccc; 
-  margin-bottom: 15px; 
-}
-
- 
-.comment3 {
-  font-weight: bold;
-  margin-bottom: 20px;
-}
 
 
-.commentwrite {
-  display: flex; 
-  align-items: flex-start;
-}
 
-
-.profile {
-  width: 50px; 
-  height: 50px; 
-  background-color: lightgray; 
-  border-radius: 50%; 
-  margin-right: 15px; 
-}
-
-
-.userwrite {
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-}
-
-.nametime {
-  display: flex; 
-  width: 100%; 
-  justify-content: space-between; 
-}
-
-.name3 {
-  flex: 4; 
-  text-align: left; 
-}
-
-.writetime3 {
-  flex: 1; 
-  text-align: right; 
-  margin-left: auto; 
-}
-
-
-.content4 {
-  font-size: 16px;
-  color: #666; 
-  margin-top: 5px; 
-}
-
-.commentwrite2 input{
- margin:20px;
-  width:80%;
-  height:80px;
+.mainContents{
+  width:100%;
 }
