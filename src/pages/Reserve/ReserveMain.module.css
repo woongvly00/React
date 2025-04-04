@@ -1,4 +1,12 @@
 .reservContainer{
     display: flex;
     flex-direction: row;
+    margin-left: 20px;
+    width:100%;
+}
+
+
+.reservArea{
+    min-width:1200px;
+    min-height:900px;
 }

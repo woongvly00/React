@@ -14,11 +14,11 @@ const Sidebar = () => {
   const [outingTime, setOutingTime] = useState("");
   const [workTime, setWorkTime] = useState("");
 
-  const handleCheckIn = async () => {
+  const handleCheckIn = async () => {   // 출근
     const currentTime = new Date().toISOString();
     // Zustand 스토어에서 토큰 가져오기
     const token = useAuthStore.getState().token;
-    console.log(token," : token ddd");
+    console.log(token, " : token ddd");
 
     try {
       const response = await axios.post(
@@ -40,11 +40,26 @@ const Sidebar = () => {
     }
   };
 
-  const handleCheckOut = async () => {
+  const handleCheckOut = async () => {  // 퇴근
     const currentTime = new Date().toISOString();
 
+    const { token, userId } = useAuthStore.getState();
+
     try {
-      const response = await axios.post("http://10.10.55.69/work/checkOut", { checkOutTime: currentTime });
+      const response = await axios.post(
+        "http://10.10.55.69/work/checkOut",
+        {
+          checkOutTime: currentTime,
+          emp_loginId: userId  // ✅ 여기에 로그인 아이디를 명시적으로 보내줘야 해
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`  // ✅ 이건 headers로 보내는 게 맞아
+          }
+        }
+      );
+
       console.log('서버 응답:', response.data);
       setIsCheckedOut(true);
       setIsCheckedIn(false);
@@ -55,7 +70,8 @@ const Sidebar = () => {
     }
   };
 
-  const handleOuting = async () => {
+
+  const handleOuting = async () => {  //업무
     const currentTime = new Date();
 
     const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
@@ -71,7 +87,7 @@ const Sidebar = () => {
     }
   };
 
-  const handleWork = async () => {
+  const handleWork = async () => {  // 외근 
     const currentTime = new Date();
 
     const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
