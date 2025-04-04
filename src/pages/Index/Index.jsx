@@ -18,6 +18,7 @@ const Index = () => {
 
     const handleLogin = (e)=>{
         e.preventDefault();
+
         axios.post("http://10.10.55.69/auth/login", login)
         .then(resp=>{
             const token = resp.data;
