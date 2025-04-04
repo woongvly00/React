@@ -1,0 +1,114 @@
+.SBoardContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;  
+    align-items: center;
+    flex-wrap: wrap;      
+  
+  }
+  .subcontainer{
+    width:1000px;
+  }
+
+  /* 자유/동아리 게시판 */
+
+*{box-sizing: border-box;}
+
+
+.navi {
+   
+  color: #333;               
+  text-align: left;           
+  font-size: 1.2rem;          
+  font-weight: normal;        
+  border: 1px solid #ccc;    
+  padding: 10px;              
+}
+
+
+.navi div {
+  padding-top:30px;
+  padding-left: 10px;  
+ font-weight: bold;
+}
+
+.navibelow{
+  display: flex;
+}
+
+.navibelowleft{
+  flex:9;
+}
+
+.navibelowright{
+  flex:1;
+}
+
+  .freelist {
+    display: flex;
+    width: 100%;  
+    padding: 20px;
+    border:1px solid black;
+  }
+  
+  .photo {
+    flex: 1.5;  
+    background-color: #f0f0f0;  
+    margin-right: 20px;  
+    border:1px solid black;
+  }
+  
+  .write {
+    flex: 4.5;  
+    display: flex;
+    flex-direction: column;
+    border:1px solid black;
+  }
+  
+  .title {
+    flex: 1;  
+    padding: 10px;
+    border:1px solid black;
+  }
+  
+  .content {
+    flex: 3;  
+    padding: 10px;
+    border:1px solid black;
+  }
+  
+  .writeElse {
+    flex: 2;  
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border:1px solid black;
+  }
+  
+  .writer,
+  .good,
+  .look,
+  .writeTime {
+    flex: 1;  
+    background-color: #dcdcdc;  
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border:1px solid black;
+  }
+  
+  .writer {
+    background-color: #ffcccb;
+  }
+  
+  .good {
+    background-color: #c6e7d0;
+  }
+  
+  .look {
+    background-color: #cce7f7;
+  }
+  
+  .writeTime {
+    background-color: #e7e7e7;
+  }
