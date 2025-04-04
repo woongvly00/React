@@ -13,6 +13,7 @@ import Board_club from '../Boardlist/Board_club';
 import Board_department from '../Boardlist/Board_department';
 import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
+import Board_write_button from '../Boardlist/Board_write_button';
 
 
 
@@ -41,6 +42,7 @@ const MainContent = () => {
 
 
 
+
           {/* 인사관리 */}
           {/* 인사관리 페이지가 없는 상태에서 만들어졌습니다. 인사관리 페이지 만들어지면 아래 전자결졔로 연결되는 부분 인사관리로만 바꿔주세요! */}
           <Route path="hr" element={<ApprovalMain />}></Route>
@@ -57,6 +59,8 @@ const MainContent = () => {
           <Route path="department" element={<Board_department />}></Route>
           <Route path="business" element={<Board_business />}></Route>
           <Route path="support" element={<Board_support />}></Route>
+          <Route path="write_button" element={<Board_write_button/>}></Route>
+
 
 
 
