@@ -18,7 +18,7 @@ const Sidelist = () => {
             <aside className={sideliststyle.sidebar}>
               
               
-        <div><Link to="/mainpage/maincontent/write_button"><button className={sideliststyle.button}>글쓰기</button></Link></div>
+        <div><Link to="/mainpage/maincontent/write_button" state={{ name: "board" }}><button className={sideliststyle.button}>글쓰기</button></Link></div>
 
         <div className={sideliststyle.boardsidebar}>
           <div className={sideliststyle.wholegasy}>게시판 전체보기</div>
@@ -45,7 +45,7 @@ const Sidelist = () => {
       // 전자결제 list
       case 'approval':
         return <div className={sideliststyle.sideList}>
-                전자결제 내용
+                전자결제
                </div>;
 
 
@@ -60,15 +60,35 @@ const Sidelist = () => {
       // 일정 list
       case 'schedule':
         return <div className={sideliststyle.sideList}>
-                일정
-              </div>;
+          <div>
+            커스텀뷰 넣기
+          </div>
+          <div>
+            내 캘린더
+            <ur>
+              <li>개인 일정</li>
+            </ur>
+          </div>
+          <div>
+            공유 캘린더
+            <ur>
+              <li>프로젝트1 일정</li>
+              <li>회사 단체 일정</li>
+            </ur>
+          </div>
+        </div>;
 
 
 
       // 예약 list
       case 'reserve':
         return <div className={sideliststyle.sideList}>
-                예약
+                <ur>
+                  <li>나의 예약 목록</li>
+                  <li>회의실</li>
+                  <li>차량</li>
+                  <li>비품</li>
+                </ur>
               </div>;
       
 

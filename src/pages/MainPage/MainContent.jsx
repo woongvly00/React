@@ -26,7 +26,7 @@ const MainContent = () => {
 
     <div className={style.maincontainer}>
       <div className={style.mainSidebar}>
-        <Link to="/mainpage"><i className="fa-solid fa-2x fa-house" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
+        <div className={style.icons}><Link to="/mainpage"><i className="fa-solid fa-2x fa-house" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link></div>
         <Link to="/mainpage/maincontent/approval" state={{ name: "approval" }}><i className="fa-solid fa-2x fa-inbox" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/hr" state={{ name: "hr" }}><i className="fa-solid fa-2x fa-person" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/board" state={{ name: "board" }}><i className="fa-solid fa-2x fa-clipboard" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
