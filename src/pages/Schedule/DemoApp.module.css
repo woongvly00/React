@@ -1,18 +1,18 @@
-/* 오버레이: 화면 전체 덮기 */
+
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
-    align-items: center; /* 수직 중앙 */
-    justify-content: center; /* 수평 중앙 */
+    align-items: center;
+    justify-content: center; 
     z-index: 1000;
   }
   
-  /* 모달 컨테이너: 박스 */
+
   .modal-container {
     background: white;
     padding:50px;
@@ -22,7 +22,7 @@
     min-height: 600px;
   }
   
-  /* 버튼 영역 */
+
   .modal-buttons {
     margin-top: 1rem;
     display: flex;

@@ -3,6 +3,9 @@ import axios from 'axios';
 import useAuthStore from '../../store/useAuthStore';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode'; 
+
+
 
 const Index = () => {
     const navi = useNavigate();
@@ -15,8 +18,19 @@ const Index = () => {
 
     const handleLogin = (e)=>{
         e.preventDefault();
+
         axios.post("http://10.10.55.6/auth/login", login).then(resp=>{
-            setAuth(resp.data, login.id);
+            const token = resp.data;
+            const decodedToken = jwtDecode(token);
+            const per_function = decodedToken.per_function;
+            const per_secure = decodedToken.per_secure;
+
+            
+            console.log(decodedToken);
+
+            setAuth(token, login.id, per_function,per_secure );
+
+
             navi("/mainpage");
         }).catch((error) => {
             console.error("로그인 실패", error);

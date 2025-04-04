@@ -15,37 +15,60 @@ import caxios from '../../Utils/caxios';
 
 export default function DemoApp() {
 
+
   function handleDateSelect(selectInfo) {
     setSelectedInfo(selectInfo)
     setIsModalOpen(true)
   }
 
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
-  const [newTitle, setNewTitle] = useState('');
-  const [newContent, setNewContent] = useState('');
-  const [event, setEvent] = useState({});
+
+  const [schedule_id, setSchedule_id] = useState('');
+  const [s_category_id, setS_category_id] = useState('');
+  const [schedule_title, setSchedule_title] = useState('');
+  const [schedule_content, setSchedule_content] = useState('');
+  const [start_date, setStart_date] = useState('');
+  const [end_date, setEnd_date] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  const [event, setEvent] = useState({setSchedule_id: 0 ,
+                                      setS_category_id: 0,
+                                      setSchedule_title: '',
+                                      setStart_date: '',
+                                      setEnd_date: '',
+                                      startTime: '',
+                                      endTime: ''
+  });
+
+  const handleInput = (e) => {
+          const { name, value } = e.target;
+          setEvent((prev) => ({ ...prev, [name]: value }));
+      }
+
+
+  function handleEventClick(clickInfo) {
+      alert(`'${clickInfo.event.title}' 이벤트 클릭됨`);
+    }
 
 
   function handleAddEvent() {
     const calendarApi = selectedInfo.view.calendar
     calendarApi.unselect()
-  
-    if (newTitle) {
+
+    if (schedule_title) {
       const newEvent = {
-        id: createEventId(),
-        title: newTitle,
-        start: selectedInfo.startStr,
-        end: selectedInfo.endStr,
+        schedule_id: createEventId(),
+        shedule_title: schedule_title || '',
+        start_date: selectedInfo.startStr,
+        end_date: selectedInfo.endStr,
         allDay: selectedInfo.allDay
       };
 
       calendarApi.addEvent(newEvent);
 
-      const handleInput = (e) => {
-        const { name, value } = e.target;
-        setEvent((prev) => ({ ...prev, [name]: value }));
-    }
       
 
       caxios.post(`/schedule`, event).then(resp => {
@@ -60,7 +83,7 @@ export default function DemoApp() {
     }
   
     // 초기화
-    setNewTitle('')
+    setSchedule_title('')
     setIsModalOpen(false)
   }
   
@@ -134,8 +157,9 @@ export default function DemoApp() {
             <input
               type="text"
               name="schedule_title"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
+              value={schedule_title}
+              onChange={handleInput}
+              // onChange={(e) => setSchedule_title(e.target.value)}
               placeholder="일정 제목 입력"
               autoFocus
             />
@@ -144,14 +168,14 @@ export default function DemoApp() {
               시작
               <input name="start_date" type="date"  onChange={handleInput}></input>
               <select>
-                <option name="start_date" value="2025-04-03T09:00">오전 09:00</option>
+                <option name="startTime" value="2025-04-03T09:00">오전 09:00</option>
               </select>
             </div>
             <div>
               종료
               <input name="end_date" type="date" onChange={handleInput}></input>
               <select>
-                <option name="end_date" value="2025-04-03T10:00">오전 10:00</option>
+                <option name="endTime" value="2025-04-03T10:00">오전 10:00</option>
               </select>
             </div>
             <div>
@@ -159,8 +183,7 @@ export default function DemoApp() {
               <textarea
                 name="schedule_content"
                 value={newContent}
-                onChange={(e) => setNewContent(e.target.value)}
-                
+                onChange={handleInput}
                 placeholder="내용 입력"
                 style={{ width: '300px;', height: '150px', resize: 'none' }}
               />
