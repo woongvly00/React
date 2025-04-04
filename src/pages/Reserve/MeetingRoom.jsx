@@ -7,6 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import caxios from '../../Utils/caxios';
 import { sliceEvents } from '@fullcalendar/core';
 import rStyle from './MettingRoom.module.css';
+import InputResev from './InputResv'
 
 
 
@@ -30,7 +31,8 @@ const MeetingRoom = ()=> {
       ]
 
     return (
-        <div class={rStyle.reservTable}>
+        <div>
+        <div className={rStyle.reservTable}>
             <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView='timeGridDay'
@@ -45,6 +47,10 @@ const MeetingRoom = ()=> {
             select={handleDateSelect}
             events={events}
             />
+        </div>
+        
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo}/>)}
+        
         </div>
     )
 };
