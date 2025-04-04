@@ -1,12 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Header.css';
+import useAuthStore from '../store/useAuthStore';
+import { Link, Route, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
+  const {userId} = useAuthStore.getState();
+
+  const logout = useAuthStore((state) => state.logout);
+  const navi = useNavigate();
 
   // Close dropdown when clicking outside
   useEffect(() => {
+
+
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setShowUserMenu(false);
@@ -38,16 +46,10 @@ const Header = () => {
           {showUserMenu && (
             <div className="user-dropdown">
               <ul>
-                <li onClick={() => window.location.href = '/mypage'}>
-                  <i className="fa-solid fa-user"></i> 마이페이지
-                </li>
-                <li onClick={() => window.location.href = '/test'}>
-                  <i className="fa-solid fa-vial"></i> 테스트 페이지
-                </li>
-                <li>
-                  <i className="fa-solid fa-gear"></i> 설정
-                </li>
-                <li>
+               <Link to= "/mainpage/maincontent/mypage" state={{userId}}> <li><i className="fa-solid fa-user"></i> 마이페이지</li></Link>
+               <Link to="/home/header/test"> <li><i className="fa-solid fa-vial"></i> 테스트 페이지</li></Link>
+               <Link to="/home/header/setting"> <li><i className="fa-solid fa-gear"></i> 설정</li></Link> 
+                <li onClick={() => { logout(); navi("/"); }}>
                   <i className="fa-solid fa-right-from-bracket"></i> 로그아웃
                 </li>
               </ul>

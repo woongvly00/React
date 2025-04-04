@@ -21,6 +21,7 @@ const Index = () => {
 
         axios.post("http://10.5.5.6/auth/login", login)
         .then(resp=>{
+
             const token = resp.data;
             const decodedToken = jwtDecode(token);
             const per_function = decodedToken.per_function;
@@ -30,6 +31,7 @@ const Index = () => {
             console.log(decodedToken);
 
             setAuth(token, login.id, per_function,per_secure );
+
 
             navi("/mainpage");
         }).catch((error) => {

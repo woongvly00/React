@@ -96,3 +96,28 @@
   width: 16px;
   text-align: center;
 }
+
+/* 기존 Link 스타일 재정의 */
+a {
+  color: #565656; /* 기본 링크 색상 변경 */
+  text-decoration: none;
+}
+
+/* 드롭다운 메뉴 링크 스타일 */
+.user-dropdown a {
+  color: #333;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-dropdown a:hover {
+  color: #547291; /* 호버 시 색상 */
+}
+
+/* 아이콘 스타일 */
+.user-dropdown a i {
+  width: 16px;
+  text-align: center;
+}

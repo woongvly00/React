@@ -20,10 +20,12 @@ const useAuthStore = create((set)=>({
         sessionStorage.setItem("per_secure",per_secure);
     },
     logout: ()=>{
-        set({token:null, userId:null, isAuth:false});
+        set({token:null, userId:null, isAuth:false, per_function:null, per_secure:0});
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userId");
         sessionStorage.removeItem("isAuth");
+        sessionStorage.removeItem("per_function");
+        sessionStorage.removeItem("per_secure");
     },
     initialize: ()=>{
         const token = sessionStorage.getItem("token");
