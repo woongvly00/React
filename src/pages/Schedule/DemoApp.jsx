@@ -9,7 +9,7 @@ import caxios from '../../Utils/caxios';
 import { sliceEvents } from '@fullcalendar/core';
 import useScheduleStore from '../../store/useScheduleStore';
 
-export default function DemoApp() {
+const DemoApp = () => {
   const { events, addEvent } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
@@ -130,12 +130,26 @@ export default function DemoApp() {
             <div>
               시작
               <input name="start" type="date" value={eventInput.start} onChange={handleInput} />
-              <input name="startTime" type="time" value={eventInput.startTime} onChange={handleInput} />
+              <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
+                {Array.from({ length: 48 }).map((_, index) => {
+                  const h = String(Math.floor(index / 2)).padStart(2, '0');
+                  const m = index % 2 === 0 ? '00' : '30';
+                  const time = `${h}:${m}`;
+                  return <option key={time} value={time}>{time}</option>;
+                })}
+              </select>
             </div>
             <div>
               종료
               <input name="end" type="date" value={eventInput.end} onChange={handleInput} />
-              <input name="endTime" type="time" value={eventInput.endTime} onChange={handleInput} />
+              <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
+                {Array.from({ length: 48 }).map((_, index) => {
+                  const h = String(Math.floor(index / 2)).padStart(2, '0');
+                  const m = index % 2 === 0 ? '00' : '30';
+                  const time = `${h}:${m}`;
+                  return <option key={time} value={time}>{time}</option>;
+                })}
+              </select>
             </div>
             <div>
               일정 내용
@@ -223,3 +237,6 @@ export const CustomView = (props) => {
     </div>
   );
 };
+
+
+export default DemoApp;
