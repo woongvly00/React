@@ -8,11 +8,11 @@ const Navigation = () => {
   
   const navigate = useNavigate();
 
-  const toApproval = () => {navigate('/mainpage/maincontent/approval')};
-  const toSchedule = () => {navigate('/mainpage/maincontent/schedule')};
-  const toBoard = () => {navigate('/mainpage/maincontent/board')};
-  const toHR = () => {navigate('/mainpage/maincontent/hr')};
-  const toReserve = () => {navigate('/mainpage/maincontent/reserve')};
+  const toApproval = () => {navigate('/mainpage/maincontent/approval', { state: { name: 'approval' } })};
+  const toSchedule = () => {navigate('/mainpage/maincontent/schedule', { state: { name: 'schedule' } })};
+  const toBoard = () => {navigate('/mainpage/maincontent/board', { state: { name: 'board' } })};
+  const toHR = () => {navigate('/mainpage/maincontent/hr', { state: { name: 'hr' } })};
+  const toReserve = () => {navigate('/mainpage/maincontent/reserve', { state: { name: 'reserve' } })};
 
   const [chatWindow, setChatWindow] = useState(null);
   const [isPopup, setIsPopup] = useState(false);

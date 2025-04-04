@@ -16,6 +16,7 @@ const ApprovalMain = () => {
   ];
 
   return (
+
     <div className="approval-main">
       <h2 className="approval-title">전자결재 대시보드</h2>
 
@@ -31,6 +32,7 @@ const ApprovalMain = () => {
       <div className="approval-section">
         <h3>내가 기안한 문서</h3>
         <DashboardList list={myDrafts} type="drafts" />
+
       </div>
     </div>
   );
