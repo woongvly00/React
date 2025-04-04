@@ -1,22 +1,31 @@
+// DashboardList.jsx
 import React from 'react';
+import './DashboardList.css';
 
-const DashboardList = ({ items }) => {
+const DashboardList = ({ list, type }) => {
   return (
-    <div style={{
-      background: '#f5f5f5',
-      padding: '1rem',
-      borderRadius: '12px',
-      marginTop: '2rem'
-    }}>
-      <h4>결재 / 참고 문서함</h4>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index} style={{ padding: '0.5rem 0', borderBottom: '1px solid #ddd' }}>
-            <strong>{item.title}</strong> - 상태: {item.status}
-          </li>
+    <table className="dashboard-table">
+      <thead>
+        <tr>
+          <th>제목</th>
+          {type === 'waiting' && <th>기안자</th>}
+          <th>문서 유형</th>
+          <th>결재 상태</th>
+          <th>기안일</th>
+        </tr>
+      </thead>
+      <tbody>
+        {list.map((item) => (
+          <tr key={item.id}>
+            <td>{item.title}</td>
+            {type === 'waiting' && <td>{item.requester}</td>}
+            <td>{item.formType || '일반'}</td>
+            <td>{item.status}</td>
+            <td>{item.date}</td>
+          </tr>
         ))}
-      </ul>
-    </div>
+      </tbody>
+    </table>
   );
 };
 
