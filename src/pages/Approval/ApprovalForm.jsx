@@ -1,63 +1,93 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useState } from 'react';
+import { Editor } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
 
 const ApprovalForm = () => {
-  const navigate = useNavigate();
+  const editorRef = useRef();
 
-  const [formData, setFormData] = useState({
-    loaTitle: "",
-    loaContent: "",
-    firstApprover: "",
-    interimApprover: "",
-    finalApprover: "",
-    referList: "",
-    appEmergncyCall: ""
+  const [form, setForm] = useState({
+    loaTitle: '',
+    writer: '',
+    department: '',
+    approver: '',
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleAutoInsert = () => {
+    const editorInstance = editorRef.current.getInstance();
+    const autoText = `
+## 📋 결재 문서 정보
+
+- **제목**: ${form.loaTitle}
+- **작성자**: ${form.writer}
+- **부서**: ${form.department}
+- **결재자**: ${form.approver}
+
+---
+
+하단에 결재 내용을 작성해주세요.
+    `;
+
+    editorInstance.setMarkdown(autoText);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("/api/approval/register", formData);
-      alert("전자결재가 등록되었습니다.");
-      navigate("/approval");
-    } catch (error) {
-      alert("등록 중 오류가 발생했습니다.");
-      console.error(error);
-    }
+
+    const editorInstance = editorRef.current.getInstance();
+    const content = editorInstance.getMarkdown();
+
+    console.log('제출데이터:', {
+      ...form,
+      content,
+    });
+
+    // 이후 FormData로 서버 제출 가능
   };
 
   return (
-    <div className="approval-form">
-      <h2>전자결재 작성</h2>
+    <div style={{ padding: '2rem' }}>
+      <h2>📄 품의서 작성</h2>
+
       <form onSubmit={handleSubmit}>
-        <label>제목</label>
-        <input type="text" name="loaTitle" value={formData.loaTitle} onChange={handleChange} required />
+        <div>
+          <label>제목</label><br />
+          <input type="text" name="loaTitle" value={form.loaTitle} onChange={handleChange} required />
+        </div>
 
-        <label>상세내용</label>
-        <textarea name="loaContent" value={formData.loaContent} onChange={handleChange} required />
+        <div>
+          <label>작성자</label><br />
+          <input type="text" name="writer" value={form.writer} onChange={handleChange} required />
+        </div>
 
-        <label>결재자1 (1차)</label>
-        <input type="text" name="firstApprover" value={formData.firstApprover} onChange={handleChange} required />
+        <div>
+          <label>부서</label><br />
+          <input type="text" name="department" value={form.department} onChange={handleChange} required />
+        </div>
 
-        <label>결재자2 (중간)</label>
-        <input type="text" name="interimApprover" value={formData.interimApprover} onChange={handleChange} />
+        <div>
+          <label>결재자</label><br />
+          <input type="text" name="approver" value={form.approver} onChange={handleChange} required />
+        </div>
 
-        <label>결재자3 (최종)</label>
-        <input type="text" name="finalApprover" value={formData.finalApprover} onChange={handleChange} />
+        <br />
+        <button type="button" onClick={handleAutoInsert}>📥 본문 자동 생성</button>
 
-        <label>수신참조자</label>
-        <input type="text" name="referList" value={formData.referList} onChange={handleChange} />
+        <div style={{ marginTop: '2rem' }}>
+          <Editor
+            previewStyle="vertical"
+            height="400px"
+            initialEditType="markdown"
+            ref={editorRef}
+          />
+        </div>
 
-        <label>비상연락망</label>
-        <input type="text" name="appEmergncyCall" value={formData.appEmergncyCall} onChange={handleChange} required />
-
-        <button type="submit">작성 완료</button>
+        <br />
+        <button type="submit">📨 제출</button>
       </form>
     </div>
   );

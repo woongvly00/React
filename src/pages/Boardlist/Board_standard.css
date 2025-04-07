@@ -1,9 +1,15 @@
 .SBoardContainer{
   display: flex;
   flex-direction: row;
+  justify-content: center;  
+  align-items: center;
+  flex-wrap: wrap;      
+
 }
 
-
+.subcontainer{
+  width:1000px;
+}
 .container {
     width: 100%;
     max-width: 1200px;
@@ -102,211 +108,180 @@
 
 
 
-/* 자유/동아리 게시판 */
-
-*{box-sizing: border-box;}
 
 
-.navi {
-   
-  color: #333;               
-  text-align: left;           
-  font-size: 1.2rem;          
-  font-weight: normal;        
-  border: 1px solid #ccc;    
-  padding: 10px;              
-}
-
-
-.navi th {
-  padding-top:30px;
-  padding-left: 10px;  
  
-}
 
-.navibelow{
+
+
+
+/* 댓글부분 */
+.comment2 {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 700px;
 }
 
-.navibelowleft{
-  flex:9;
+.comment3 {
+  font-weight: bold;
+  font-size: 16px;
+  padding-bottom: 10px;
 }
 
-.navibelowright{
-  flex:1;
+.commentwrite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
 }
 
-  .freelist {
-    display: flex;
-    width: 100%;  
-    padding: 20px;
-    border:1px solid black;
-  }
-  
-  .photo {
-    flex: 1.5;  
-    background-color: #f0f0f0;  
-    margin-right: 20px;  
-    border:1px solid black;
-  }
-  
-  .write {
-    flex: 4.5;  
-    display: flex;
-    flex-direction: column;
-    border:1px solid black;
-  }
-  
-  .title {
-    flex: 1;  
-    padding: 10px;
-    border:1px solid black;
-  }
-  
-  .content {
-    flex: 3;  
-    padding: 10px;
-    border:1px solid black;
-  }
-  
-  .writeElse {
-    flex: 2;  
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border:1px solid black;
-  }
-  
-  .writer,
-  .good,
-  .look,
-  .writeTime {
-    flex: 1;  
-    background-color: #dcdcdc;  
-    padding: 5px;
-    text-align: center;
-    border-radius: 5px;
-    border:1px solid black;
-  }
-  
-  .writer {
-    background-color: #ffcccb;
-  }
-  
-  .good {
-    background-color: #c6e7d0;
-  }
-  
-  .look {
-    background-color: #cce7f7;
-  }
-  
-  .writeTime {
-    background-color: #e7e7e7;
-  }
+.profile {
+  width: 50px;
+  height: 50px;
+  background-color: gray;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  margin-left:10px;
+}
 
+.userwrite {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left:20px;
+  gap:10px;
+}
 
+.nametime {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.name3 {
+  font-weight: bold;
+}
 
-  /* 스탠다드 글쓰기 입력창 */
-  .container2 {
-    width: 80%; 
-    margin: 0 auto; 
-    padding: 20px;
+.writetime3 {
+  font-size: 12px;
+  color: gray;
+}
+
+.content4 {
+  margin-top: 5px;
+}
+
+.commentwrite2 {
+  display: flex;
+  gap: 10px;
 }
 
 
-.signcancel {
-    display: flex;
-    justify-content: flex-end; 
-    gap: 10px; 
-    margin-bottom: 20px;
+
+textarea {
+  width: 100%;
+  min-height: 70px;  /* 최소 높이 설정 */
+  max-height: 150px; /* 최대 높이 설정 (선택 사항) */
+  resize: vertical;  /* 세로 크기 조절 가능 */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+
+  flex: 5;
 }
 
 
-.signcancel >button{
-  padding: 10px 20px;
-  background-color: lightcoral; 
-  color: white; 
+
+.okbutton {
+  padding: 5px 10px;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
-  border-radius: 5px;
+  flex: 0.5;
 }
 
 
 
-.gasyselect {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    margin-bottom: 20px;
+
+/* 게시글 클릭시 화면 */
+.standardwrite10{
+  font-weight:bold;
+  font-size: 20px;
+  margin-bottom:50px;
 }
 
-.gasywrite {
-    font-weight: bold; 
-    flex:1;
-}
+/* .gasyselect, .titlewrite, .file {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+} */
 
-.selects{
-  flex:6;
-}
-
-.selects select {
-    width: 40%; 
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
- 
 
 .titlewrite {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 20px;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px;
 }
 
 .title2 {
-    font-weight: bold; 
-    flex:1;
+  font-weight: bold; 
+  flex:1;
 }
 
 .text2 {
-  flex:5;
+flex:5;
 }
 .text2 input {
-    width: 95%; 
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc; 
-}
-
-
-.checkbox2 label {
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    font-size:15px;
+  width: 95%; 
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc; 
 }
 
 
 
-.file {
-    margin-bottom: 20px;
+.title2 {
+  font-weight: bold;
+  color: #333;
 }
 
-input[type="file"] {
-    padding: 10px;
+.text2 {
+  color: #555;
 }
 
+/* .file .text2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #007bff;
+} */
+
+.download-icon {
+  font-size: 18px;
+}
 
 .contentwrite {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  margin-top: 15px;
+  padding: 15px;
+  min-height: 120px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
 }
+
 
 .good2{
   display: flex; 
@@ -328,7 +303,7 @@ input[type="file"] {
   cursor: pointer; 
   font-size: 24px; 
   text-align: center; 
-  margin:10px;
+  margin-top:20px;
 }
 
 .finger{
@@ -343,80 +318,60 @@ input[type="file"] {
   font-size: 15px;
 }
 
-.list2{
-  position: relative;
-  
+
+.button-container {
+  display: flex;
+  justify-content: space-between;  /* 목록으로는 중앙, 수정과 삭제는 오른쪽 */
+  align-items: center;             /* 세로 정렬 */
+  width: 100%;                     /* 전체 너비 차지 */
+  /* margin-left:80px; */
+
 }
 
-.list2>button{
+/* 목록으로 버튼을 중앙으로 배치 */
+.list3 {
+  flex: 1;                         /* 왼쪽 공간을 차지 */
+  text-align: center;              /* 텍스트 중앙 정렬 */
+  margin-left:150px;
+}
+
+/* 수정과 삭제 버튼들을 오른쪽에 배치 */
+.right-buttons {
+  display: flex;                   /* 수정과 삭제 버튼들을 가로로 나열 */
+  justify-content: flex-end;        /* 오른쪽 정렬 */
+}
+
+/* 버튼 스타일 */
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+/* .list3{
+  position: relative;
+
+  width: 100%;
+  height: 40px;
+}
+
+.list3>button{
   position: absolute;
   bottom: 0;
   right: 0;
-}
+} */
 
 
 
-/* 댓글부분 */
-.comment2 {
-  padding: 10px;
-  border-bottom: 1px solid #ccc; 
-  margin-bottom: 15px; 
-}
-
- 
-.comment3 {
-  font-weight: bold;
-  margin-bottom: 20px;
-}
 
 
-.commentwrite {
-  display: flex; 
-  align-items: flex-start;
-}
 
-
-.profile {
-  width: 50px; 
-  height: 50px; 
-  background-color: lightgray; 
-  border-radius: 50%; 
-  margin-right: 15px; 
-}
-
-
-.userwrite {
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; 
-}
-
-.nametime {
-  display: flex; 
-  width: 100%; 
-  justify-content: space-between; 
-}
-
-.name3 {
-  flex: 4; 
-  text-align: left; 
-}
-
-.writetime3 {
-  flex: 1; 
-  text-align: right; 
-  margin-left: auto; 
-}
-
-
-.content4 {
-  font-size: 16px;
-  color: #666; 
-  margin-top: 5px; 
-}
-
-.commentwrite2 input{
- margin:20px;
-  width:80%;
-  height:80px;
+.mainContents{
+  width:100%;
 }

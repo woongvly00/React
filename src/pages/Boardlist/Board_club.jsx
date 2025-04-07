@@ -1,9 +1,10 @@
-import './Board_free.css';
 import React from 'react';
+import './Board_club.css';
 
-const Board_free = () => {
-    return (
+const Board_club =()=>{
 
+    return(
+        
         <div className="SBoardContainer">
 
         <div className="subcontainer">
@@ -11,7 +12,7 @@ const Board_free = () => {
             <h2>📄 게시판</h2>
             <div className="approval-grid">
             <div className="navi">
-                <div>자유 게시판</div>
+                <div>동아리 게시판</div>
 
             </div>
             <div className="navibelow">
@@ -47,5 +48,5 @@ const Board_free = () => {
         </div>
     </div>
     );
-}
-export default Board_free;
+};
+export default Board_club;
