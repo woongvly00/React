@@ -34,12 +34,22 @@ function MessengerPopup({ onClose }) {
           targetname:target,
           myname:me
         }).then((resp)=>{
+          const seq = resp.data.seq;
           setCurrentChat(name);
-          navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}`);
+          navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}&seq=${seq}`);
       });
     }  else{
-      setCurrentChat(name);
-      navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}`);
+      axios.get("http://10.5.5.2/Employee/checkRoomSeqExist",{
+        params:{
+          targetId:target,
+          myId: me
+        }
+      }).then((resp)=>{
+        const seq =resp.data.MSG_GROUP_ID;
+        console.log(seq);
+        setCurrentChat(name);
+        navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}&seq=${seq}`);
+      });
     }
 
      
