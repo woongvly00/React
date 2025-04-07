@@ -2,65 +2,94 @@ import { useState,useEffect } from "react";
 import style from './Employee.module.css';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
-
+import useAuthStore from '../../store/useAuthStore';
 
 
 function EmployeePage({openChat}) {
     const [employees,setEmployees] = useState([]);
     const [groupedEmployees, setGroupedEmployees] = useState({});
     const [groupedRooms, setGroupedRooms ] = useState({});
+    const [myInfo,setMyInfo] = useState(null);
     const Navigate = useNavigate();
     
+  
+
+ 
+
+
     //사원목록 가져오기
     useEffect(() => {
-        axios.get("http://10.5.5.2/Employee/SelectEmp").then((resp) => {
-          setEmployees(resp.data);
-          console.log(resp.data);
-    
-          // 부서별로 직원 그룹화
-          const grouped = resp.data.reduce((acc, emp) => {
-            if (!acc[emp.dept_name]) {
-              acc[emp.dept_name] = [];
-            }
-            acc[emp.dept_name].push(emp.emp_name);
-            return acc;
-          }, {});
-    
-          setGroupedEmployees(grouped);
+        const userId = sessionStorage.getItem("userId");
+        console.log(userId);
+        let mine = null;
 
-          return axios.get("http://10.5.5.2/Employee/SelectGroupId");
-        }).then((groupIdResp)=>{
-            console.log(groupIdResp.data);
-        })
+          axios.get("http://10.5.5.2/Employee/SelectMine",{
+            params: {userId: userId}
+          }).then((userIdResp)=>{
+             mine = userIdResp.data;
+            console.log(mine.emp_code_id);
+            
+
+            if (!mine || !mine.emp_code_id) {
+                console.error("내 정보가 잘못되었습니다:", mine);
+                return; // 데이터가 잘못되면 여기서 중단
+              }
+
+              setMyInfo(mine);
+
+            return axios.get("http://10.5.5.2/Employee/SelectEmp");
+        }).then((resp) => {
+            console.log(resp.data);
+             const filtered = resp.data.filter(emp => emp.emp_code_id !== mine.emp_code_id); // 나 자신 제외
+    
+             setEmployees(filtered);
+    
+            // 부서별로 직원 그룹화
+            const grouped = filtered.reduce((acc, emp) => {
+                if (!acc[emp.dept_name]) {
+                    acc[emp.dept_name] = [];
+                }
+                acc[emp.dept_name].push(emp);
+                return acc;
+            }, {});
+    
+            setGroupedEmployees(grouped);
+        });
+       
       }, []);
+
+  
 
      
 
 
     return (
         <div className={style.main}>
-            <div className={style.myprofile}>
+            {myInfo && (
+                <div className={style.myprofile}>
                 <div className={style.imgbox}>
                     <div className={style.img}>
                         {/* <img src=""></img> 프로필 이미지 넣는곳*/}
                     </div>
                 </div>
                 <div className={style.namebox}>
-                    <div className={style.name}>임태웅</div>
+                    <div className={style.name}>{myInfo.emp_name}</div>
                 </div>
             </div>
-            {Object.entries(groupedEmployees).map(([dept, names]) => (
+            )}
+            
+            {Object.entries(groupedEmployees).map(([dept, employees]) => (
                 <div key={dept}>
                     <p>{dept}</p> {/* 부서명 출력 */}
-                    {names.map((name, index) => (
+                    {employees.map((emp, index) => (
                         <div key={index} className={style.another}>
                             <div className={style.imgbox}>
                                 <div className={style.anotherimg}>
                                     {/* <img src=""></img> 프로필 이미지 넣는곳 */}
                                 </div>
                             </div>
-                            <div className={style.namebox} onDoubleClick={()=>openChat(name)}>
-                                <div className={style.anothername}>{name}</div> {/* 사원명 출력 */}
+                            <div className={style.namebox} onDoubleClick={()=>openChat(emp.emp_code_id,myInfo?.emp_code_id,emp.emp_name)}>
+                                <div className={style.anothername}>{emp.emp_name}</div> {/* 사원명 출력 */}
                             </div>
                         </div>
                     ))}

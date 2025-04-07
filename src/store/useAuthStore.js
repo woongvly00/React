@@ -28,11 +28,17 @@ const useAuthStore = create((set)=>({
         const token = sessionStorage.getItem("token");
         const userId = sessionStorage.getItem("userId");
         const isAuth = sessionStorage.getItem("isAuth");
+        console.log("initialize 실행중")
+
+        
 
         if(token && userId){
             set({token:token, userId:userId, isAuth: isAuth});
         }
+
     }
+
+   
 }))
 
 export default useAuthStore;
