@@ -15,6 +15,7 @@ import Board_department from '../Boardlist/Board_department';
 import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
 import Board_write_button from '../Boardlist/Board_write_button';
+import FormWrite from "../Approval/ApprovalWrite";
 
 
 
@@ -40,7 +41,7 @@ const MainContent = () => {
         <Routes>
           {/* 전자결제 */}
           <Route path="approval" element={<ApprovalMain />}></Route>
-
+          <Route path="/approval/write" element={<FormWrite />} />
 
 
 
