@@ -173,12 +173,15 @@ const DemoApp = () => {
   );
 }
 
+
+
 const renderEventContent = (eventInfo) => {
-  return (
-    <>
+  const bgColor = eventInfo.event.extendedProps.color || 'blue';
+ return (
+    <div style={{backgroundColor:bgColor, borderRadius:'0px'}}>
       <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
+      <b>{eventInfo.event.title}</b>
+    </div>
   );
 };
 

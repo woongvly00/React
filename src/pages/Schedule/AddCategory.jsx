@@ -4,13 +4,14 @@ import AddCategoryStyle from './AddCategoryStyle.module.css';
 import caxios from '../../Utils/caxios';
 
 
-const AddCategory = ({ closeModal, selectedInfo }) => {
+const AddCategory = ({ closeModal }) => {
 
-//   const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [calender, setCalender] = useState({
-    s_c_id: '',
+    s_c_id: 0,
     s_c_name: '',
-    color: ''
+    color: '#FFFFFF'
   });
 
   const handleInput = (e) => {
@@ -20,19 +21,25 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
 
 
   const handleAddCalender = () => {
-    caxios.post("/schedule", calender).catch((error) => {
+    console.log(calender);
+
+    caxios.post("/cSchedule", calender).catch((error) => {
         if (error.response?.status === 404 || 500) {
           alert("등록에 실패했습니다.");
-        }
-  });
+    }})
+
+    setIsModalOpen(false);
+    setCalender({s_c_name:"", color:"#FFFFFF"})
+
+    };
 
 
     return (
         <div className={AddCategoryStyle['modal-overlay']}>
           <div className={AddCategoryStyle['modal-container']}>
             <select name="s_c_id" value={calender.s_c_id} onChange={handleInput}>
-               <option value="20">내 캘린더</option>
-               <option value="21">공유 캘린더</option>
+               <option key="myCal" value="20">내 캘린더</option>
+               <option key="shareCal" value="21">공유 캘린더</option>
             </select>
 
             <div>
@@ -51,7 +58,7 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
           </div>
         </div>
       )
-}
+
 }
 
 export default AddCategory;
