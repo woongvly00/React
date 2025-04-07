@@ -44,9 +44,31 @@ const Sidelist = () => {
 
       // 전자결제 list
       case 'approval':
-        return <div className={sideliststyle.sideList}>
-                전자결제
-               </div>;
+        return (
+          <div className={sideliststyle.sideList}>
+            <aside className={sideliststyle.sidebar}>
+      
+              <div><Link to="/mainpage/maincontent/approval/write" state={{ name: "approval" }}>
+                <button className={sideliststyle.button}>결재 작성</button>
+              </Link></div>
+      
+              <div className={sideliststyle.boardsidebar}>
+                <div className={sideliststyle.wholegasy}>결재 문서함</div>
+                <div><Link to="/approval/pending" state={{ name: "approval" }}>내가 결재할 문서</Link></div>
+                <div><Link to="/approval/requested" state={{ name: "approval" }}>내가 상신한 문서</Link></div>
+                <div><Link to="/approval/complete" state={{ name: "approval" }}>완료된 문서</Link></div>
+                <div><Link to="/approval/rejected" state={{ name: "approval" }}>반려된 문서</Link></div>
+              </div>
+      
+              <div className={sideliststyle.boardsidebar}>
+                <div className={sideliststyle.wholegasy}>부서 문서함</div>
+                <div><Link to="/approval/department/referenced" state={{ name: "approval" }}>부서 참조 문서</Link></div>
+                <div><Link to="/approval/department/created" state={{ name: "approval" }}>부서 생산 문서</Link></div>
+              </div>
+      
+            </aside>
+          </div>
+        );
 
 
 

@@ -1,22 +1,22 @@
-import './Board_free.css';
+import bstyle from './Board_free.module.css';
 import React from 'react';
 
 const Board_free = () => {
     return (
 
-        <div className="SBoardContainer">
+        <div className={bstyle.SBoardContainer}>
 
-        <div className="subcontainer">
+        <div className={bstyle.subcontainer}>
 
             <h2>📄 게시판</h2>
-            <div className="approval-grid">
-            <div className="navi">
+            <div className={bstyle.approval}>
+            <div className={bstyle.navi}>
                 <div>자유 게시판</div>
 
             </div>
-            <div className="navibelow">
-                <div className="navibelowleft"><input type="text" placeholder="🔍게시글 입력"></input></div>
-                <div className="navibelowright">
+            <div className={bstyle.navibelow}>
+                <div className={bstyle.navibelowleft}><input type="text" placeholder="🔍게시글 입력"></input></div>
+                <div className={bstyle.navibelowright}>
                     <select>
                         <option value="option1">최신순</option>
                         <option value="option2">조회순</option>
@@ -25,20 +25,20 @@ const Board_free = () => {
                 </div>
             </div>
             <hr></hr>
-            <div className="freelist">
+            <div className={bstyle.freelist}>
 
-                <div className="photo">
+                <div className={bstyle.photo}>
 
                     사진
                 </div>
-                <div className="write">
-                    <div className="title">제목</div>
-                    <div className="content">내용</div>
-                    <div className="writeElse">
-                        <div className="writer">작성자</div>
-                        <div className="good">추천수</div>
-                        <div className="look">조회수</div>
-                        <div className="writeTime">현재 시간</div>
+                <div className={bstyle.write}>
+                    <div className={bstyle.title}>제목</div>
+                    <div className={bstyle.content}>내용</div>
+                    <div className={bstyle.writeElse}>
+                        <div className={bstyle.writer}>작성자</div>
+                        <div className={bstyle.good}>추천수</div>
+                        <div className={bstyle.look}>조회수</div>
+                        <div className={bstyle.writeTime}>현재 시간</div>
                     </div>
                 </div>
 

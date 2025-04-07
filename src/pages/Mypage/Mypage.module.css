@@ -1,0 +1,14 @@
+.ScheContainer{
+    display: flex;
+    flex-direction: row;
+    width:100%;
+}
+
+.sideList{
+    min-width:300px;
+}
+
+.calender{
+    min-width:1200px;
+    min-height:900px;
+}

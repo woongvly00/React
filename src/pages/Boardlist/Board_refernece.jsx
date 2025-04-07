@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Board_reference.css';
+import bstyle from './Board_reference.module.css';
 
 const Board_reference = () => {
     const [group, setGroup] = useState([]);
@@ -22,17 +22,17 @@ const Board_reference = () => {
 
 
     return (
-        <div className="SBoardContainer">
+        <div className={bstyle.SBoardContainer}>
 
-            <div className="subcontainer">
+            <div className={bstyle.subcontainer}>
 
 
 
                 <h2>📄 게시판</h2>
-                <div className="approval-grid">
-                    <table className="cotainer">
+                <div className={bstyle.approval}>
+                    <table className={bstyle.cotainer}>
                         <thead>
-                            <tr className="navi">
+                            <tr className={bstyle.navi}>
                                 <th>자료실</th>
                             </tr>
                             <tr>
@@ -44,7 +44,7 @@ const Board_reference = () => {
                                     </select>
                                 </td>
                             </tr>
-                            <tr className="list">
+                            <tr className={bstyle.list}>
 
 
                                 <th>번호</th>

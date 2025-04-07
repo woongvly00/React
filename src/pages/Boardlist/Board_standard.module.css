@@ -289,7 +289,7 @@ flex:5;
   align-items: center; 
 }
 
-.thumbs-button {
+.thumbsbutton {
   display: flex;
   flex-direction: column; 
   align-items: center; 
@@ -319,7 +319,7 @@ flex:5;
 }
 
 
-.button-container {
+.buttoncontainer {
   display: flex;
   justify-content: space-between;  
   align-items: center;            
@@ -334,7 +334,7 @@ flex:5;
 }
 
 
-.right-buttons {
+.rightbuttons {
   display: flex;                  
   justify-content: flex-end;        
 }

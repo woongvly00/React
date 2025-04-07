@@ -1,4 +1,4 @@
-import './Board_write_button.css';
+import bstyle from './Board_write_button.module.css';
 import React from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState } from 'draft-js';
@@ -10,23 +10,23 @@ const Board_write_button = () => {
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     return (
-        <div className="SBoardContainer">
+        <div className={bstyle.SBoardContainer}>
 
-            <div className="subcontainer">
+            <div className={bstyle.subcontainer}>
 
 
 
                 <div>📄 게시판</div>
-                <div className="approval-grid">
-                    <div className="container2">
-                        <div className="standardwrite10">글쓰기</div>
-                        <div className="signcancel">
+                <div className={bstyle.approval}>
+                    <div className={bstyle.container2}>
+                        <div className={bstyle.standardwrite10}>글쓰기</div>
+                        <div className={bstyle.signcancel}>
                             <button>등록</button>
                             <button>취소</button>
                         </div>
-                        <div className="gasyselect">
-                            <div className="gasywrite">게시판</div>
-                            <div className="selects">
+                        <div className={bstyle.gasyselect}>
+                            <div className={bstyle.gasywrite}>게시판</div>
+                            <div className={bstyle.selects}>
                                 <select>
                                     <option value="option1">자유 게시판</option>
                                     <option value="option2">동아리 게시판</option>
@@ -37,17 +37,17 @@ const Board_write_button = () => {
                                 </select>
                             </div>
                         </div>
-                        <div className="titlewrite">
-                            <div className="title2">제목</div>
-                            <div className="text2"><input type="text" placeholder="제목을 입력하세요"></input></div>
-                            <div className="checkbox2">
+                        <div className={bstyle.titlewrite}>
+                            <div className={bstyle.title2}>제목</div>
+                            <div className={bstyle.text2}><input type="text" placeholder="제목을 입력하세요"></input></div>
+                            <div className={bstyle.checkbox2}>
                                 <label>
                                     <input type="checkbox" />
                                     공지로 등록
                                 </label>
                             </div>
                         </div>
-                        <div className="file">
+                        <div className={bstyle.file}>
                             <input type="file"></input>
                         </div>
   

@@ -1,28 +1,56 @@
 import style from '../chatting/Chatting.module.css';
 import {useState, useEffect, useRef} from 'react';
-import { useLocation } from 'react-router-dom';
+import { replace, useLocation } from 'react-router-dom';
 import stompClient from "../../Components/websocket/websocket";
+import axios from 'axios'; 
+import dayjs from 'dayjs';
 
 function Chatting() {
 
     const [message, setMessage] = useState(""); //채팅한 메시지
     const [messages, setMessages] = useState([]); //메시지 저장
-    const [groupId,setGroupId] = useState(1);
-    const [empId,setEmpId] = useState(1);
     
     const contentRef = useRef(null);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const userName = params.get("chat");
+    const targetName = params.get("chat");//대화상대
+    const targetId = params.get("to"); //대화상대 id
+    const myId = Number(params.get("from")); //내 id
+    const seq = Number(params.get("seq")); //방 번호
    
+     const showMessages = () =>{
+        axios.get("http://10.5.5.2/Employee/showMessages",{
+            params:{
+                seq:seq
+            }
+        }).then((resp)=>{
+            console.log(resp.data);
+            const fetchedMessages = resp.data.map(msg=>({
+                ...msg,
+                isMine:msg.msg_emp_id === myId
+            }));
+            setMessages(fetchedMessages);
+        })
+     } 
+    
+
 
     useEffect(() => {
+
+
+       showMessages();
+         
         stompClient.onConnect = () => {
+
+
           console.log("WebSocket 연결 성공");
     
           stompClient.subscribe("/topic/messages", (msg) => {
             const receivedMessage = JSON.parse(msg.body);
-            setMessages((prev) => [...prev, receivedMessage]);
+            const isMine = receivedMessage.msg_emp_id === myId;
+    
+             console.log("받은 메시지:", receivedMessage, "내ID:", myId, "isMine:", isMine);
+            setMessages((prev) => [...prev, {...receivedMessage,isMine}]);
           });
         };
     
@@ -31,13 +59,16 @@ function Chatting() {
         return () => {
           stompClient.deactivate(); // 컴포넌트가 사라질 때 연결 해제
         };
-      }, []);
+      }, [myId,seq]);
 
       const sendMessage = () => {
         if (message.trim() !== "") {
+            console.log("상대iD: "+targetId +" : " + "내ID: "+myId + " 방번호 : " +seq) //이아이디 들로 채팅방이랑 메시지 테이블 연결해서 채팅 ㄱㄱ
             
             const msgData={
-                msgContent:message
+                msg_content:message,
+                msg_group_id:seq,
+                msg_emp_id:myId
             }
 
 
@@ -51,12 +82,6 @@ function Chatting() {
 
 
 
-    // const sendMessage = () => {
-    //     if (message.trim() === "") return; // 빈 메시지 전송 방지
-    //     console.log("전송된 메시지:", message); // 메시지 전송 로직 (여기서 서버로 보내면 됨)
-    //     setMessages([...messages,{ text:message, isMine: true}]);
-    //     setMessage(""); // 입력창 비우기
-    // };
 
     //엔터누르면 전송
     const handleKeyDown = (e) => {
@@ -75,7 +100,7 @@ function Chatting() {
 
     return(
         <div className={style.main}>
-            <div className={style.head}>{userName ? `${userName}님과의 채팅` : "채팅방"}</div>
+            <div className={style.head}>{targetName ? `${targetName}님과의 채팅` : "채팅방"}</div>
             <div className={style.content} ref={contentRef}>
                 {messages.map((msg,index)=>(
                     <div 
@@ -83,7 +108,8 @@ function Chatting() {
                     className={msg.isMine ? style.myMessageWrapper : ""}
                 >
                     <div className={msg.isMine ? style.myMessage : style.otherMessage}>
-                        {msg.text}
+                        <div>{msg.msg_content}</div>
+                        <div className={style.time}>{dayjs(msg.send_date).format("A hh:mm")}</div>
                     </div>
                 </div>
                 ))}
