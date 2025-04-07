@@ -10,7 +10,7 @@ import { sliceEvents } from '@fullcalendar/core';
 import useScheduleStore from '../../store/useScheduleStore';
 
 const DemoApp = () => {
-  const { events, addEvent, setEvents, event } = useScheduleStore();
+  const { events, addEvent, setEvents, event, removeEvent } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
   const [eventInput, setEventInput] = useState({
@@ -26,7 +26,7 @@ const DemoApp = () => {
   });
 
   useEffect(() => {
-    caxios.get('schedule').then((resp) => {
+    caxios.get('/schedule').then((resp) => {
       const getAllevents = resp.data.map((event) => ({
         id:event.id,
         title: event.title,
@@ -37,7 +37,6 @@ const DemoApp = () => {
           category_id: event.category_id
         }
       }));
-    console.log(getAllevents);
     setEvents(getAllevents);
     })
 
@@ -90,16 +89,48 @@ const DemoApp = () => {
     });
   };
 
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const handleEventClick = (clickInfo) => {
-    alert(`'${clickInfo.event.title}' 이벤트 클릭됨`);
 
+    console.log(clickInfo.event.start_date, clickInfo.event.end_date);
+    caxios.get(`/schedule/${clickInfo.event.id}`).then((resp) => {
+
+      const getEvent = resp.data;
+      const formattedEvent = {
+        id:getEvent.id,
+        title: getEvent.title,
+        start_date: `${getEvent.start_date}T${getEvent.startTime}`,
+        end_date: `${getEvent.end_date}T${getEvent.endTime}`,
+        startTime: `${getEvent.startTime}`,
+        endTime: `${getEvent.endTime}`,
+        allDay: false,
+        content: `${getEvent.content}`
+        
+      };
+
+    setSelectedEvent(formattedEvent);
+    setIsDetailOpen(true);
+
+    });
 
   };
+
+
 
   const handleWeekendsToggle = () => {
     setWeekendsVisible(!weekendsVisible);
   };
 
+  const handleDelete = () => {
+    removeEvent(selectedEvent.id)
+    caxios.delete(`/schedule/${selectedEvent.id}`).then(resp => {})
+    setIsDetailOpen(false);
+  };
+
+  const handleUpdate = () => {
+    
+  };
   
 
   return (
@@ -193,6 +224,26 @@ const DemoApp = () => {
           </div>
         </div>
       )}
+
+      {isDetailOpen && selectedEvent && (
+          <div className={calenderStyle['detail-overlay']}>
+            <div className={calenderStyle['detail-container']}>
+              <h2>📌 일정 상세 정보</h2>
+              <p><strong>제목:</strong> {selectedEvent.title}</p>
+              <p><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</p>
+              <p><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</p>
+              <p><strong>내용:</strong> {selectedEvent.content}</p>
+        
+              <div className={calenderStyle['modal-buttons']}>
+                <button onClick={handleDelete}>삭제</button>
+                <button onClick={handleUpdate}>수정</button>
+                <button onClick={() => setIsDetailOpen(false)}>닫기</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
     </div>
   );
 }
