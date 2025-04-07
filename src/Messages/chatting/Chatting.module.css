@@ -94,3 +94,10 @@ textarea{
     color: white;
     cursor: pointer;
 }
+
+.time {
+    font-size: 0.75rem;
+    color: gray;
+    text-align: right;
+    margin-top: 4px;
+}
