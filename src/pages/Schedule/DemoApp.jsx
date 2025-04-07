@@ -16,8 +16,8 @@ const DemoApp = () => {
   const [eventInput, setEventInput] = useState({
     id: '',
     title: '',
-    start: '',
-    end: '',
+    start_date: '',
+    end_date: '',
     startTime: '',
     endTime: '',
     content: '',
@@ -43,8 +43,8 @@ const DemoApp = () => {
     const newEvent = {
       id: Date.now().toString(),
       title: eventInput.title,
-      start: `${eventInput.start}T${eventInput.startTime}`,
-      end: `${eventInput.end}T${eventInput.endTime}`,
+      start: `${eventInput.start_date}T${eventInput.startTime}`,
+      end: `${eventInput.end_date}T${eventInput.endTime}`,
       allDay: false,
       extendedProps: {
         content: eventInput.content,
@@ -57,15 +57,16 @@ const DemoApp = () => {
     addEvent(newEvent);
     calendarApi.addEvent(newEvent);
 
-    caxios.post(`/schedule`, eventInput).catch((error) => {
-      if (error.response?.status === 404) {
+
+    caxios.post("/schedule", eventInput).catch((error) => {
+      if (error.response?.status === 404 || 500) {
         alert("등록에 실패했습니다.");
       }
     });
 
     setIsModalOpen(false);
     setEventInput({
-      id: '', title: '', start: '', end: '', startTime: '', endTime: '', content: '', category_id: 1
+      id: '', title: '', start_date: '', end_date: '', startTime: '', endTime: '', content: '', category_id: 1
     });
   };
 
@@ -129,7 +130,7 @@ const DemoApp = () => {
             </div>
             <div>
               시작
-              <input name="start" type="date" value={eventInput.start} onChange={handleInput} />
+              <input name="start_date" type="date" value={eventInput.start} onChange={handleInput} />
               <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
                 {Array.from({ length: 48 }).map((_, index) => {
                   const h = String(Math.floor(index / 2)).padStart(2, '0');
@@ -141,7 +142,7 @@ const DemoApp = () => {
             </div>
             <div>
               종료
-              <input name="end" type="date" value={eventInput.end} onChange={handleInput} />
+              <input name="end_date" type="date" value={eventInput.end} onChange={handleInput} />
               <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
                 {Array.from({ length: 48 }).map((_, index) => {
                   const h = String(Math.floor(index / 2)).padStart(2, '0');

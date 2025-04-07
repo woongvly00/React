@@ -60,21 +60,47 @@ const Sidelist = () => {
       // 일정 list
       case 'schedule':
         return <div className={sideliststyle.sideList}>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <strong>내 캘린더</strong>
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  <strong>공유 캘린더</strong>
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
           <div>
             커스텀뷰 넣기
           </div>
           <div>
             내 캘린더
-            <ur>
+            <ul>
               <li>개인 일정</li>
-            </ur>
+            </ul>
           </div>
           <div>
             공유 캘린더
-            <ur>
+            <ul>
               <li>프로젝트1 일정</li>
               <li>회사 단체 일정</li>
-            </ur>
+            </ul>
           </div>
         </div>;
 
