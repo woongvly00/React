@@ -97,35 +97,34 @@ const Boardlist = () => {
                             <div className="button-container">
                                 <div className="list3"><button>목록으로</button></div>
                                 <div className="right-buttons">
-                                    <div className="list4"><button>수정</button></div>
+                                    <div className="list4"><Link to="/mainpage/maincontent/write_update"><button>수정</button></Link></div>
                                     <div className="list5"><button>삭제</button></div>
                                 </div>
                             </div>
-                        </div>
 
-
-                        {/* 댓글 */}
-                        <div className="comment2">
-                            <div className="comment3">댓글</div>
-                            <div className="commentwrite">
-                                <div className="profile">프로필 사진</div>
-                                <div className="userwrite">
-                                    <div className="nametime">
-                                        <div className="name3">이름</div>
-                                        <div className="writetime3">작성시간</div>
+                    </div>
+                            {/* 댓글 */}
+                            <div className="comment2">
+                                <div className="comment3">댓글</div>
+                                <div className="commentwrite">
+                                    <div className="profile">프로필 사진</div>
+                                    <div className="userwrite">
+                                        <div className="nametime">
+                                            <div className="name3">이름</div>
+                                            <div className="writetime3">작성시간</div>
+                                        </div>
+                                        <div className="content4">댓글내용</div>
                                     </div>
-                                    <div className="content4">댓글내용</div>
+                                </div>
+                                <div className="commentwrite2">
+                                    <textarea placeholder="내용을 입력하세요"></textarea>
+                                    <button className="okbutton">확인</button>
                                 </div>
                             </div>
-                            <div className="commentwrite2">
-                                <textarea placeholder="내용을 입력하세요"></textarea>
-                                <button className="okbutton">확인</button>
-                            </div>
-                        </div>
 
 
-                        <hr></hr>
-                        <hr></hr>
+                            <hr></hr>
+                            <hr></hr>
 
 
                     </table>

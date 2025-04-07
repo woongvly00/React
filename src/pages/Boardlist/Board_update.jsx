@@ -1,9 +1,26 @@
-import './Board_write_button.css';
+import './Board_update.css';
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { useState } from 'react';
 
 
 
-const Board_write_button = () => {
+const Board_update = () => {
+
+    const [update,setUpdate]=useState([]);
+    const [message,setMessage]=useState({title:"",content:""});
+
+    const handleChange=(e)=>{
+        const {name,value}=e.target;
+        setMessage((prev)=>({...prev,[name]:value}));
+    }
+
+    const handleAdd=()=>{
+        const result=update.map((message)=>{
+            if(message.board_id=-)
+        })
+    }
+
 
     return (
         <div className="SBoardContainer">
@@ -17,8 +34,8 @@ const Board_write_button = () => {
                     <div className="container2">
                         <div className="standardwrite10">글쓰기</div>
                         <div className="signcancel">
-                            <button>등록</button>
-                            <button>취소</button>
+                            <button onClick={handleAdd}>등록</button>
+                            <Link to="/mainpage/maincontent/standard"><button>취소</button></Link>
                         </div>
                         <div className="gasyselect">
                             <div className="gasywrite">게시판</div>
@@ -35,7 +52,7 @@ const Board_write_button = () => {
                         </div>
                         <div className="titlewrite">
                             <div className="title2">제목</div>
-                            <div className="text2"><input type="text" placeholder="제목을 입력하세요"></input></div>
+                            <div className="text2"><input type="text" placeholder="제목을 입력하세요" onChange={handleChange} value={encodeURIComponent.id}></input></div>
                             <div className="checkbox2">
                                 <label>
                                     <input type="checkbox" />
@@ -50,11 +67,11 @@ const Board_write_button = () => {
                             <textarea>툴바</textarea>
                         {/* </div> */}
 
-                    
+                      
                     </div>
                 </div>
             </div>
         </div>
     );
 };
-export default Board_write_button;
+export default Board_update;

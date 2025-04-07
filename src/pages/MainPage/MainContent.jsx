@@ -14,6 +14,7 @@ import Board_department from '../Boardlist/Board_department';
 import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
 import Board_write_button from '../Boardlist/Board_write_button';
+import Board_update from '../Boardlist/Board_update';
 
 
 
@@ -38,6 +39,7 @@ const MainContent = () => {
           <Route path="approval" element={<ApprovalMain />}></Route>
           <Route path="schedule" element={<ScheduleMain />}></Route>
 
+          <Route path="write_update" element={<Board_update/>}></Route>
           <Route path="write_button" element={<Board_write_button/>}></Route>
           <Route path="standard" element={<Boardlist />}></Route>
           <Route path="listmanager" element={<Board_listmanager />}></Route>
