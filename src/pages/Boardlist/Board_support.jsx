@@ -1,18 +1,18 @@
-import './Board_support.css';
+import bstyle from './Board_support.module.css';
 
 const Board_support =()=>{
 
     return(
-        <table className="SBoardContainer">
+        <table className={bstyle.SBoardContainer}>
 
-        <table className="subcontainer">
+        <table className={bstyle.subcontainer}>
     
     
     
             <h2>📄 게시판</h2>
-            <table className="approval-grid">
-            <table className="cotainer">
-                <tr className="navi">
+            <table className={bstyle.approval}>
+            <table className={bstyle.cotainer}>
+                <tr className={bstyle.navi}>
                     <th>업체교육/업무지원보고서</th>
                 </tr>
                 <tr>
@@ -25,7 +25,7 @@ const Board_support =()=>{
                     </td>
                 </tr>
                 <hr></hr>
-                <tr className="list">
+                <tr className={bstyle.list}>
     
                     <tr>
                         <th>번호</th>
