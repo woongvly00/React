@@ -16,8 +16,12 @@ import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
 import Mypage from '../Mypage/Mypage';
 import Board_write_button from '../Boardlist/Board_write_button';
+
+
+
 import FormWrite from "../Approval/ApprovalWrite";
 import FormWriteNext from "../Approval/FormWriteNext";
+
 
 
 
@@ -43,8 +47,10 @@ const MainContent = () => {
         <Routes>
           {/* 전자결제 */}
           <Route path="approval" element={<ApprovalMain />}></Route>
+
           <Route path="/approval/write" element={<FormWrite />} />
           <Route path="/approval/write/next" element={<FormWriteNext />} />
+
 
 
 
@@ -53,8 +59,6 @@ const MainContent = () => {
           {/* 인사관리 페이지가 없는 상태에서 만들어졌습니다. 인사관리 페이지 만들어지면 아래 전자결졔로 연결되는 부분 인사관리로만 바꿔주세요! */}
           <Route path="hr" element={<ApprovalMain />}></Route>
           
-
-
 
           {/* 게시판 */}
           <Route path="write_button" element={<Board_write_button/>}></Route>
