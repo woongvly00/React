@@ -7,7 +7,9 @@ import RouteFilter from './Components/filters/RouteFilter';
 import Mainpage from './pages/MainPage/Mainpage.jsx';
 import MessengerPopupContainer from "./Messages/MessengerPopupContainer";
 import Header from './Components/Header.jsx';
+import Modal from 'react-modal';
 
+Modal.setAppElement('#root'); // ⚠️ 꼭 있어야 접근성 에러 안 나고, ESC 키/백그라운드 클릭 처리 가능!
 
 const App = () => {
   const initialize = useAuthStore((state) => state.initialize);
@@ -16,6 +18,7 @@ const App = () => {
     initialize();
   }, []);
 
+  
   return (
     
       <div className="app-container">

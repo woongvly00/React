@@ -1,58 +1,64 @@
-// 📄 FormWriteNext.jsx : 전자결재 - 본문작성 + 파일 + 결재선 입력 화면
+// 📄 FormWriteNext.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import ApproverModal from "./ApproverModal";
 import axios from "axios";
 
 const FormWriteNext = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { formId, formName, formDesc, formContent } = location.state || {};
+  const { formId, formName, formContent } = location.state || {};
 
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(formContent || "");
   const [files, setFiles] = useState([]);
-  const [approvers, setApprovers] = useState([]);
+  const [approverModalOpen, setApproverModalOpen] = useState(false);
+  const [approverLevels, setApproverLevels] = useState({
+    level1: null,
+    level2: null,
+    level3: null,
+    level4: null,
+    final: null,
+  });
+  const [currentLevel, setCurrentLevel] = useState(null);
 
-  // ✅ formContent를 본문에 초기 렌더링
-  useEffect(() => {
-    if (formContent) {
-      setContent(formContent);
-    }
-  }, [formContent]);
-
-  // ✅ 제목 입력 시 본문 내 {{제목}} 자동 치환
-  const handleTitleChange = (e) => {
-    const newTitle = e.target.value;
-    setTitle(newTitle);
-    setContent((prev) => prev.replace(/{{제목}}/g, newTitle));
-  };
-
-  // ✅ 결재선 입력 시 본문 내 {{결재선}} 자동 치환 (임시)
-  const handleApproverInput = (e) => {
-    const approverNames = e.target.value.split(",").map((name) => name.trim());
-    setApprovers(approverNames);
-    setContent((prev) => prev.replace(/{{결재선}}/g, approverNames.join(", ")));
-  };
-
+  // 첨부파일 변경
   const handleFileChange = (e) => {
     setFiles(Array.from(e.target.files));
   };
 
+  // 결재자 모달 열기
+  const openApproverModal = (level) => {
+    setCurrentLevel(level);
+    setApproverModalOpen(true);
+  };
+
+  // 결재자 선택 후 저장
+  const handleApproverSelect = (user) => {
+    setApproverLevels((prev) => ({ ...prev, [currentLevel]: user }));
+    setApproverModalOpen(false);
+  };
+
+  // 제출
   const handleSubmit = async () => {
-    if (!title || !content || approvers.length === 0) {
-      alert("모든 필드를 입력해주세요!");
+    const approvers = Object.values(approverLevels).filter(Boolean);
+
+    if (!title || !content || !approverLevels.final) {
+      alert("제목, 본문, 최종결재자를 입력해주세요!");
       return;
     }
+
+    let finalContent = content
+      .replace(/{{제목}}/g, title)
+      .replace(/{{결재선}}/g, approvers.map((a) => a.name).join(" → "));
 
     const formData = new FormData();
     formData.append("formId", formId);
     formData.append("title", title);
-    formData.append("content", content);
-    formData.append("formName", formName);
-    formData.append("formDesc", formDesc);
-    approvers.forEach((a, idx) => formData.append(`approverIds[${idx}]`, a));
+    formData.append("content", finalContent);
+    approvers.forEach((a, idx) => formData.append(`approverIds[${idx}]`, a.id));
     files.forEach((file) => formData.append("files", file));
 
     try {
@@ -66,7 +72,7 @@ const FormWriteNext = () => {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h2>📝 전자결재 문서 작성</h2>
+      <h2>✍️ 전자결재 문서 작성</h2>
 
       <div style={{ marginBottom: "1rem" }}>
         <label>양식 제목</label>
@@ -74,19 +80,8 @@ const FormWriteNext = () => {
       </div>
 
       <div style={{ marginBottom: "1rem" }}>
-        <label>양식 설명</label>
-        <textarea value={formDesc} readOnly rows={2} style={{ width: "100%" }} />
-      </div>
-
-      <div style={{ marginBottom: "1rem" }}>
         <label>제목</label>
-        <input
-          type="text"
-          value={title}
-          onChange={handleTitleChange}
-          style={{ width: "100%" }}
-          placeholder="결재 문서 제목 입력"
-        />
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} style={{ width: "100%" }} />
       </div>
 
       <div style={{ marginBottom: "1rem" }}>
@@ -95,7 +90,7 @@ const FormWriteNext = () => {
           apiKey={process.env.REACT_APP_TINYMCE_KEY}
           value={content}
           onEditorChange={(newValue) => setContent(newValue)}
-          init={{ height: 400, menubar: false }}
+          init={{ height: 300, menubar: false }}
         />
       </div>
 
@@ -105,16 +100,25 @@ const FormWriteNext = () => {
       </div>
 
       <div style={{ marginBottom: "1rem" }}>
-        <label>결재선 (콤마로 구분)</label>
-        <input
-          type="text"
-          onChange={handleApproverInput}
-          placeholder="ex) 홍길동,이몽룡"
-          style={{ width: "100%" }}
-        />
+        <label>결재선 지정</label>
+        <div>
+          {Object.entries(approverLevels).map(([level, user]) => (
+            <div key={level} style={{ marginBottom: "0.5rem" }}>
+              <button onClick={() => openApproverModal(level)}>
+                {level.toUpperCase()} {user ? `: ${user.name}` : "선택"}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       <button onClick={handleSubmit}>제출하기 ✅</button>
+
+      <ApproverModal
+        isOpen={approverModalOpen}
+        onClose={() => setApproverModalOpen(false)}
+        onSelect={handleApproverSelect}
+      />
     </div>
   );
 };
