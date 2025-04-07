@@ -13,7 +13,10 @@ function Chatting() {
     const contentRef = useRef(null);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
-    const userName = params.get("chat");
+    const targetName = params.get("chat");//대화상대
+    const targetId = params.get("to"); //대화상대 id
+    const myId = params.get("from"); //내 id
+    
    
 
     useEffect(() => {
@@ -35,7 +38,7 @@ function Chatting() {
 
       const sendMessage = () => {
         if (message.trim() !== "") {
-            
+            console.log("상대iD: "+targetId +" : " + "내ID: "+myId) //이아이디 들로 채팅방이랑 메시지 테이블 연결해서 채팅 ㄱㄱ
             const msgData={
                 msgContent:message
             }
@@ -75,7 +78,7 @@ function Chatting() {
 
     return(
         <div className={style.main}>
-            <div className={style.head}>{userName ? `${userName}님과의 채팅` : "채팅방"}</div>
+            <div className={style.head}>{targetName ? `${targetName}님과의 채팅` : "채팅방"}</div>
             <div className={style.content} ref={contentRef}>
                 {messages.map((msg,index)=>(
                     <div 

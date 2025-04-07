@@ -6,7 +6,9 @@
     flex-wrap: wrap;      
   
   }
-  
+  .subcontainer{
+    width:1000px;
+  }
   
   .container {
       width: 100%;

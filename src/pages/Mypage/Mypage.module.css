@@ -1,12 +1,14 @@
-.reservContainer{
+.ScheContainer{
     display: flex;
     flex-direction: row;
-    margin-left: 20px;
     width:100%;
 }
 
+.sideList{
+    min-width:300px;
+}
 
-.reservArea{
+.calender{
     min-width:1200px;
     min-height:900px;
 }
