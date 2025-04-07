@@ -1,0 +1,15 @@
+.dashboard-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    width: 200px;
+    background-color: #f9f9f9;
+  }
+  .dashboard-card h4 {
+    margin-bottom: 10px;
+  }
+  .dashboard-card p {
+    font-size: 14px;
+    color: #666;
+  }
+  

@@ -5,6 +5,7 @@ import Boardlist from '../Boardlist/Board_standard';
 import Sidelist from '../../Components/Sidelist';
 import ReserveMain from '../Reserve/ReserveMain';
 import style from './MainContent.module.css';
+import ApprovalForm from '../Approval/ApprovalForm';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import Board_listmanager from '../Boardlist/Board_listmanager';
 import Board_reference from '../Boardlist/Board_refernece';
@@ -14,6 +15,8 @@ import Board_department from '../Boardlist/Board_department';
 import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
 import Mypage from '../Mypage/Mypage';
+import Board_write_button from '../Boardlist/Board_write_button';
+
 
 
 const MainContent = () => {
@@ -24,7 +27,7 @@ const MainContent = () => {
 
     <div className={style.maincontainer}>
       <div className={style.mainSidebar}>
-        <Link to="/mainpage"><i className="fa-solid fa-2x fa-house" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
+        <div className={style.icons}><Link to="/mainpage"><i className="fa-solid fa-2x fa-house" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link></div>
         <Link to="/mainpage/maincontent/approval" state={{ name: "approval" }}><i className="fa-solid fa-2x fa-inbox" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/hr" state={{ name: "hr" }}><i className="fa-solid fa-2x fa-person" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/board" state={{ name: "board" }}><i className="fa-solid fa-2x fa-clipboard" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
@@ -32,6 +35,7 @@ const MainContent = () => {
         <Link to="/mainpage/maincontent/reserve" state={{ name: "reserve" }}><i className="fa-solid fa-2x fa-clock" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/msg"><i className="fa-solid fa-2x fa-comment" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
       </div>
+      
       <Sidelist />
       <div className={style.mainContents}>
         <Routes>
@@ -41,14 +45,16 @@ const MainContent = () => {
 
 
 
+
           {/* 인사관리 */}
-          인사관리 페이지가 없는 상태에서 만들어졌습니다. 인사관리 페이지 만들어지면 아래 전자결졔로 연결되는 부분 인사관리로만 바꿔주세요!
+          {/* 인사관리 페이지가 없는 상태에서 만들어졌습니다. 인사관리 페이지 만들어지면 아래 전자결졔로 연결되는 부분 인사관리로만 바꿔주세요! */}
           <Route path="hr" element={<ApprovalMain />}></Route>
           
 
 
 
           {/* 게시판 */}
+          <Route path="write_button" element={<Board_write_button/>}></Route>
           <Route path="standard" element={<Boardlist />}></Route>
           <Route path="listmanager" element={<Board_listmanager />}></Route>
           <Route path="reference" element={<Board_reference />}></Route>
@@ -57,6 +63,8 @@ const MainContent = () => {
           <Route path="department" element={<Board_department />}></Route>
           <Route path="business" element={<Board_business />}></Route>
           <Route path="support" element={<Board_support />}></Route>
+          
+
 
 
 
@@ -73,6 +81,7 @@ const MainContent = () => {
 
           {/* 메신저 */}
           <Route path="msg" element={<ApprovalMain />}></Route>
+
 
           {/* 마이페이지 */}
           <Route path='mypage' element={<Mypage/>}> </Route>
