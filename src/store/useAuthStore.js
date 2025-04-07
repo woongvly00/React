@@ -8,6 +8,7 @@ const useAuthStore = create((set)=>({
     isAuth: false,
     per_function :"U",
     per_secure:3,
+    isInitialized: false,   // 로딩 상태
     
 
 
@@ -27,15 +28,29 @@ const useAuthStore = create((set)=>({
         sessionStorage.removeItem("per_function");
         sessionStorage.removeItem("per_secure");
     },
-    initialize: ()=>{
+    initialize: ()=> {
         const token = sessionStorage.getItem("token");
         const userId = sessionStorage.getItem("userId");
-        const isAuth = sessionStorage.getItem("isAuth");
-
+        const isAuth = sessionStorage.getItem("isAuth") === "true";  // ← boolean으로 변환
+        const per_function = sessionStorage.getItem("per_function");
+        const per_secure = parseInt(sessionStorage.getItem("per_secure"));
+    
+        console.log("initialize 실행중")
+    
         if(token && userId){
-            set({token:token, userId:userId, isAuth: isAuth});
+            set({
+                token,
+                userId,
+                isAuth,
+                per_function,
+                per_secure,
+                isInitialized: true
+            });
         }
     }
+    
+
+   
 }))
 
 export default useAuthStore;

@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation 
 import EmployeePage from "../employees/EmployeePage";
 import ChattingRoom from "../chattingroom/ChattingRoom";
 import Chatting from "../chatting/Chatting";
-
+import axios from 'axios';
 
 function MessengerPopup({ onClose }) {
     const nodeRef = useRef(null);
@@ -15,14 +15,38 @@ function MessengerPopup({ onClose }) {
     const params = new URLSearchParams(location.search);
     const initialChat = params.get("chat");
     const [currentChat, setCurrentChat] = useState(initialChat);
+   
 
-    const openChatWindow = (name) => {
+    const openChatWindow = (target,me,name) => {
+      console.log(target +" : "+me);
+      axios.get("http://10.5.5.2/Employee/checkRoomExist",{
+        params:{
+          targetname:target,
+          myname:me
+        }
+      }).then((result)=>{
+        console.log(result.data);
+        const exist = result.data;
+
+        if(exist===false){
+         
+        axios.post("http://10.5.5.2/Employee/madeChatRoom",{
+          targetname:target,
+          myname:me
+        }).then((resp)=>{
+          setCurrentChat(name);
+          navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}`);
+      });
+    }  else{
       setCurrentChat(name);
-      navigate(`/messenger/chatting?chat=${name}`);
+      navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}`);
+    }
+
+     
+}); 
   };
 
 
-  
 
   useEffect(() => {
     if (initialChat) {
@@ -58,7 +82,7 @@ const handleClose = () => {
             <div className={style.contentStyle}>
                 <div className={style.left}>
                   <button className={style.empbtn} onClick={()=> navigate("/messenger/employee")}>사원</button>
-                  <button className={style.chatbtn} onClick={()=> navigate("/messenger/chattingroom")}>채팅</button>
+                  <button className={style.chatbtn} onClick={()=> navigate("/messenger/chattingroom")}>1:1</button>
                 </div>
                 <div className={style.right}>
                   <Routes>

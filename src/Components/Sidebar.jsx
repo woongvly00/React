@@ -22,7 +22,7 @@ const Sidebar = () => {
 
     try {
       const response = await axios.post(
-        "http://10.10.55.69/work/checkIn",
+        "http://10.5.5.6/work/checkIn",
         { checkInTime: currentTime },
         {
           headers: {
@@ -47,7 +47,7 @@ const Sidebar = () => {
 
     try {
       const response = await axios.post(
-        "http://10.10.55.69/work/checkOut",
+        "http://10.5.5.6/work/checkOut",
         {
           checkOutTime: currentTime,
           emp_loginId: userId  // ✅ 여기에 로그인 아이디를 명시적으로 보내줘야 해
@@ -80,7 +80,7 @@ const Sidebar = () => {
     console.log("외근 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.10.55.69/work/outing", { outingTime: formattedTime });
+      const response = await axios.post("http://10.5.5.6/work/outing", { outingTime: formattedTime });
       console.log('서버 응답:', response.data);
     } catch (error) {
       console.log('외근 시간 전송 오류', error);
@@ -96,7 +96,7 @@ const Sidebar = () => {
     console.log("업무 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.10.55.69/work/work", { workTime: formattedTime });
+      const response = await axios.post("http://10.5.5.6/work/work", { workTime: formattedTime });
       console.log('서버 응답:', response.data);
     } catch (error) {
       console.log('업무 시간 전송 오류', error);
