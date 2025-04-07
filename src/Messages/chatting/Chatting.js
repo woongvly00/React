@@ -1,4 +1,4 @@
-import style from '../chatting/Chatting.module.css';
+import msgstyle from '../chatting/Chatting.module.css';
 import {useState, useEffect, useRef} from 'react';
 import { replace, useLocation } from 'react-router-dom';
 import stompClient from "../../Components/websocket/websocket";
@@ -99,27 +99,27 @@ function Chatting() {
     }, [messages]);
 
     return(
-        <div className={style.main}>
-            <div className={style.head}>{targetName ? `${targetName}님과의 채팅` : "채팅방"}</div>
-            <div className={style.content} ref={contentRef}>
+        <div className={msgstyle.main}>
+            <div className={msgstyle.head}>{targetName ? `${targetName}님과의 채팅` : "채팅방"}</div>
+            <div className={msgstyle.content} ref={contentRef}>
                 {messages.map((msg,index)=>(
                     <div 
                     key={index} 
-                    className={msg.isMine ? style.myMessageWrapper : ""}
+                    className={msg.isMine ? msgstyle.myMessageWrapper : ""}
                 >
-                    <div className={msg.isMine ? style.myMessage : style.otherMessage}>
+                    <div className={msg.isMine ? msgstyle.myMessage : msgstyle.otherMessage}>
                         <div>{msg.msg_content}</div>
-                        <div className={style.time}>{dayjs(msg.send_date).format("A hh:mm")}</div>
+                        <div className={msgstyle.time}>{dayjs(msg.send_date).format("A hh:mm")}</div>
                     </div>
                 </div>
                 ))}
             </div>
-            <div className={style.message}>
+            <div className={msgstyle.message}>
                 <textarea placeholder='메시지 입력' value={message} onChange={(e)=> setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}></textarea>
             </div>
-            <div className={style.service}>
-                <button className={style.send} onClick={sendMessage}>전송</button>
+            <div className={msgstyle.service}>
+                <button className={msgstyle.send} onClick={sendMessage}>전송</button>
             </div>
         </div>
     )

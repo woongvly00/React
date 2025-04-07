@@ -33,10 +33,7 @@ const DemoApp = () => {
         start: `${event.start_date}T${event.startTime}`,
         end: `${event.end_date}T${event.endTime}`,
         allDay: false,
-        startTime: event.startTime,
-        endTime: event.endTime,
         extendedProps: {
-          content: event.content,
           category_id: event.category_id
         }
       }));
@@ -95,6 +92,8 @@ const DemoApp = () => {
 
   const handleEventClick = (clickInfo) => {
     alert(`'${clickInfo.event.title}' 이벤트 클릭됨`);
+
+
   };
 
   const handleWeekendsToggle = () => {
