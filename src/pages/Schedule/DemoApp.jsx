@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { formatDate } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -10,7 +10,7 @@ import { sliceEvents } from '@fullcalendar/core';
 import useScheduleStore from '../../store/useScheduleStore';
 
 const DemoApp = () => {
-  const { events, addEvent } = useScheduleStore();
+  const { events, addEvent, setEvents, event } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
   const [eventInput, setEventInput] = useState({
@@ -24,6 +24,29 @@ const DemoApp = () => {
     category_id: 1,
     color: ''
   });
+
+  useEffect(() => {
+    caxios.get('schedule').then((resp) => {
+      const getAllevents = resp.data.map((event) => ({
+        id:event.id,
+        title: event.title,
+        start: `${event.start_date}T${event.startTime}`,
+        end: `${event.end_date}T${event.endTime}`,
+        allDay: false,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        extendedProps: {
+          content: event.content,
+          category_id: event.category_id
+        }
+      }));
+    console.log(getAllevents);
+    setEvents(getAllevents);
+    })
+
+    
+  }, [])
+
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
   const handleInput = (e) => {
@@ -77,6 +100,8 @@ const DemoApp = () => {
   const handleWeekendsToggle = () => {
     setWeekendsVisible(!weekendsVisible);
   };
+
+  
 
   return (
     <div className='demo-app'>
@@ -176,7 +201,7 @@ const DemoApp = () => {
 
 
 const renderEventContent = (eventInfo) => {
-  const bgColor = eventInfo.event.extendedProps.color || 'blue';
+  const bgColor = eventInfo.event.extendedProps.color || 'dodgeblue';
  return (
     <div style={{backgroundColor:bgColor, borderRadius:'0px'}}>
       <b>{eventInfo.timeText}</b>
@@ -219,28 +244,7 @@ const SidebarEvent = ({ event }) => {
   );
 };
 
-export const CustomView = (props) => {
-  const segs = sliceEvents(props, true);
 
-  return (
-    <div className="custom-view">
-      <h2>\ud83d\uddd3\ufe0f 현재 뷰 날짜</h2>
-      <p>{props.dateProfile.currentRange.start.toDateString()}</p>
-
-      <h3>\ud83d\uddc2\ufe0f 이벤트 개수</h3>
-      <p>{segs.length}개 이벤트가 있습니다.</p>
-
-      <ul>
-        {segs.map((seg, index) => (
-          <li key={index}>
-            <strong>{seg.eventRange.def.title}</strong><br />
-            날짜: {seg.eventRange.range.start.toDateString()}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
 
 
 export default DemoApp;
