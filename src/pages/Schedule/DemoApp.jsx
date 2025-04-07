@@ -229,10 +229,10 @@ const DemoApp = () => {
           <div className={calenderStyle['detail-overlay']}>
             <div className={calenderStyle['detail-container']}>
               <h2>📌 일정 상세 정보</h2>
-              <p><strong>제목:</strong> {selectedEvent.title}</p>
-              <p><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</p>
-              <p><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</p>
-              <p><strong>내용:</strong> {selectedEvent.content}</p>
+              <div><strong>제목:</strong> {selectedEvent.title}</div>
+              <div><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</div>
+              <div><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</div>
+              <div><strong>내용:</strong> {selectedEvent.content}</div>
         
               <div className={calenderStyle['modal-buttons']}>
                 <button onClick={handleDelete}>삭제</button>
