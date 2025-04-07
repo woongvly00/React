@@ -1,6 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { Editor } from '@toast-ui/react-editor';
-import '@toast-ui/editor/dist/toastui-editor.css';
 
 const ApprovalForm = () => {
   const editorRef = useRef();
@@ -76,15 +74,6 @@ const ApprovalForm = () => {
 
         <br />
         <button type="button" onClick={handleAutoInsert}>📥 본문 자동 생성</button>
-
-        <div style={{ marginTop: '2rem' }}>
-          <Editor
-            previewStyle="vertical"
-            height="400px"
-            initialEditType="markdown"
-            ref={editorRef}
-          />
-        </div>
 
         <br />
         <button type="submit">📨 제출</button>
