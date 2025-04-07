@@ -17,6 +17,7 @@ import Board_support from '../Boardlist/Board_support';
 import Mypage from '../Mypage/Mypage';
 import Board_write_button from '../Boardlist/Board_write_button';
 import FormWrite from "../Approval/ApprovalWrite";
+import FormWriteNext from "../Approval/FormWriteNext";
 
 
 
@@ -43,6 +44,7 @@ const MainContent = () => {
           {/* 전자결제 */}
           <Route path="approval" element={<ApprovalMain />}></Route>
           <Route path="/approval/write" element={<FormWrite />} />
+          <Route path="/approval/write/next" element={<FormWriteNext />} />
 
 
 
