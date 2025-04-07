@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import sideliststyle from './Sidelist.module.css';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import AddCategory from '../pages/Schedule/AddCategory';
 
 const Sidelist = () => {
   const location = useLocation();
   const name = location.state?.name;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedInfo, setSelectedInfo] = useState(null);
 
+
+  const handleModalOpen = (selectInfo) => {
+    setSelectedInfo(selectInfo);
+    setIsModalOpen(true);
+  };
 
   const renderContent = () => {
     switch (name) {
@@ -60,16 +68,19 @@ const Sidelist = () => {
       // 일정 list
       case 'schedule':
         return <div className={sideliststyle.sideList}>
+          <div>
+            커스텀뷰 넣기
+          </div>
           <div className="accordion" id="accordionExample">
             <div className="accordion-item">
               <h2 className="accordion-header">
                 <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                <strong>내 캘린더</strong>
+                내 캘린더
                 </button>
               </h2>
               <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                 <div className="accordion-body">
-                  It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                <input type="checkbox" style={{ accentColor: 'blue', marginRight: '8px' }}/><span>개인일정</span>
                 </div>
               </div>
             </div>
@@ -81,26 +92,19 @@ const Sidelist = () => {
               </h2>
               <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div className="accordion-body">
-                  
+                <ul>
+                  <li>프로젝트1 일정</li>
+                  <li>회사 단체 일정</li>
+                </ul>
                 </div>
               </div>
             </div>
           </div>
           <div>
-            커스텀뷰 넣기
-          </div>
-          <div>
-            내 캘린더
-            <ul>
-              <li>개인 일정</li>
-            </ul>
-          </div>
-          <div>
-            공유 캘린더
-            <ul>
-              <li>프로젝트1 일정</li>
-              <li>회사 단체 일정</li>
-            </ul>
+            <button onClick={handleModalOpen}>캘린더 추가</button>
+            <div>
+              {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo}/>)}
+            </div>
           </div>
         </div>;
 
