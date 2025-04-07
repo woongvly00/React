@@ -132,3 +132,20 @@ input[type="file"] {
   bottom: 0;
   right: 0;
 }
+
+.demo-wrapper {
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.demo-editor {
+  min-height: 300px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.toolbar-class {
+  border: 1px solid #bbb;
+  background-color: #f5f5f5;
+}

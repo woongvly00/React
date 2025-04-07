@@ -18,7 +18,7 @@ const Boardlist = () => {
 
 
 
-                <h2>📄 게시판</h2>
+                <div>📄 게시판</div>
                 <div className="approval-grid">
                     <table className="cotainer">
                         <tr className="navi">

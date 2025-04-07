@@ -4,90 +4,90 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId } from './event-utils'
 import calenderStyle from './DemoApp.module.css';
+import caxios from '../../Utils/caxios';
+import { sliceEvents } from '@fullcalendar/core';
+import useScheduleStore from '../../store/useScheduleStore';
 
-export default function DemoApp() {
+const DemoApp = () => {
+  const { events, addEvent } = useScheduleStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedInfo, setSelectedInfo] = useState(null);
+  const [eventInput, setEventInput] = useState({
+    id: '',
+    title: '',
+    start_date: '',
+    end_date: '',
+    startTime: '',
+    endTime: '',
+    content: '',
+    category_id: 1,
+    color: ''
+  });
+  const [weekendsVisible, setWeekendsVisible] = useState(true);
 
-  // 주말 보이기 여부 / 캘린더에 표시 중인 이벤트 목록
-  const [weekendsVisible, setWeekendsVisible] = useState(true)
-  const [currentEvents, setCurrentEvents] = useState([])
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setEventInput((prev) => ({ ...prev, [name]: value }));
+  };
 
-  // 주말표시 on/off
-  function handleWeekendsToggle() {
-    setWeekendsVisible(!weekendsVisible)
-  }
+  const handleDateSelect = (selectInfo) => {
+    setSelectedInfo(selectInfo);
+    setIsModalOpen(true);
+  };
 
+  const handleAddEvent = () => {
+    const calendarApi = selectedInfo.view.calendar;
+    calendarApi.unselect();
 
-  // 캘린더의 날짜 드래그/클릭 하면 새로운 일정 추가
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedInfo, setSelectedInfo] = useState(null)
-  const [newTitle, setNewTitle] = useState('')
+    const newEvent = {
+      id: Date.now().toString(),
+      title: eventInput.title,
+      start: `${eventInput.start_date}T${eventInput.startTime}`,
+      end: `${eventInput.end_date}T${eventInput.endTime}`,
+      allDay: false,
+      extendedProps: {
+        content: eventInput.content,
+        category_id: eventInput.category_id
+      }
+    };
 
-  function handleDateSelect(selectInfo) {
+    
 
-    setSelectedInfo(selectInfo)
-    setIsModalOpen(true)
-    // let title = prompt('Please enter a new title for your event')
-    // let calendarApi = selectInfo.view.calendar
-
-    // calendarApi.unselect() // clear date selection
-
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id: createEventId(),
-    //     title,
-    //     start: selectInfo.startStr,
-    //     end: selectInfo.endStr,
-    //     allDay: selectInfo.allDay
-    //   })
-    // }
-  }
-
-  function handleAddEvent() {
-    const calendarApi = selectedInfo.view.calendar
-    calendarApi.unselect()
-  
-    if (newTitle) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title: newTitle,
-        start: selectedInfo.startStr,
-        end: selectedInfo.endStr,
-        allDay: selectedInfo.allDay
-      })
-    }
-  
-    // 초기화
-    setNewTitle('')
-    setIsModalOpen(false)
-  }
-  
+    addEvent(newEvent);
+    calendarApi.addEvent(newEvent);
 
 
-  // 이벤트 삭제 기능
-  function handleEventClick(clickInfo) {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
-    }
-  }
+    caxios.post("/schedule", eventInput).catch((error) => {
+      if (error.response?.status === 404 || 500) {
+        alert("등록에 실패했습니다.");
+      }
+    });
 
+    setIsModalOpen(false);
+    setEventInput({
+      id: '', title: '', start_date: '', end_date: '', startTime: '', endTime: '', content: '', category_id: 1
+    });
+  };
 
-  // 이벤트 변경 사항 업데이트
-  function handleEvents(events) {
-    setCurrentEvents(events)
-  }
+  const handleEventClick = (clickInfo) => {
+    alert(`'${clickInfo.event.title}' 이벤트 클릭됨`);
+  };
+
+  const handleWeekendsToggle = () => {
+    setWeekendsVisible(!weekendsVisible);
+  };
 
   return (
     <div className='demo-app'>
       <Sidebar
         weekendsVisible={weekendsVisible}
         handleWeekendsToggle={handleWeekendsToggle}
-        currentEvents={currentEvents}
+        currentEvents={events}
       />
+
       <div className='demo-app-main'>
         <FullCalendar
-          
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView='dayGridMonth'
           headerToolbar={{
@@ -95,7 +95,6 @@ export default function DemoApp() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
           }}
-          // dateClick={this.dateClick}
           editable={true}
           selectable={true}
           selectMirror={true}
@@ -103,8 +102,8 @@ export default function DemoApp() {
           weekends={weekendsVisible}
           select={handleDateSelect}
           eventContent={renderEventContent}
+          events={events}
           eventClick={handleEventClick}
-          events={currentEvents}
         />
       </div>
 
@@ -113,27 +112,54 @@ export default function DemoApp() {
           <div className={calenderStyle['modal-container']}>
             <h2>일정 추가</h2>
             <div>
-              캘린더
-              <select>
-                <option>캘린더 list 넣기</option>
+              일정 종류
+              <select name="category_id" value={eventInput.category_id} onChange={handleInput}>
+                <option value="111">캘린더 list 넣기</option>
               </select>
             </div>
             <div>
               일정 제목
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="일정 제목 입력"
-              autoFocus
-            />
-            </div>
-            <div>
               <input
                 type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
+                name="title"
+                value={eventInput.title}
+                onChange={handleInput}
                 placeholder="일정 제목 입력"
+                autoFocus
+              />
+            </div>
+            <div>
+              시작
+              <input name="start_date" type="date" value={eventInput.start} onChange={handleInput} />
+              <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
+                {Array.from({ length: 48 }).map((_, index) => {
+                  const h = String(Math.floor(index / 2)).padStart(2, '0');
+                  const m = index % 2 === 0 ? '00' : '30';
+                  const time = `${h}:${m}`;
+                  return <option key={time} value={time}>{time}</option>;
+                })}
+              </select>
+            </div>
+            <div>
+              종료
+              <input name="end_date" type="date" value={eventInput.end} onChange={handleInput} />
+              <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
+                {Array.from({ length: 48 }).map((_, index) => {
+                  const h = String(Math.floor(index / 2)).padStart(2, '0');
+                  const m = index % 2 === 0 ? '00' : '30';
+                  const time = `${h}:${m}`;
+                  return <option key={time} value={time}>{time}</option>;
+                })}
+              </select>
+            </div>
+            <div>
+              일정 내용
+              <textarea
+                name="content"
+                value={eventInput.content}
+                onChange={handleInput}
+                placeholder="내용 입력"
+                style={{ width: '300px', height: '150px', resize: 'none' }}
               />
             </div>
             <div className={calenderStyle['modal-buttons']}>
@@ -143,40 +169,29 @@ export default function DemoApp() {
           </div>
         </div>
       )}
-
     </div>
-
-    
-  )
+  );
 }
 
-function renderEventContent(eventInfo) {
+const renderEventContent = (eventInfo) => {
   return (
     <>
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  )
-}
+  );
+};
 
-function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
+const Sidebar = ({ weekendsVisible, handleWeekendsToggle, currentEvents }) => {
   return (
     <div className='demo-app-sidebar'>
-      <div className='demo-app-sidebar-section'>
-        <h2>Instructions</h2>
-        <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
-        </ul>
-      </div>
       <div className='demo-app-sidebar-section'>
         <label>
           <input
             type='checkbox'
             checked={weekendsVisible}
             onChange={handleWeekendsToggle}
-          ></input>
+          />
           toggle weekends
         </label>
       </div>
@@ -189,16 +204,40 @@ function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
         </ul>
       </div>
     </div>
+  );
+};
 
-    
-  )
-}
-
-function SidebarEvent({ event }) {
+const SidebarEvent = ({ event }) => {
   return (
     <li key={event.id}>
-      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+      <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
       <i>{event.title}</i>
     </li>
-  )
-}
+  );
+};
+
+export const CustomView = (props) => {
+  const segs = sliceEvents(props, true);
+
+  return (
+    <div className="custom-view">
+      <h2>\ud83d\uddd3\ufe0f 현재 뷰 날짜</h2>
+      <p>{props.dateProfile.currentRange.start.toDateString()}</p>
+
+      <h3>\ud83d\uddc2\ufe0f 이벤트 개수</h3>
+      <p>{segs.length}개 이벤트가 있습니다.</p>
+
+      <ul>
+        {segs.map((seg, index) => (
+          <li key={index}>
+            <strong>{seg.eventRange.def.title}</strong><br />
+            날짜: {seg.eventRange.range.start.toDateString()}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+
+export default DemoApp;

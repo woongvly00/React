@@ -1,9 +1,13 @@
 import './Board_write_button.css';
 import React from 'react';
-
-
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { EditorState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import { useState } from 'react';
 
 const Board_write_button = () => {
+    
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
     return (
         <div className="SBoardContainer">
@@ -12,7 +16,7 @@ const Board_write_button = () => {
 
 
 
-                <h2>📄 게시판</h2>
+                <div>📄 게시판</div>
                 <div className="approval-grid">
                     <div className="container2">
                         <div className="standardwrite10">글쓰기</div>
@@ -46,11 +50,23 @@ const Board_write_button = () => {
                         <div className="file">
                             <input type="file"></input>
                         </div>
-                        {/* <div className="contentwrite"> */}
-                            <textarea>툴바</textarea>
-                        {/* </div> */}
-
-                    
+  
+                        <Editor
+                           editorState={editorState}
+                           onEditorStateChange={setEditorState}
+                           wrapperClassName="demo-wrapper"
+                           editorClassName="demo-editor"
+                           toolbar={{
+                            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'emoji', 'remove', 'history'],
+                            inline: { inDropdown: false, options: ['bold', 'italic', 'underline', 'strikethrough'] },
+                            fontSize: {
+                              options: [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96],
+                            },
+                            fontFamily: {
+                              options: ['Arial', 'Georgia', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+                            },
+                          }}
+                         />
                     </div>
                 </div>
             </div>
