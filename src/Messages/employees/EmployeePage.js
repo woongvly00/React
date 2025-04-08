@@ -8,9 +8,8 @@ import useAuthStore from '../../store/useAuthStore';
 function EmployeePage({openChat}) {
     const [employees,setEmployees] = useState([]);
     const [groupedEmployees, setGroupedEmployees] = useState({});
-    const [groupedRooms, setGroupedRooms ] = useState({});
     const [myInfo,setMyInfo] = useState(null);
-    const Navigate = useNavigate();
+ 
     
   
 
@@ -20,14 +19,16 @@ function EmployeePage({openChat}) {
     //사원목록 가져오기
     useEffect(() => {
         const userId = sessionStorage.getItem("userId");
-        console.log(userId);
+      
         let mine = null;
 
           axios.get("http://10.5.5.2/Employee/SelectMine",{
-            params: {userId: userId}
+            params: {
+                userId: userId
+            }
           }).then((userIdResp)=>{
              mine = userIdResp.data;
-            console.log(mine.emp_code_id);
+          
             
 
             if (!mine || !mine.emp_code_id) {
@@ -39,7 +40,7 @@ function EmployeePage({openChat}) {
 
             return axios.get("http://10.5.5.2/Employee/SelectEmp");
         }).then((resp) => {
-            console.log(resp.data);
+         
              const filtered = resp.data.filter(emp => emp.emp_code_id !== mine.emp_code_id); // 나 자신 제외
     
              setEmployees(filtered);
