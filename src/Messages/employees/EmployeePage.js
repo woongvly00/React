@@ -19,7 +19,7 @@ function EmployeePage({openChat}) {
     //사원목록 가져오기
     useEffect(() => {
         const userId = sessionStorage.getItem("userId");
-        console.log(userId);
+      
         let mine = null;
 
           axios.get("http://10.5.5.2/Employee/SelectMine",{
@@ -28,7 +28,7 @@ function EmployeePage({openChat}) {
             }
           }).then((userIdResp)=>{
              mine = userIdResp.data;
-            console.log(mine);
+          
             
 
             if (!mine || !mine.emp_code_id) {
@@ -40,7 +40,7 @@ function EmployeePage({openChat}) {
 
             return axios.get("http://10.5.5.2/Employee/SelectEmp");
         }).then((resp) => {
-            console.log(resp.data);
+         
              const filtered = resp.data.filter(emp => emp.emp_code_id !== mine.emp_code_id); // 나 자신 제외
     
              setEmployees(filtered);
