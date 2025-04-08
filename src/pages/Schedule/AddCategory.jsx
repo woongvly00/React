@@ -1,51 +1,93 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import caxios from '../../Utils/caxios';
 import addCategoryStyle from './AddCategoryStyle.module.css';
 
 
+
 const AddCategory = ({ closeModal }) => {
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [myInfo,setMyInfo] = useState(null);
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    console.log(userId);
+    let mine = null;
+
+      caxios.get("/Employee/SelectMine",{
+        params: {userId: userId}
+      }).then((userIdResp)=>{
+        mine = userIdResp.data;
+        setMyInfo(mine);
+        console.log(mine.emp_code_id);
+        
+
+        if (!mine || !mine.emp_code_id) {
+            console.error("내 정보가 잘못되었습니다:", mine);
+            return;
+          }
+        console.log(mine.emp_dept_id);
+         setCalender((prev) => ({...prev, dept_code : mine.emp_dept_id}));
+          
+      });
+
+   
+  }, []);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [calender, setCalender] = useState({
-    s_c_id: 0,
-    s_c_name: '',
-    color: '#FFFFFF'
+    c_id: '',
+    c_title: '',
+    dept_code:'',
+    color: '#FFFFFF',
+    public_code: ''
   });
 
   const handleInput = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'color') {
+      setSelectedColor(value);
+    }
     setCalender((prev) => ({ ...prev, [name]: value }));
   };
   const colors = ['#f44336', '#4caf50', '#2196f3', '#ffeb3b'];
 
   const handleAddCalender = () => {
-    console.log(calender);
+    console.log("최종 전송할 데이터:", calender);
 
-    caxios.post("/cSchedule", calender).catch((error) => {
+    caxios.post("/calendar", calender).catch((error) => {
         if (error.response?.status === 404 || 500) {
           alert("등록에 실패했습니다.");
     }})
 
+    
+    setCalender({
+      c_id: '',
+      c_title: '',
+      dept_code:'',
+      color: '#FFFFFF',
+      public_code: '10'
+    });
     setIsModalOpen(false);
-    setCalender({s_c_name:"", color:"#FFFFFF"})
-
     };
 
     const [selectedColor, setSelectedColor] = useState('');
 
     return (
         <div className={addCategoryStyle['modal-overlay']}>
+          
           <div className={addCategoryStyle['modal-container']}>
-            <select name="s_c_id" value={calender.s_c_id} onChange={handleInput}>
-               <option key="myCal" value="20">내 캘린더</option>
-               <option key="shareCal" value="21">공유 캘린더</option>
+            <div className={addCategoryStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button></div>
+            <select id="selectCal" name="public_code" value={calender.public_code} onChange={handleInput}>
+               <option value="10">내 캘린더</option>
+               <option value="20">공유 캘린더</option>
             </select>
 
             <div>
               캘린더 이름
-              <input type="text" name="s_c_name" />
+              <input type="text" name="c_title" value={calender.c_title}  onChange={handleInput}/>
             </div>
             <div>
               색상
@@ -75,7 +117,6 @@ const AddCategory = ({ closeModal }) => {
             
             <div className={addCategoryStyle['modal-buttons']}>
               <button onClick={handleAddCalender}>저장</button>
-              <button onClick={closeModal}>취소</button>
             </div>
           </div>
         </div>
