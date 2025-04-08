@@ -1,5 +1,3 @@
-// 📄 FormWriteNext.jsx
-
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
@@ -12,7 +10,6 @@ const FormWriteNext = () => {
   const { formId, formName, formContent } = location.state || {};
 
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState(formContent || "");
   const [files, setFiles] = useState([]);
   const [approverModalOpen, setApproverModalOpen] = useState(false);
   const [approverLevels, setApproverLevels] = useState({
@@ -23,34 +20,64 @@ const FormWriteNext = () => {
     final: null,
   });
   const [currentLevel, setCurrentLevel] = useState(null);
+  const [template, setTemplate] = useState(formContent || "");
 
-  // 첨부파일 변경
+  const approverDisplayNames = () => {
+    return Object.values(approverLevels)
+      .filter(Boolean)
+      .map((a) => a.name)
+      .join(" → ");
+  };
+
   const handleFileChange = (e) => {
     setFiles(Array.from(e.target.files));
   };
 
-  // 결재자 모달 열기
   const openApproverModal = (level) => {
     setCurrentLevel(level);
     setApproverModalOpen(true);
   };
 
-  // 결재자 선택 후 저장
-  const handleApproverSelect = (user) => {
-    setApproverLevels((prev) => ({ ...prev, [currentLevel]: user }));
-    setApproverModalOpen(false);
+  const handleApproverSelect = (users) => {
+    const updated = {
+      level1: users[0] || null,
+      level2: users[1] || null,
+      level3: users[2] || null,
+      level4: users[3] || null,
+      final: users[4] || null,
+    };
+    setApproverLevels(updated);
+
+    const raw = template;
+    const approverNames = users.map((u) => u.name).join(" → ");
+    const updatedContent = raw
+      .replace(/{{제목}}/g, title)
+      .replace(/{{결재선}}/g, approverNames);
+    window.tinymce?.get("formContent")?.setContent(updatedContent);
   };
 
-  // 제출
+  const handleTitleChange = (e) => {
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+
+    const raw = template;
+    const updated = raw
+      .replace(/{{제목}}/g, newTitle)
+      .replace(/{{결재선}}/g, approverDisplayNames());
+    window.tinymce?.get("formContent")?.setContent(updated);
+  };
+
   const handleSubmit = async () => {
     const approvers = Object.values(approverLevels).filter(Boolean);
 
-    if (!title || !content || !approverLevels.final) {
-      alert("제목, 본문, 최종결재자를 입력해주세요!");
+    if (!title || !approverLevels.final) {
+      alert("제목과 최종 결재자를 입력해주세요!");
       return;
     }
 
-    let finalContent = content
+    const rawEditorContent = window.tinymce?.get("formContent")?.getContent() || "";
+
+    const finalContent = rawEditorContent
       .replace(/{{제목}}/g, title)
       .replace(/{{결재선}}/g, approvers.map((a) => a.name).join(" → "));
 
@@ -81,16 +108,36 @@ const FormWriteNext = () => {
 
       <div style={{ marginBottom: "1rem" }}>
         <label>제목</label>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} style={{ width: "100%" }} />
+        <input
+          type="text"
+          value={title}
+          onChange={handleTitleChange}
+          style={{ width: "100%" }}
+        />
       </div>
 
       <div style={{ marginBottom: "1rem" }}>
         <label>본문</label>
         <Editor
-          apiKey={process.env.REACT_APP_TINYMCE_KEY}
-          value={content}
-          onEditorChange={(newValue) => setContent(newValue)}
-          init={{ height: 300, menubar: false }}
+          id="formContent"
+          apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+          initialValue={formContent || ""}
+          init={{
+            height: 300,
+            menubar: false,
+            inline: true,
+            body_class: "custom-editor-body",
+            content_style: `
+              .custom-editor-body {
+                background-color: white !important;
+                color: #000 !important;
+                font-family: sans-serif;
+              }
+            `,
+            plugins: "table lists code",
+            toolbar:
+              "undo redo | styleselect | bold italic | alignleft aligncenter alignright | table | code",
+          }}
         />
       </div>
 
@@ -105,7 +152,7 @@ const FormWriteNext = () => {
           {Object.entries(approverLevels).map(([level, user]) => (
             <div key={level} style={{ marginBottom: "0.5rem" }}>
               <button onClick={() => openApproverModal(level)}>
-                {level.toUpperCase()} {user ? `: ${user.name}` : "선택"}
+                {level.toUpperCase()} {user?.name ? `: ${user.name}` : "선택"}
               </button>
             </div>
           ))}
