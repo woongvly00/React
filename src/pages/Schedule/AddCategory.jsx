@@ -41,7 +41,7 @@ const AddCategory = ({ closeModal }) => {
     c_title: '',
     dept_code:'',
     color: '#FFFFFF',
-    public_code: ''
+    public_code: '10'
   });
 
   const handleInput = (e) => {
@@ -80,7 +80,7 @@ const AddCategory = ({ closeModal }) => {
           
           <div className={addCategoryStyle['modal-container']}>
             <div className={addCategoryStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button></div>
-            <select id="selectCal" name="public_code" value={calender.public_code} onChange={handleInput}>
+            <select name="public_code" value={calender.public_code} onChange={handleInput}>
                <option value="10">내 캘린더</option>
                <option value="20">공유 캘린더</option>
             </select>
@@ -116,7 +116,9 @@ const AddCategory = ({ closeModal }) => {
             </div>
             
             <div className={addCategoryStyle['modal-buttons']}>
-              <button onClick={handleAddCalender}>저장</button>
+            <button onClick={handleAddCalender} disabled={!calender.dept_code || !calender.public_code} >
+              저장
+            </button>
             </div>
           </div>
         </div>
