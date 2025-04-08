@@ -161,10 +161,13 @@ const DemoApp = () => {
 
   const handleSave = () => {
     console.log(update);
-    caxios.put(`/schedule/${update.id}`, update).then(resp => {})
+    caxios.put(`/schedule/${update.id}`, update).then(resp => {
+      
+      
+    });
     setIsEditing(false);
     setSelectedEvent(update);
-  }
+  };
   
   const [isEditing, setIsEditing] = useState(false);
 
