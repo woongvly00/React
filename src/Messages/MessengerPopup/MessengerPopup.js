@@ -18,14 +18,14 @@ function MessengerPopup({ onClose }) {
    
 
     const openChatWindow = (target,me,name) => {
-      console.log(target +" : "+me);
+
       axios.get("http://10.5.5.2/Employee/checkRoomExist",{
         params:{
           targetname:target,
           myname:me
         }
       }).then((result)=>{
-        console.log(result.data);
+      
         const exist = result.data;
 
         if(exist===false){
@@ -46,9 +46,11 @@ function MessengerPopup({ onClose }) {
         }
       }).then((resp)=>{
         const seq =resp.data.MSG_GROUP_ID;
-        console.log(seq);
+     
         setCurrentChat(name);
-        navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}&seq=${seq}`);
+        navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}&seq=${seq}`,{
+          state:{fromPage: location.pathname}
+        });
       });
     }
 
@@ -65,7 +67,6 @@ function MessengerPopup({ onClose }) {
 }, [initialChat]);
 
 useEffect(() => {
-    console.log("현재 경로:", location.pathname);
   if (location.pathname === "/messenger") {
       setCurrentChat(null);
   }
@@ -73,7 +74,17 @@ useEffect(() => {
 
 
 const handleClose = () => {
-  navigate("/messenger");
+  const fromPage = location.state?.fromPage;
+
+  if(fromPage === "/messenger/chattingroom"){
+      navigate("/messenger/chattingroom");
+  }else if (fromPage === "/messenger/employee"){
+    navigate("/messenger/employee");
+  } else{
+    navigate("/messenger");
+  }
+
+  setCurrentChat(null);
 };
 
   return (
@@ -99,7 +110,7 @@ const handleClose = () => {
                     <Route path="employee" element={<EmployeePage openChat={openChatWindow}/>}></Route>
                     <Route path="/" element={<EmployeePage openChat={openChatWindow}/>}></Route>
                     <Route path="chatting" element={<Chatting />}></Route>
-                    <Route path="chattingroom" element={<ChattingRoom />}></Route>
+                    <Route path="chattingroom" element={<ChattingRoom openChat={openChatWindow}/>}></Route>
                   </Routes>
                 </div>
             </div>

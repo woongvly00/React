@@ -13,12 +13,16 @@ Modal.setAppElement('#root'); // ⚠️ 꼭 있어야 접근성 에러 안 나�
 
 const App = () => {
   const initialize = useAuthStore((state) => state.initialize);
-
+  const isInitialized = useAuthStore((state) => state.isInitialized);
   useEffect(() => {
     initialize();
   }, []);
 
-  
+  if (!isInitialized) {
+    return <div>로딩 중...</div>;       // 1단계 해결책
+  }
+
+
   return (
     
       <div className="app-container">

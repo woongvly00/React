@@ -186,18 +186,18 @@
 
 
 
-textarea {
+  /* textarea {
   width: 100%;
-  min-height: 70px;  /* 최소 높이 설정 */
-  max-height: 150px; /* 최대 높이 설정 (선택 사항) */
-  resize: vertical;  /* 세로 크기 조절 가능 */
+  min-height: 70px;  
+  max-height: 150px; 
+  resize: vertical;  
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
 
   flex: 5;
-}
+}   */
 
 
 
@@ -340,7 +340,8 @@ flex:5;
 }
 
 
-/* .okbutton {
+
+/* button {
   padding: 10px 20px;
   margin: 5px;
   border: 1px solid #ccc;

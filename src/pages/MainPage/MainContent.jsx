@@ -48,8 +48,8 @@ const MainContent = () => {
           {/* 전자결제 */}
           <Route path="approval" element={<ApprovalMain />}></Route>
 
-          <Route path="/approval/write" element={<FormWrite />} />
-          <Route path="/approval/write/next" element={<FormWriteNext />} />
+          <Route path="approval/write" element={<FormWrite />} />
+          <Route path="approval/write/next" element={<FormWriteNext />} />
 
 
 

@@ -39,7 +39,6 @@ const DemoApp = () => {
       }));
     setEvents(getAllevents);
     })
-
     
   }, [])
 
@@ -128,10 +127,50 @@ const DemoApp = () => {
     setIsDetailOpen(false);
   };
 
-  const handleUpdate = () => {
-    
+  const [update, setUpdate ] = useState({
+    id:'',
+    title:'',
+    start_date:'',
+    end_date: '',
+    startTime: '',
+    endTime: '',
+    content: ''
+  });
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setUpdate({
+        id: selectedEvent.id,
+        title: selectedEvent.title || '',
+        start_date: selectedEvent.start_date || '',
+        end_date: selectedEvent.end_date || '',
+        startTime: selectedEvent.startTime || '',
+        endTime: selectedEvent.endTime || '',
+        content: selectedEvent.content || ''
+      });
+    }
+  }, [selectedEvent]);
+
+  const handleUpdate = (e) => {
+    setIsEditing(true);
+    const {name,value} = e.target
+        setUpdate((prev)=>({...prev,[name]:value}));
+  };
+
+
+
+  const handleSave = () => {
+    console.log(update);
+    caxios.put(`/schedule/${update.id}`, update).then(resp => {
+      
+      
+    });
+    setIsEditing(false);
+    setSelectedEvent(update);
+    setIsDetailOpen(false);
   };
   
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div className='demo-app'>
@@ -174,14 +213,7 @@ const DemoApp = () => {
             </div>
             <div>
               일정 제목
-              <input
-                type="text"
-                name="title"
-                value={eventInput.title}
-                onChange={handleInput}
-                placeholder="일정 제목 입력"
-                autoFocus
-              />
+              <input type="text" name="title" value={eventInput.title} onChange={handleInput} placeholder="일정 제목 입력" autoFocus />
             </div>
             <div>
               시작
@@ -209,11 +241,7 @@ const DemoApp = () => {
             </div>
             <div>
               일정 내용
-              <textarea
-                name="content"
-                value={eventInput.content}
-                onChange={handleInput}
-                placeholder="내용 입력"
+              <textarea name="content" value={eventInput.content} onChange={handleInput} placeholder="내용 입력"
                 style={{ width: '300px', height: '150px', resize: 'none' }}
               />
             </div>
@@ -228,16 +256,53 @@ const DemoApp = () => {
       {isDetailOpen && selectedEvent && (
           <div className={calenderStyle['detail-overlay']}>
             <div className={calenderStyle['detail-container']}>
-              <h2>📌 일정 상세 정보</h2>
-              <p><strong>제목:</strong> {selectedEvent.title}</p>
-              <p><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</p>
-              <p><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</p>
-              <p><strong>내용:</strong> {selectedEvent.content}</p>
+              <h2>일정 상세 정보</h2>
+
+              {isEditing ? (<>
+                <input type="hidden" name="id" value={update.id} />
+                <div><strong>제목:</strong><input type="text" name="title" value={update.title} onChange={handleUpdate} placeholder="일정 제목 입력" autoFocus/></div>
+                <div>
+                  시작일<input name="start_date" type="date" value={update.start} onChange={handleUpdate} />
+                  종료일<input name="end_date" type="date" value={update.end} onChange={handleUpdate} />
+                </div>
+                <div>
+                  시작시간
+                  <select name="startTime" value={update.startTime} onChange={handleUpdate}>
+                    {Array.from({ length: 48 }).map((_, index) => {
+                      const h = String(Math.floor(index / 2)).padStart(2, '0');
+                      const m = index % 2 === 0 ? '00' : '30';
+                      const time = `${h}:${m}`;
+                      return <option key={time} value={time}>{time}</option>;
+                    })}
+                  </select>
+                  종료시간
+                  <select name="endTime" value={update.endTime} onChange={handleUpdate}>
+                    {Array.from({ length: 48 }).map((_, index) => {
+                      const h = String(Math.floor(index / 2)).padStart(2, '0');
+                      const m = index % 2 === 0 ? '00' : '30';
+                      const time = `${h}:${m}`;
+                      return <option key={time} value={time}>{time}</option>;
+                    })}
+                  </select>
+                </div>
+                <div>
+                  <strong>내용:</strong>
+                  <textarea name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" style={{ width: '300px', height: '150px', resize: 'none' }}></textarea></div>
+              
+              </>) : (<>
+                <div>{selectedEvent.id}</div>
+                <div><strong>제목:</strong> {selectedEvent.title}</div>
+                <div><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</div>
+                <div><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</div>
+                <div><strong>내용:</strong> {selectedEvent.content}</div>
+              </>)}
+              
         
-              <div className={calenderStyle['modal-buttons']}>
-                <button onClick={handleDelete}>삭제</button>
-                <button onClick={handleUpdate}>수정</button>
-                <button onClick={() => setIsDetailOpen(false)}>닫기</button>
+              <div id="editBtns" className={calenderStyle['detail-buttons']}>
+                {
+                  isEditing ? <><button onClick={handleSave}>저장</button><button onClick={() => setIsEditing(false)}>취소</button></>
+                            : <><button onClick={handleUpdate}>수정</button><button onClick={handleDelete}>삭제</button><button onClick={() => {setIsDetailOpen(false); setIsEditing(false);}}>닫기</button></>
+                }
               </div>
             </div>
           </div>
