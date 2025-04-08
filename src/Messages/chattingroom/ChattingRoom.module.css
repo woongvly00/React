@@ -18,7 +18,7 @@
 .anothername{
     margin-top: 18px;
     font-weight: bold;
-    
+    cursor: default;
 }
 
 .imgbox{
@@ -27,6 +27,6 @@
 }
 
 .namebox{
-   
+    
     width: 70%;
 }
