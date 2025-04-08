@@ -27,6 +27,8 @@ import FormWriteNext from "../Approval/FormWriteNext";
 
 const MainContent = () => {
 
+  const location = useLocation();
+  const isMypage = location.pathname.includes('/mainpage/maincontent/mypage');
 
 
   return (
@@ -41,8 +43,10 @@ const MainContent = () => {
         <Link to="/mainpage/maincontent/reserve" state={{ name: "reserve" }}><i className="fa-solid fa-2x fa-clock" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/msg"><i className="fa-solid fa-2x fa-comment" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
       </div>
+   
+        {!isMypage && <Sidelist />}
+     
       
-      <Sidelist />
       <div className={style.mainContents}>
         <Routes>
           {/* 전자결제 */}

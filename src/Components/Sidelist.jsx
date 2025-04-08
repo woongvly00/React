@@ -3,18 +3,12 @@ import sideliststyle from './Sidelist.module.css';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import AddCategory from '../pages/Schedule/AddCategory';
+import ScheduleList from '../pages/Schedule/ScheduleList';
 
 const Sidelist = () => {
   const location = useLocation();
   const name = location.state?.name;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedInfo, setSelectedInfo] = useState(null);
-
-
-  const handleModalOpen = (selectInfo) => {
-    setSelectedInfo(selectInfo);
-    setIsModalOpen(true);
-  };
+  
 
   const renderContent = () => {
     switch (name) {
@@ -90,42 +84,8 @@ const Sidelist = () => {
       case 'schedule':
         return <div className={sideliststyle.sideList}>
           <div>
-            커스텀뷰 넣기
+            <ScheduleList />
           </div>
-          <div className="accordion" id="accordionExample">
-            <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                내 캘린더
-                </button>
-              </h2>
-              <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                <div className="accordion-body">
-                <input type="checkbox" style={{ accentColor: 'blue', marginRight: '8px' }}/><span>개인일정</span>
-                </div>
-              </div>
-            </div>
-            <div className="accordion-item">
-              <h2 className="accordion-header">
-                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  <strong>공유 캘린더</strong>
-                </button>
-              </h2>
-              <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                <div className="accordion-body">
-                <ul>
-                  <li>프로젝트1 일정</li>
-                  <li>회사 단체 일정</li>
-                </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <button onClick={handleModalOpen}>캘린더 추가</button>
-            
-          </div>
-          {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo}/>)}
         </div>;
 
 
