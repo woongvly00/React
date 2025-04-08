@@ -167,6 +167,7 @@ const DemoApp = () => {
     });
     setIsEditing(false);
     setSelectedEvent(update);
+    setIsDetailOpen(false);
   };
   
   const [isEditing, setIsEditing] = useState(false);

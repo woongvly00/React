@@ -18,7 +18,7 @@ const AddCategory = ({ closeModal }) => {
     const { name, value } = e.target;
     setCalender((prev) => ({ ...prev, [name]: value }));
   };
-
+  const colors = ['#f44336', '#4caf50', '#2196f3', '#ffeb3b'];
 
   const handleAddCalender = () => {
     console.log(calender);
@@ -33,6 +33,7 @@ const AddCategory = ({ closeModal }) => {
 
     };
 
+    const [selectedColor, setSelectedColor] = useState('');
 
     return (
         <div className={addCategoryStyle['modal-overlay']}>
@@ -44,11 +45,32 @@ const AddCategory = ({ closeModal }) => {
 
             <div>
               캘린더 이름
-              <input name="s_c_name" type="text" value={calender.s_c_name} onChange={handleInput} />
+              <input type="text" name="s_c_name" />
             </div>
             <div>
-             색깔 
-             <input type="radio" name="color" value={calender.color} onChange={handleInput}/>
+              색상
+            {colors.map((color) => (
+              <label key={color} className="inline-block mx-1 cursor-pointer">
+                <input
+                  type="radio"
+                  name="color"
+                  value={color}
+                  onChange={handleInput}
+                  checked={selectedColor === color}
+                  style={{ display: 'none' }}
+                />
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: color,
+                    borderRadius: '50%',
+                    border: selectedColor === color ? '3px solid #000' : '1px solid #ccc',
+                  }}
+                />
+              </label>
+            ))}
             </div>
             
             <div className={addCategoryStyle['modal-buttons']}>
