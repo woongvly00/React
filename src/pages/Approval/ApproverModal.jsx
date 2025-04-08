@@ -1,115 +1,187 @@
-// 📄 ApproverModal.jsx - 단계별 결재자 선택 모달
-
 import React, { useState } from "react";
-import Modal from "react-modal";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Editor } from "@tinymce/tinymce-react";
+import ApproverModal from "./ApproverModal";
+import axios from "axios";
 
-// 단계 수 상수화
-const LEVELS = [1, 2, 3, 4, 5];
+const FormWriteNext = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { formId, formName, formContent } = location.state || {};
 
-Modal.setAppElement("#root");
+  const [title, setTitle] = useState("");
+  const [files, setFiles] = useState([]);
+  const [approverModalOpen, setApproverModalOpen] = useState(false);
+  const [approverLevels, setApproverLevels] = useState({
+    level1: null,
+    level2: null,
+    level3: null,
+    level4: null,
+    final: null,
+  });
+  const [currentLevel, setCurrentLevel] = useState(null);
+  const [template] = useState(formContent || "");
 
-const ApproverModal = ({ isOpen, onClose, onSelect, selectedApprovers }) => {
-  const [level, setLevel] = useState(null);
-  const [tempApprovers, setTempApprovers] = useState(selectedApprovers || {});
+  const approverDisplayNames = () =>
+    Object.values(approverLevels)
+      .filter(Boolean)
+      .map((a) => a.name)
+      .join(" → ");
 
-  // 임시 더미 사원 데이터
-  const dummyEmployees = [
-    { id: "101", name: "홍길동" },
-    { id: "102", name: "김철수" },
-    { id: "103", name: "이영희" },
-    { id: "104", name: "최준호" },
-    { id: "105", name: "박미정" },
-  ];
+  const handleFileChange = (e) => setFiles(Array.from(e.target.files));
 
-  const handleApproverClick = (employee) => {
-    if (level === null) return;
-    setTempApprovers((prev) => ({ ...prev, [level]: employee }));
-    setLevel(null); // 선택 후 초기화
+  const openApproverModal = (level) => {
+    setCurrentLevel(level);
+    setApproverModalOpen(true);
   };
 
-  const handleSave = () => {
-    // 최종 결재자(5단계)는 반드시 선택되어야 함
-    if (!tempApprovers[5]) {
-      alert("최종 결재자를 선택해주세요 (5단계)");
+  const handleApproverSelect = (users) => {
+    const updated = {
+      level1: users[0] || null,
+      level2: users[1] || null,
+      level3: users[2] || null,
+      level4: users[3] || null,
+      final: users[4] || null,
+    };
+    setApproverLevels(updated);
+
+    const updatedContent = template
+      .replace(/{{제목}}/g, title)
+      .replace(/{{결재선}}/g, approverDisplayNames());
+    window.tinymce?.get("formContent")?.setContent(updatedContent);
+  };
+
+  const handleTitleChange = (e) => {
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+    const updated = template
+      .replace(/{{제목}}/g, newTitle)
+      .replace(/{{결재선}}/g, approverDisplayNames());
+    window.tinymce?.get("formContent")?.setContent(updated);
+  };
+
+  const handleSubmit = async () => {
+    const approvers = Object.values(approverLevels).filter(Boolean);
+    const hasFinal = approverLevels.final && approverLevels.final.name;
+
+    if (!title.trim()) {
+      alert("제목을 입력해주세요!");
       return;
     }
-    onSelect(tempApprovers);
-    onClose();
+
+    if (!hasFinal) {
+      alert("최종 결재자를 설정해주세요!");
+      return;
+    }
+
+    const rawEditorContent = window.tinymce?.get("formContent")?.getContent() || "";
+
+    const finalContent = rawEditorContent
+      .replace(/{{제목}}/g, title)
+      .replace(/{{결재선}}/g, approverDisplayNames());
+
+    const formData = new FormData();
+    formData.append("formId", formId);
+    formData.append("title", title);
+    formData.append("content", finalContent);
+    approvers.forEach((a, idx) => formData.append(`approverIds[${idx}]`, a.id));
+    files.forEach((file) => formData.append("files", file));
+
+    try {
+      await axios.post("/api/approval/request", formData);
+      alert("전자결재 요청이 완료되었습니다.");
+      navigate("/mainpage/maincontent/approval");
+    } catch (err) {
+      console.error("전자결재 제출 실패", err);
+    }
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      contentLabel="결재자 선택"
-      style={{
-        content: { width: "600px", margin: "auto", borderRadius: "12px" },
-      }}
-    >
-      <h2>🧑‍⚖️ 결재자 선택</h2>
+    <div style={{ padding: "2rem" }}>
+      <h2>✍️ 전자결재 문서 작성</h2>
 
-      <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}>
-        {LEVELS.map((lvl) => (
-          <button
-            key={lvl}
-            onClick={() => setLevel(lvl)}
-            style={{
-              background: level === lvl ? "#222" : "#eee",
-              color: level === lvl ? "#fff" : "#000",
-              padding: "0.5rem 1rem",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            {lvl === 5 ? `최종결재자` : `${lvl}단계`}
-          </button>
-        ))}
+      <div style={{ marginBottom: "1rem" }}>
+        <label>양식 제목</label>
+        <input type="text" value={formName} readOnly style={{ width: "100%" }} />
       </div>
 
-      {level && (
-        <div style={{ borderTop: "1px solid #ccc", paddingTop: "1rem" }}>
-          <h4>{level === 5 ? "최종 결재자" : `${level}단계`} 결재자 선택</h4>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-            {dummyEmployees.map((emp) => (
-              <button
-                key={emp.id}
-                onClick={() => handleApproverClick(emp)}
-                style={{
-                  border: "1px solid #aaa",
-                  padding: "0.5rem",
-                  borderRadius: "5px",
-                  background: "#f8f8f8",
-                }}
-              >
-                {emp.name} ({emp.id})
+      <div style={{ marginBottom: "1rem" }}>
+        <label>제목</label>
+        <input
+          type="text"
+          value={title}
+          onChange={handleTitleChange}
+          style={{ width: "100%" }}
+        />
+      </div>
+
+      <div style={{ marginBottom: "1rem" }}>
+        <label>본문</label>
+        <Editor
+          id="formContent"
+          apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+          initialValue={formContent || ""}
+          init={{
+            height: 300,
+            menubar: false,
+            inline: true,
+            body_class: "custom-editor-body",
+            content_style: `
+              .custom-editor-body {
+                background-color: #fff !important;
+                color: #000 !important;
+                font-family: 'Segoe UI', sans-serif !important;
+                padding: 1rem !important;
+                line-height: 1.6;
+                font-size: 16px;
+              }
+              table {
+                border-collapse: collapse;
+                width: 100%;
+              }
+              td, th {
+                border: 1px solid #ddd;
+                padding: 8px;
+              }
+              h1, h2, h3 {
+                font-weight: bold;
+                margin-top: 1em;
+              }
+            `,
+            plugins: "table lists code",
+            toolbar:
+              "undo redo | styleselect | bold italic | alignleft aligncenter alignright | table | code",
+          }}
+        />
+      </div>
+
+      <div style={{ marginBottom: "1rem" }}>
+        <label>첨부파일</label>
+        <input type="file" multiple onChange={handleFileChange} />
+      </div>
+
+      <div style={{ marginBottom: "1rem" }}>
+        <label>결재선 지정</label>
+        <div>
+          {Object.entries(approverLevels).map(([level, user]) => (
+            <div key={level} style={{ marginBottom: "0.5rem" }}>
+              <button onClick={() => openApproverModal(level)}>
+                {level.toUpperCase()} {user?.name ? `: ${user.name}` : "선택"}
               </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div style={{ marginTop: "1rem" }}>
-        <h4>📝 선택된 결재자</h4>
-        <ul>
-          {LEVELS.map((lvl) => (
-            <li key={lvl}>
-              {lvl === 5 ? "최종결재자" : `${lvl}단계`} :
-              {tempApprovers[lvl]
-                ? ` ${tempApprovers[lvl].name} (${tempApprovers[lvl].id})`
-                : " 미지정"}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
 
-      <div style={{ marginTop: "1rem", textAlign: "right" }}>
-        <button onClick={handleSave} style={{ marginRight: "1rem" }}>
-          저장 ✅
-        </button>
-        <button onClick={onClose}>닫기 ❌</button>
-      </div>
-    </Modal>
+      <button onClick={handleSubmit}>제출하기 ✅</button>
+
+      <ApproverModal
+        isOpen={approverModalOpen}
+        onClose={() => setApproverModalOpen(false)}
+        onSelect={handleApproverSelect}
+      />
+    </div>
   );
 };
 
-export default ApproverModal;
+export default FormWriteNext;
