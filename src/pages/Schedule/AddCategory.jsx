@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import AddCategoryStyle from './AddCategoryStyle.module.css';
 import caxios from '../../Utils/caxios';
+import addCategoryStyle from './AddCategoryStyle.module.css';
 
 
 const AddCategory = ({ closeModal }) => {
@@ -35,8 +35,8 @@ const AddCategory = ({ closeModal }) => {
 
 
     return (
-        <div className={AddCategoryStyle['modal-overlay']}>
-          <div className={AddCategoryStyle['modal-container']}>
+        <div className={addCategoryStyle['modal-overlay']}>
+          <div className={addCategoryStyle['modal-container']}>
             <select name="s_c_id" value={calender.s_c_id} onChange={handleInput}>
                <option key="myCal" value="20">내 캘린더</option>
                <option key="shareCal" value="21">공유 캘린더</option>
@@ -48,10 +48,10 @@ const AddCategory = ({ closeModal }) => {
             </div>
             <div>
              색깔 
-             <input type="color" name="color" value={calender.color} onChange={handleInput}/>
+             <input type="radio" name="color" value={calender.color} onChange={handleInput}/>
             </div>
             
-            <div className={AddCategoryStyle['modal-buttons']}>
+            <div className={addCategoryStyle['modal-buttons']}>
               <button onClick={handleAddCalender}>저장</button>
               <button onClick={closeModal}>취소</button>
             </div>
