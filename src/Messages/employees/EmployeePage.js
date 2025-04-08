@@ -8,9 +8,8 @@ import useAuthStore from '../../store/useAuthStore';
 function EmployeePage({openChat}) {
     const [employees,setEmployees] = useState([]);
     const [groupedEmployees, setGroupedEmployees] = useState({});
-    const [groupedRooms, setGroupedRooms ] = useState({});
     const [myInfo,setMyInfo] = useState(null);
-    const Navigate = useNavigate();
+ 
     
   
 
@@ -24,10 +23,12 @@ function EmployeePage({openChat}) {
         let mine = null;
 
           axios.get("http://10.5.5.2/Employee/SelectMine",{
-            params: {userId: userId}
+            params: {
+                userId: userId
+            }
           }).then((userIdResp)=>{
              mine = userIdResp.data;
-            console.log(mine.emp_code_id);
+            console.log(mine);
             
 
             if (!mine || !mine.emp_code_id) {

@@ -37,9 +37,10 @@ function Chatting() {
 
     useEffect(() => {
 
-
+        if(seq){
        showMessages();
-         
+        }
+
         stompClient.onConnect = () => {
 
 
@@ -59,7 +60,7 @@ function Chatting() {
         return () => {
           stompClient.deactivate(); // 컴포넌트가 사라질 때 연결 해제
         };
-      }, [myId,seq]);
+      }, [location.search]);
 
       const sendMessage = () => {
         if (message.trim() !== "") {
