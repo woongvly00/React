@@ -7,7 +7,6 @@ import ReserveMain from '../Reserve/ReserveMain';
 import style from './MainContent.module.css';
 import ApprovalForm from '../Approval/ApprovalForm';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
-import Board_listmanager from '../Boardlist/Board_listmanager';
 import Board_reference from '../Boardlist/Board_refernece';
 import Board_free from '../Boardlist/Board_free';
 import Board_club from '../Boardlist/Board_club';
@@ -16,6 +15,7 @@ import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
 import Mypage from '../Mypage/Mypage';
 import Board_write_button from '../Boardlist/Board_write_button';
+import Board_titlelink from '../Boardlist/Board_titlelink';
 
 
 
@@ -61,9 +61,9 @@ const MainContent = () => {
           
 
           {/* 게시판 */}
+          <Route path="titlelink/:boardId" element={<Board_titlelink/>}></Route>
           <Route path="write_button" element={<Board_write_button/>}></Route>
           <Route path="standard" element={<Boardlist />}></Route>
-          <Route path="listmanager" element={<Board_listmanager />}></Route>
           <Route path="reference" element={<Board_reference />}></Route>
           <Route path="free" element={<Board_free />}></Route>
           <Route path="club" element={<Board_club />}></Route>
