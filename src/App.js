@@ -29,10 +29,7 @@ const App = () => {
             <Route path='/mainpage/*' element={<Mainpage/>}></Route>
             <Route path='/messenger/*' element={<MessengerPopupContainer />} />
             <Route path='/home/*' element={<Header/>}/>
-          {/* </Route> */}
-
           </Route>
-
         </Routes>
     
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { formatDate } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -10,7 +10,7 @@ import { sliceEvents } from '@fullcalendar/core';
 import useScheduleStore from '../../store/useScheduleStore';
 
 const DemoApp = () => {
-  const { events, addEvent } = useScheduleStore();
+  const { events, addEvent, setEvents, event, removeEvent } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
   const [eventInput, setEventInput] = useState({
@@ -24,6 +24,25 @@ const DemoApp = () => {
     category_id: 1,
     color: ''
   });
+
+  useEffect(() => {
+    caxios.get('/schedule').then((resp) => {
+      const getAllevents = resp.data.map((event) => ({
+        id:event.id,
+        title: event.title,
+        start: `${event.start_date}T${event.startTime}`,
+        end: `${event.end_date}T${event.endTime}`,
+        allDay: false,
+        extendedProps: {
+          category_id: event.category_id
+        }
+      }));
+    setEvents(getAllevents);
+    })
+
+    
+  }, [])
+
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
   const handleInput = (e) => {
@@ -70,13 +89,49 @@ const DemoApp = () => {
     });
   };
 
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const handleEventClick = (clickInfo) => {
-    alert(`'${clickInfo.event.title}' 이벤트 클릭됨`);
+
+    console.log(clickInfo.event.start_date, clickInfo.event.end_date);
+    caxios.get(`/schedule/${clickInfo.event.id}`).then((resp) => {
+
+      const getEvent = resp.data;
+      const formattedEvent = {
+        id:getEvent.id,
+        title: getEvent.title,
+        start_date: `${getEvent.start_date}T${getEvent.startTime}`,
+        end_date: `${getEvent.end_date}T${getEvent.endTime}`,
+        startTime: `${getEvent.startTime}`,
+        endTime: `${getEvent.endTime}`,
+        allDay: false,
+        content: `${getEvent.content}`
+        
+      };
+
+    setSelectedEvent(formattedEvent);
+    setIsDetailOpen(true);
+
+    });
+
   };
+
+
 
   const handleWeekendsToggle = () => {
     setWeekendsVisible(!weekendsVisible);
   };
+
+  const handleDelete = () => {
+    removeEvent(selectedEvent.id)
+    caxios.delete(`/schedule/${selectedEvent.id}`).then(resp => {})
+    setIsDetailOpen(false);
+  };
+
+  const handleUpdate = () => {
+    
+  };
+  
 
   return (
     <div className='demo-app'>
@@ -169,16 +224,39 @@ const DemoApp = () => {
           </div>
         </div>
       )}
+
+      {isDetailOpen && selectedEvent && (
+          <div className={calenderStyle['detail-overlay']}>
+            <div className={calenderStyle['detail-container']}>
+              <h2>📌 일정 상세 정보</h2>
+              <p><strong>제목:</strong> {selectedEvent.title}</p>
+              <p><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</p>
+              <p><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</p>
+              <p><strong>내용:</strong> {selectedEvent.content}</p>
+        
+              <div className={calenderStyle['modal-buttons']}>
+                <button onClick={handleDelete}>삭제</button>
+                <button onClick={handleUpdate}>수정</button>
+                <button onClick={() => setIsDetailOpen(false)}>닫기</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
     </div>
   );
 }
 
+
+
 const renderEventContent = (eventInfo) => {
-  return (
-    <>
+  const bgColor = eventInfo.event.extendedProps.color || 'dodgeblue';
+ return (
+    <div style={{backgroundColor:bgColor, borderRadius:'0px'}}>
       <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
+      <b>{eventInfo.event.title}</b>
+    </div>
   );
 };
 
@@ -216,28 +294,7 @@ const SidebarEvent = ({ event }) => {
   );
 };
 
-export const CustomView = (props) => {
-  const segs = sliceEvents(props, true);
 
-  return (
-    <div className="custom-view">
-      <h2>\ud83d\uddd3\ufe0f 현재 뷰 날짜</h2>
-      <p>{props.dateProfile.currentRange.start.toDateString()}</p>
-
-      <h3>\ud83d\uddc2\ufe0f 이벤트 개수</h3>
-      <p>{segs.length}개 이벤트가 있습니다.</p>
-
-      <ul>
-        {segs.map((seg, index) => (
-          <li key={index}>
-            <strong>{seg.eventRange.def.title}</strong><br />
-            날짜: {seg.eventRange.range.start.toDateString()}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
 
 
 export default DemoApp;

@@ -1,17 +1,17 @@
 import React from 'react';
-import './Board_department.css';
+import bstyle from './Board_department.module.css';
 
 const Board_department =()=>{
 
     return(
-        <table className="SBoardContainer">
+        <table className={bstyle.SBoardContainer}>
 
-        <table className="subcontainer">
+        <table className={bstyle.subcontainer}>
             <h2>📄 게시판</h2>
             
-            <table className="approval-grid">
-            <table className="cotainer">
-                <tr className="navi">
+            <table className={bstyle.approval}>
+            <table className={bstyle.cotainer}>
+                <tr className={bstyle.navi}>
                     <th>부서 게시판</th>
                 </tr>
                 <tr>
@@ -24,7 +24,7 @@ const Board_department =()=>{
                     </td>
                 </tr>
                 <hr></hr>
-                <tr className="list">
+                <tr className={bstyle.list}>
                     
                     <tr>
                         <th>번호</th>
