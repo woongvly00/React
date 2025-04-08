@@ -29,4 +29,36 @@
     gap: 1rem;
     justify-content: center;
   }
+
+  .detail-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    z-index: 9999;
+  }
+  
+
+  .detail-container {
+    background: white;
+    padding:50px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    min-width: 500px;
+    min-height: 300px;
+  }
+  
+
+  .detail-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
   

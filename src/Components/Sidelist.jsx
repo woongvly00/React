@@ -124,10 +124,9 @@ const Sidelist = () => {
           </div>
           <div>
             <button onClick={handleModalOpen}>캘린더 추가</button>
-            <div>
-              {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo}/>)}
-            </div>
+            
           </div>
+          {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo}/>)}
         </div>;
 
 
