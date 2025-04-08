@@ -52,7 +52,7 @@ const AddCategory = ({ closeModal }) => {
     }
     setCalender((prev) => ({ ...prev, [name]: value }));
   };
-  const colors = ['#f44336', '#4caf50', '#2196f3', '#ffeb3b'];
+  const colors = ['#ee5074', '#fa7227', '#ac725e', '#f7d915', '#a3b90a', '#57b92a', '#4fced8', '#5990d5', '#777dbf', '#844285'];
 
   const handleAddCalender = () => {
     console.log("최종 전송할 데이터:", calender);
