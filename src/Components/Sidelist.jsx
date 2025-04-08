@@ -31,7 +31,6 @@ const Sidelist = () => {
         <div className={sideliststyle.boardsidebar}>
           <div className={sideliststyle.wholegasy}>게시판 전체보기</div>
           <div><Link to="/mainpage/maincontent/standard" state={{ name: "board" }}>공지사항</Link></div>
-          <div><Link to="/mainpage/maincontent/listmanager" state={{ name: "board" }}>게시판 관리</Link></div>
           <div><Link to="/mainpage/maincontent/reference" state={{ name: "board" }}>자료실</Link></div>
           <div>전사 게시판
             <li><Link to="/mainpage/maincontent/free" state={{ name: "board" }}>자유게시판</Link></li>

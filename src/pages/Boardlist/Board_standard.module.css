@@ -340,7 +340,7 @@ flex:5;
 }
 
 
-button {
+/* .okbutton {
   padding: 10px 20px;
   margin: 5px;
   border: 1px solid #ccc;
@@ -350,7 +350,7 @@ button {
 
 button:hover {
   background-color: #f0f0f0;
-}
+} */
 
 
 .mainContents{
