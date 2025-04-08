@@ -18,14 +18,14 @@ function MessengerPopup({ onClose }) {
    
 
     const openChatWindow = (target,me,name) => {
-      console.log(target +" : "+me);
+
       axios.get("http://10.5.5.2/Employee/checkRoomExist",{
         params:{
           targetname:target,
           myname:me
         }
       }).then((result)=>{
-        console.log(result.data);
+      
         const exist = result.data;
 
         if(exist===false){
@@ -46,7 +46,7 @@ function MessengerPopup({ onClose }) {
         }
       }).then((resp)=>{
         const seq =resp.data.MSG_GROUP_ID;
-        console.log(seq);
+     
         setCurrentChat(name);
         navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}&seq=${seq}`,{
           state:{fromPage: location.pathname}
@@ -67,7 +67,6 @@ function MessengerPopup({ onClose }) {
 }, [initialChat]);
 
 useEffect(() => {
-    console.log("현재 경로:", location.pathname);
   if (location.pathname === "/messenger") {
       setCurrentChat(null);
   }
