@@ -104,6 +104,7 @@ const handleClose = () => {
                 <div className={style.left}>
                   <button className={style.empbtn} onClick={()=> navigate("/messenger/employee")}>사원</button>
                   <button className={style.chatbtn} onClick={()=> navigate("/messenger/chattingroom")}>1:1</button>
+                  <button className={style.groupbtn}>그룹채팅</button>
                 </div>
                 <div className={style.right}>
                   <Routes>

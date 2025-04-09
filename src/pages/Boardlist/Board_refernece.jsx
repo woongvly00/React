@@ -7,17 +7,17 @@ const Board_reference = () => {
     const [group, setGroup] = useState([]);
 
 
-        useEffect(() => {
-            axios.get('http://10.5.5.6/board/list')
-                .then(response => {
-                    console.log("응답 성공", response.data);
-                    setGroup(response.data);
-                })
-                .catch(error => {
-                    console.error("🔥 오류 발생:", error);
-                });
-        }, []);
-     
+    useEffect(() => {
+        axios.get('http://10.5.5.12/board')
+            .then(response => {
+                console.log("응답 성공", response.data);
+                setGroup(response.data);
+            })
+            .catch(error => {
+                console.error("🔥 오류 발생:", error);
+            });
+    }, []);
+
 
 
 
@@ -55,20 +55,20 @@ const Board_reference = () => {
                             </tr>
                         </thead>
                         <tbody>
-                       
-                        {
-        group.map((message,index) => {
-          return(
-            <tr key={index}>
-            <td>{message.board_id}</td>
-            <td>{message.board_title}</td>
-            <td>{message.board_name}</td>
-            <td>{message.board_write_date}</td>
-            <td>{message.board_view}</td>
-          </tr>
-          );
-        })
-        }
+
+                            {
+                                group.map((message, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{message.board_id}</td>
+                                            <Link to={`/mainpage/maincontent/titlelink/${message.board_id}`}>{message.board_title}</Link>
+                                            <td>{message.board_name}</td>
+                                            <td>{message.board_write_date}</td>
+                                            <td>{message.board_view}</td>
+                                        </tr>
+                                    );
+                                })
+                            }
 
                         </tbody>
                     </table>

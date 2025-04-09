@@ -48,3 +48,9 @@
 .radio-option input:checked + .custom-radio {
   border: 3px solid #2196F3; /* 선택된 경우 테두리 강조 */
 }
+
+.closeBtn{
+    display: flex;
+    justify-content:right;
+    align-items: flex-end;
+}

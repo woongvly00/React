@@ -6,7 +6,6 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import calenderStyle from './DemoApp.module.css';
 import caxios from '../../Utils/caxios';
-import { sliceEvents } from '@fullcalendar/core';
 import useScheduleStore from '../../store/useScheduleStore';
 
 const DemoApp = () => {
@@ -21,8 +20,8 @@ const DemoApp = () => {
     startTime: '',
     endTime: '',
     content: '',
-    category_id: 1,
-    color: ''
+    c_id: 1,
+    emp_id: 0
   });
 
   useEffect(() => {
@@ -34,7 +33,7 @@ const DemoApp = () => {
         end: `${event.end_date}T${event.endTime}`,
         allDay: false,
         extendedProps: {
-          category_id: event.category_id
+          c_id: event.c_id
         }
       }));
     setEvents(getAllevents);
@@ -44,29 +43,74 @@ const DemoApp = () => {
 
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
+  const [myInfo,setMyInfo] = useState(null);
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    console.log(userId);
+    let mine = null;
+
+      caxios.get("/Employee/SelectMine",{
+        params: {userId: userId}
+      }).then((userIdResp)=>{
+        mine = userIdResp.data;
+        setMyInfo(mine);
+        
+        
+
+        if (!mine || !mine.emp_code_id) {
+            console.error("내 정보가 잘못되었습니다:", mine);
+            return;
+          }
+        console.log(mine.emp_code_id);  
+        console.log(mine.emp_dept_id);
+        setEventInput((prev) => ({
+          id: '',
+          title: '',
+          start_date: '',
+          end_date: '',
+          startTime: '',
+          endTime: '',
+          content: '',
+          c_id: 1, 
+          emp_id : mine.emp_code_id
+        }));
+          
+      });
+
+   
+  }, []);
+
+
+
+
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setEventInput((prev) => ({ ...prev, [name]: value }));
+    
+    setEventInput((prev) => ({ ...prev, [name]: name === 'c_id' ? Number(value) : value }));
   };
 
   const handleDateSelect = (selectInfo) => {
     setSelectedInfo(selectInfo);
     setIsModalOpen(true);
+    
   };
 
   const handleAddEvent = () => {
+    
     const calendarApi = selectedInfo.view.calendar;
     calendarApi.unselect();
 
     const newEvent = {
       id: Date.now().toString(),
+      c_id: eventInput.c_id,
       title: eventInput.title,
       start: `${eventInput.start_date}T${eventInput.startTime}`,
       end: `${eventInput.end_date}T${eventInput.endTime}`,
       allDay: false,
       extendedProps: {
         content: eventInput.content,
-        category_id: eventInput.category_id
+        c_id: eventInput.c_id,
+        emp_id: eventInput.emp_id
       }
     };
 
@@ -84,27 +128,29 @@ const DemoApp = () => {
 
     setIsModalOpen(false);
     setEventInput({
-      id: '', title: '', start_date: '', end_date: '', startTime: '', endTime: '', content: '', category_id: 1
+      id: '', title: '', start_date: '', end_date: '', startTime: '', endTime: '', content: '', c_id: 1
     });
   };
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+
   const handleEventClick = (clickInfo) => {
 
-    console.log(clickInfo.event.start_date, clickInfo.event.end_date);
     caxios.get(`/schedule/${clickInfo.event.id}`).then((resp) => {
 
       const getEvent = resp.data;
       const formattedEvent = {
         id:getEvent.id,
+        c_id:getEvent.c_id,
         title: getEvent.title,
         start_date: `${getEvent.start_date}T${getEvent.startTime}`,
         end_date: `${getEvent.end_date}T${getEvent.endTime}`,
         startTime: `${getEvent.startTime}`,
         endTime: `${getEvent.endTime}`,
-        allDay: false,
-        content: `${getEvent.content}`
+        content: `${getEvent.content}`,
+        emp_id: getEvent.emp_id
         
       };
 
@@ -140,7 +186,8 @@ const DemoApp = () => {
   useEffect(() => {
     if (selectedEvent) {
       setUpdate({
-        id: selectedEvent.id,
+        id: selectedEvent.id || 0,
+        c_id : selectedEvent.c_id || '',
         title: selectedEvent.title || '',
         start_date: selectedEvent.start_date || '',
         end_date: selectedEvent.end_date || '',
@@ -172,6 +219,13 @@ const DemoApp = () => {
   
   const [isEditing, setIsEditing] = useState(false);
 
+  const [ calList, setCalList ] = useState([]);
+  useEffect(() => {
+    caxios.get('/calendar').then((resp) => {
+      setCalList(resp.data);
+    });
+  }, []);
+
   return (
     <div className='demo-app'>
       <Sidebar
@@ -202,55 +256,76 @@ const DemoApp = () => {
       </div>
 
       {isModalOpen && (
-        <div className={calenderStyle['modal-overlay']}>
-          <div className={calenderStyle['modal-container']}>
-            <h2>일정 추가</h2>
-            <div>
-              일정 종류
-              <select name="category_id" value={eventInput.category_id} onChange={handleInput}>
-                <option value="111">캘린더 list 넣기</option>
-              </select>
-            </div>
-            <div>
-              일정 제목
-              <input type="text" name="title" value={eventInput.title} onChange={handleInput} placeholder="일정 제목 입력" autoFocus />
-            </div>
-            <div>
-              시작
-              <input name="start_date" type="date" value={eventInput.start} onChange={handleInput} />
-              <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
-                {Array.from({ length: 48 }).map((_, index) => {
-                  const h = String(Math.floor(index / 2)).padStart(2, '0');
-                  const m = index % 2 === 0 ? '00' : '30';
-                  const time = `${h}:${m}`;
-                  return <option key={time} value={time}>{time}</option>;
-                })}
-              </select>
-            </div>
-            <div>
-              종료
-              <input name="end_date" type="date" value={eventInput.end} onChange={handleInput} />
-              <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
-                {Array.from({ length: 48 }).map((_, index) => {
-                  const h = String(Math.floor(index / 2)).padStart(2, '0');
-                  const m = index % 2 === 0 ? '00' : '30';
-                  const time = `${h}:${m}`;
-                  return <option key={time} value={time}>{time}</option>;
-                })}
-              </select>
-            </div>
-            <div>
-              일정 내용
-              <textarea name="content" value={eventInput.content} onChange={handleInput} placeholder="내용 입력"
-                style={{ width: '300px', height: '150px', resize: 'none' }}
-              />
-            </div>
-            <div className={calenderStyle['modal-buttons']}>
-              <button onClick={handleAddEvent}>저장</button>
-              <button onClick={() => setIsModalOpen(false)}>취소</button>
-            </div>
-          </div>
-        </div>
+         <div className={calenderStyle['modal-overlay']}>
+         <div className={calenderStyle['modal-container']}>
+         <h2>일정 추가</h2>
+         <div>
+             일정 종류
+             <select name="c_id" value={eventInput.c_id} onChange={handleInput}>
+                 <option value="">캘린더 선택</option>
+                 {
+                   calList.map((calendar) => (
+                    <option key={calendar.c_id} value={calendar.c_id}>
+                      {calendar.c_title}
+                    </option>
+                  ))
+                 }
+             </select>
+         </div>
+         <div>
+             일정 제목
+             <input
+             type="text"
+             name="title"
+             value={eventInput.title}
+             onChange={handleInput}
+             placeholder="일정 제목 입력"
+             autoFocus
+             />
+         </div>
+         <div>
+             시작일
+             <input name="start_date" type="date" value={eventInput.start_date} onChange={handleInput} />
+             종료일
+             <input name="end_date" type="date" value={eventInput.end_date} onChange={handleInput} />
+             
+         </div>
+         <div>
+             시작시간
+             <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
+             {Array.from({ length: 48 }).map((_, index) => {
+                 const h = String(Math.floor(index / 2)).padStart(2, '0');
+                 const m = index % 2 === 0 ? '00' : '30';
+                 const time = `${h}:${m}`;
+                 return <option key={time} value={time}>{time}</option>;
+             })}
+             </select>
+             종료시간
+             <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
+             {Array.from({ length: 48 }).map((_, index) => {
+                 const h = String(Math.floor(index / 2)).padStart(2, '0');
+                 const m = index % 2 === 0 ? '00' : '30';
+                 const time = `${h}:${m}`;
+                 return <option key={time} value={time}>{time}</option>;
+             })}
+             </select>
+         </div>
+         <div>
+             일정 내용
+             <textarea
+             name="content"
+             value={eventInput.content}
+             onChange={handleInput}
+             placeholder="내용 입력"
+             style={{ width: '300px', height: '150px', resize: 'none' }}
+             />
+         </div>
+         <div className={calenderStyle['modal-buttons']}>
+             <button onClick={handleAddEvent}>저장</button>
+             <button onClick={() => setIsModalOpen(false)}>취소</button>
+         </div>
+         </div>
+     </div>
       )}
 
       {isDetailOpen && selectedEvent && (
