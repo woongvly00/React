@@ -5,46 +5,51 @@ import caxios from '../../Utils/caxios';
 const ScheduleList = ({ closeModal }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-      const [selectedInfo, setSelectedInfo] = useState(null);
+    const [selectedInfo, setSelectedInfo] = useState(null);
+    const [getMyCalendar, setMyCalendar] = useState([]);
+    const [getPublicCalendar, setPublicCalendar] = useState([]);
+    const [getComCalendar, setGetComCalendar] = useState([]);
+    const [userInfo, setUserInfo ] = useState(null);
+    const userId = session.Storage.getItem("userId");
     
     
-      const handleModalOpen = (selectInfo) => {
+    const handleModalOpen = (selectInfo) => {
         setSelectedInfo(selectInfo);
         setIsModalOpen(true);
-      };
+    };
     
-      
-      const [getMyCalendar, setMyCalendar] = useState([]);
-      const [getPublicCalendar, setPublicCalendar] = useState([]);
-      const [getComCalendar, setGetComCalendar] = useState([]);
+    caxios.get("/mypage/info").then((resp)=>{
+        setUserInfo(resp.data);
+    });
+    
 
-      const handleMyCal = () => {
+    const handleMyCal = () => {
         caxios.get("/calendar/myCal", {
             params: {
               public_code: 10  
             }}
         ).then((resp) => {
             setMyCalendar(resp.data);
-        })};
+    })};
 
-        const handlePublicCal = () => {
-            caxios.get("/calendar/publicCal", {
-                params: {
-                  public_code: 20  
-                }}
-            ).then((resp) => {
-                setPublicCalendar(resp.data);
-            })};
+    const handlePublicCal = () => {
+        caxios.get("/calendar/publicCal", {
+            params: {
+                public_code: 20  
+            }}
+        ).then((resp) => {
+            setPublicCalendar(resp.data);
+    })};
 
         
-            const handleComCal = () => {
-                caxios.get("/calendar/comCal", {
-                    params: {
-                      public_code: 30  
-                    }}
-                ).then((resp) => {
-                    setGetComCalendar(resp.data);
-                })};
+    const handleComCal = () => {
+        caxios.get("/calendar/comCal", {
+            params: {
+                public_code: 30  
+            }}
+        ).then((resp) => {
+            setGetComCalendar(resp.data);
+    })};
     
 
 
@@ -65,7 +70,13 @@ const ScheduleList = ({ closeModal }) => {
                     <div id="collapseOne" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             {
-                                getMyCalendar.map((calendar) => (
+                                getMyCalendar
+                                .filter((calendar)=>{
+                                    if(calendar.public_code == 20){
+                                        return calendar.emp_id == `${userInfo.emp_code_id}`;
+                                    }
+                                })
+                                .map((calendar) => (
                                     <div className="form-check form-switch">
                                         <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" style={{backgroundcolor:`${calendar.color}`, bordercolor:`${calendar.color}`}} defaultChecked/>
                                         <label className="form-check-label" for="switchCheckChecked" key={calendar.c_id} style={{ display: 'inline-block', cursor: 'pointer', backgroundcolor:`${calendar.color}`}}>
