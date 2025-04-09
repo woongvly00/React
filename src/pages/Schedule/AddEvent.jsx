@@ -1,13 +1,20 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import addFormStyle from './AddEvent.module.css'
+import caxios from '../../Utils/caxios';
 
 
 
 const AddEventform = ({ closeModal, selectedInfo }) => {
-    console.log("모달 열림", selectedInfo);
 
-  
+    const [ calList, setCalList ] = useState([]);
+    
+    useEffect(() => {
+        caxios.get('/calendar').then((resp) => {
+          setCalList(resp.data);
+        });
+      }, []);
+
 
 
 
@@ -18,7 +25,12 @@ const AddEventform = ({ closeModal, selectedInfo }) => {
             <div>
                 일정 종류
                 <select name="category_id" value={eventInput.category_id} onChange={handleInput}>
-                <option value="111">캘린더 list 넣기</option>
+                    <option value="">캘린더 선택</option>
+                    {
+                      <option key={calList.c_id} value={calList.c_id}>
+                        {calList.c_title}
+                      </option>
+                    }
                 </select>
             </div>
             <div>
@@ -33,8 +45,14 @@ const AddEventform = ({ closeModal, selectedInfo }) => {
                 />
             </div>
             <div>
-                시작
+                시작일
                 <input name="start_date" type="date" value={eventInput.start} onChange={handleInput} />
+                종료일
+                <input name="end_date" type="date" value={eventInput.end} onChange={handleInput} />
+                
+            </div>
+            <div>
+                시작시간
                 <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
                 {Array.from({ length: 48 }).map((_, index) => {
                     const h = String(Math.floor(index / 2)).padStart(2, '0');
@@ -43,10 +61,7 @@ const AddEventform = ({ closeModal, selectedInfo }) => {
                     return <option key={time} value={time}>{time}</option>;
                 })}
                 </select>
-            </div>
-            <div>
-                종료
-                <input name="end_date" type="date" value={eventInput.end} onChange={handleInput} />
+                종료시간
                 <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
                 {Array.from({ length: 48 }).map((_, index) => {
                     const h = String(Math.floor(index / 2)).padStart(2, '0');

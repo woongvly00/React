@@ -27,6 +27,8 @@ import FormWriteNext from "../Approval/FormWriteNext";
 
 const MainContent = () => {
 
+  const location = useLocation();
+  const isMypage = location.pathname.includes('/mainpage/maincontent/mypage');
 
 
   return (
@@ -41,8 +43,10 @@ const MainContent = () => {
         <Link to="/mainpage/maincontent/reserve" state={{ name: "reserve" }}><i className="fa-solid fa-2x fa-clock" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/msg"><i className="fa-solid fa-2x fa-comment" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
       </div>
+   
+        {!isMypage && <Sidelist />}
+     
       
-      <Sidelist />
       <div className={style.mainContents}>
         <Routes>
           {/* 전자결제 */}
@@ -57,7 +61,7 @@ const MainContent = () => {
 
           {/* 인사관리 */}
           {/* 인사관리 페이지가 없는 상태에서 만들어졌습니다. 인사관리 페이지 만들어지면 아래 전자결졔로 연결되는 부분 인사관리로만 바꿔주세요! */}
-          <Route path="hr" element={<ApprovalMain />}></Route>
+          <Route path="hr" element={<Mypage />}></Route>
           
 
           {/* 게시판 */}
