@@ -2,7 +2,7 @@ import useAuthStore from "../../store/useAuthStore";
 import style from './Mypage.module.css';
 import { useEffect, useState } from "react";
 import axios from "../../axios/axiosConfig";
-
+// 조휘영
 const Mypage = () => {
     const [edit, setEdit] = useState(false);
     const [formData, setFormData] = useState({});
