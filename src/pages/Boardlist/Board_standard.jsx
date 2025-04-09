@@ -33,7 +33,7 @@ const Boardlist = () => {
                                 </select>
                             </td>
                         </tr>
-                        <hr></hr>
+                       
                         <tr className={bstyle.list}>
 
                             <tr>
