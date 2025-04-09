@@ -61,7 +61,7 @@ const MainContent = () => {
 
           {/* 인사관리 */}
           {/* 인사관리 페이지가 없는 상태에서 만들어졌습니다. 인사관리 페이지 만들어지면 아래 전자결졔로 연결되는 부분 인사관리로만 바꿔주세요! */}
-          <Route path="hr" element={<ApprovalMain />}></Route>
+          <Route path="hr" element={<Mypage />}></Route>
           
 
           {/* 게시판 */}

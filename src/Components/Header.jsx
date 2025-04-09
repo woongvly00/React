@@ -46,7 +46,7 @@ const Header = () => {
           {showUserMenu && (
             <div className="user-dropdown">
               <ul>
-               <Link to= "/mainpage/maincontent/mypage" state={{userId}}> <li><i className="fa-solid fa-user"></i> 마이페이지</li></Link>
+               <Link to= "/mainpage/maincontent/mypage"> <li><i className="fa-solid fa-user"></i> 마이페이지</li></Link>
                <Link to="/home/header/test"> <li><i className="fa-solid fa-vial"></i> 테스트 페이지</li></Link>
                <Link to="/home/header/setting"> <li><i className="fa-solid fa-gear"></i> 설정</li></Link> 
                 <li onClick={() => { logout(); navi("/"); }}>
