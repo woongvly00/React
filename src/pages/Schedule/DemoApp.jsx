@@ -88,6 +88,8 @@ const DemoApp = () => {
     
   };
 
+  const [jobId, setJobId] = useState(0);
+
   const handleAddEvent = () => {
     
     const calendarApi = selectedInfo.view.calendar;
@@ -108,7 +110,7 @@ const DemoApp = () => {
       }
     };
 
-    
+    caxios.get("/mypage/info").then((resp) => setJobId(resp.job_id));
 
     addEvent(newEvent);
     calendarApi.addEvent(newEvent);
@@ -220,7 +222,9 @@ const DemoApp = () => {
   const [ calList, setCalList ] = useState([]);
   useEffect(() => {
     caxios.get('/calendar').then((resp) => {
+      console.log(resp.data);
       setCalList(resp.data);
+      
     });
   }, []);
 
@@ -229,6 +233,10 @@ const DemoApp = () => {
     const [h, m] = timeStr.split(':');
     return `${h.padStart(2, '0')}:${m.padStart(2, '0')}`;
   };
+
+  
+
+  
 
   return (
     <div className='demo-app'>
@@ -267,10 +275,20 @@ const DemoApp = () => {
              일정 종류
              <select name="c_id" value={eventInput.c_id} onChange={handleInput}>
                  <option value="">캘린더 선택</option>
+
                  {
-                   calList.map((calendar) => (
-                    <option key={calendar.c_id} value={calendar.c_id}>
-                      {calendar.c_title}
+                  // 일정 추가 시 캘린터 선택지에 직급에 따라 필터링 거는 중 (회사캘린더의 경우 팀장 이상만 일정 추가 가능)
+                   calList
+                   .filter((calender) => {
+                    if (calender.public_code == 30) {
+                      return jobId >= 1007;
+                   }
+                   
+                   return true;
+                  })
+                   .map((calender) => (
+                    <option key={calender.c_id} value={calender.c_id}>
+                      {calender.c_title}
                     </option>
                   ))
                  }

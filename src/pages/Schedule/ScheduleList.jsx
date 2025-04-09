@@ -66,12 +66,12 @@ const ScheduleList = ({ closeModal }) => {
                         <div className="accordion-body">
                             {
                                 getMyCalendar.map((calendar) => (
-                                    <label key={calendar.c_id} style={{
-                                        display: 'inline-block',
-                                        cursor: 'pointer',
-                                        backgroundColor: `${calendar.color}`,
-                                      }}><input type="checkbox" checked='true'
-                                    style={{ display: 'none' }}/><strong>{calendar.c_title}</strong></label>
+                                    <div className="form-check form-switch">
+                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" style={{backgroundcolor:`${calendar.color}`, bordercolor:`${calendar.color}`}} defaultChecked/>
+                                        <label className="form-check-label" for="switchCheckChecked" key={calendar.c_id} style={{ display: 'inline-block', cursor: 'pointer', backgroundcolor:`${calendar.color}`}}>
+                                            <strong>{calendar.c_title}</strong>
+                                        </label>
+                                    </div>
                                   ))
                             }
                         </div>
@@ -85,15 +85,16 @@ const ScheduleList = ({ closeModal }) => {
                     </h2>
                     <div id="collapseTwo" className="accordion-collapse collapse">
                         <div className="accordion-body">
+                            
                             {
                                 getPublicCalendar.map((calendar) => (
-                                    <label key={calendar.c_id} style={{
-                                        display: 'inline-block',
-                                        cursor: 'pointer',
-                                        backgroundColor: `${calendar.color}`,
-                                      }}><input type="checkbox" checked='true'
-                                    style={{ display: 'none' }}/><strong>{calendar.c_title}</strong></label>
-                                  ))
+                                    <div className="form-check form-switch">
+                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked />
+                                        <label className="form-check-label" for="switchCheckChecked" key={calendar.c_id} style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
+                                            <strong>{calendar.c_title}</strong>
+                                        </label>
+                                    </div>
+                                ))
                             }
                         </div>
                     </div>
@@ -108,12 +109,12 @@ const ScheduleList = ({ closeModal }) => {
                         <div className="accordion-body">
                             {
                                 getComCalendar.map((calendar) => (
-                                    <label key={calendar.c_id} style={{
-                                        display: 'inline-block',
-                                        cursor: 'pointer',
-                                        backgroundColor: `${calendar.color}`,
-                                      }}><input type="checkbox" checked='true'
-                                    style={{ display: 'none' }}/><strong>{calendar.c_title}</strong></label>
+                                    <div className="form-check form-switch">
+                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked />
+                                        <label className="form-check-label" for="switchCheckChecked" key={calendar.c_id} style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
+                                            <strong>{calendar.c_title}</strong>
+                                        </label>
+                                    </div>
                                   ))
                             }
                         </div>
