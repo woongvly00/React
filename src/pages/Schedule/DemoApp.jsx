@@ -7,6 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import calenderStyle from './DemoApp.module.css';
 import caxios from '../../Utils/caxios';
 import useScheduleStore from '../../store/useScheduleStore';
+const userId = sessionStorage.getItem("userId");
 
 const DemoApp = () => {
   const { events, addEvent, setEvents, event, removeEvent } = useScheduleStore();
@@ -39,6 +40,8 @@ const DemoApp = () => {
         }
       }));
     setEvents(getAllevents);
+    }).catch((error) => {
+      console.error("일정 정보 불러오기 실패", error);
     })
     
   }, [])
@@ -50,7 +53,7 @@ const DemoApp = () => {
     const userId = sessionStorage.getItem("userId");
     let mine = null;
 
-      caxios.get("/Employee/SelectMine",{
+    caxios.get("/Employee/SelectMine",{
         params: {userId: userId}
       }).then((userIdResp)=>{
         mine = userIdResp.data;
@@ -68,12 +71,13 @@ const DemoApp = () => {
           emp_id : mine.emp_code_id
         }));
           
-      });
+      })
+      .catch((error) => {
+        console.error("부서정보 불러오기 실패", error);
+      })
 
    
   }, []);
-
-
 
 
   const handleInput = (e) => {
@@ -88,7 +92,8 @@ const DemoApp = () => {
     
   };
 
-  const [jobId, setJobId] = useState(0);
+ 
+ 
 
   const handleAddEvent = () => {
     
@@ -110,7 +115,8 @@ const DemoApp = () => {
       }
     };
 
-    caxios.get("/mypage/info").then((resp) => setJobId(resp.job_id));
+  
+    
 
     addEvent(newEvent);
     calendarApi.addEvent(newEvent);
@@ -169,7 +175,9 @@ const DemoApp = () => {
 
   const handleDelete = () => {
     removeEvent(selectedEvent.id)
-    caxios.delete(`/schedule/${selectedEvent.id}`).then(resp => {})
+    caxios.delete(`/schedule/${selectedEvent.id}`).then(resp => {}).catch((error) => {
+      console.error("일정 삭제 실패", error);
+    })
     setIsDetailOpen(false);
   };
 
@@ -211,7 +219,10 @@ const DemoApp = () => {
     caxios.put(`/schedule/${update.id}`, update).then(resp => {
       
       
-    });
+    })
+    .catch((error) => {
+      console.error("일정 수정 실패", error);
+    })
     setIsEditing(false);
     setSelectedEvent(update);
     setIsDetailOpen(false);
@@ -225,7 +236,9 @@ const DemoApp = () => {
       console.log(resp.data);
       setCalList(resp.data);
       
-    });
+    }).catch((error) => {
+      console.error("캘린더목록 불러오기 실패", error);
+    })
   }, []);
 
   const formatTime = (timeStr) => {
@@ -234,7 +247,18 @@ const DemoApp = () => {
     return `${h.padStart(2, '0')}:${m.padStart(2, '0')}`;
   };
 
-  
+
+  const [userInfo, setUserInfo ] = useState(null);
+
+  useEffect(()=>{
+    caxios.get("/mypage/info").then((resp)=>{
+        setUserInfo(resp.data);
+        console.log(resp.data);
+    }).catch((error) => {
+        console.error("실패", error);
+    });
+    
+}, [])
 
   
 
@@ -281,7 +305,10 @@ const DemoApp = () => {
                    calList
                    .filter((calender) => {
                     if (calender.public_code == 30) {
-                      return jobId >= 1007;
+                      return userInfo.job_id >= 1007;
+                   }
+                   if(calender.public_code == 10){
+                     return userInfo.emp_code_id == calender.emp_id;
                    }
                    
                    return true;
@@ -387,7 +414,6 @@ const DemoApp = () => {
                   <textarea name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" style={{ width: '300px', height: '150px', resize: 'none' }}></textarea></div>
               
               </>) : (<>
-                {/* <div>{selectedEvent.id}</div> */}
                 <div><strong>제목:</strong> {selectedEvent.title}</div>
                 <div><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</div>
                 <div><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</div>

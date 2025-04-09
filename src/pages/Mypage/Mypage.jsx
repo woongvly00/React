@@ -2,6 +2,7 @@ import useAuthStore from "../../store/useAuthStore";
 import style from './Mypage.module.css';
 import { useEffect, useState } from "react";
 import axios from "../../axios/axiosConfig";
+import authAxios from '../../axios/axiosConfig';
 // 조휘영
 const Mypage = () => {
     const [edit, setEdit] = useState(false);
@@ -11,7 +12,7 @@ const Mypage = () => {
 
     useEffect(() => {
         if (!isInitialized || !userId) return;
-        axios.get("http://10.10.55.66/mypage/info")
+        authAxios.get("http://10.10.55.66/mypage/info")
             .then(res => {
                 setUserInfo(res.data);
                 setFormData({
@@ -44,7 +45,7 @@ const Mypage = () => {
     };
 
     const handleSave = () => {
-        axios.put("http://10.10.55.66/mypage/update", formData)
+        authAxios.put("http://10.10.55.66/mypage/update", formData)
             .then(() => {
                 setUserInfo(prev => ({ ...prev, ...formData }));
                 setEdit(false);

@@ -10,7 +10,7 @@ const ScheduleList = ({ closeModal }) => {
     const [getPublicCalendar, setPublicCalendar] = useState([]);
     const [getComCalendar, setGetComCalendar] = useState([]);
     const [userInfo, setUserInfo ] = useState(null);
-    const userId = session.Storage.getItem("userId");
+    const userId = sessionStorage.getItem("userId");
     
     
     const handleModalOpen = (selectInfo) => {
@@ -18,9 +18,14 @@ const ScheduleList = ({ closeModal }) => {
         setIsModalOpen(true);
     };
     
-    caxios.get("/mypage/info").then((resp)=>{
-        setUserInfo(resp.data);
-    });
+    useEffect(()=>{
+        caxios.get("/mypage/info").then((resp)=>{
+            setUserInfo(resp.data);
+        }).catch((error) => {
+            console.error("실패", error);
+        });
+        
+    }, [])
     
 
     const handleMyCal = () => {
@@ -72,9 +77,10 @@ const ScheduleList = ({ closeModal }) => {
                             {
                                 getMyCalendar
                                 .filter((calendar)=>{
-                                    if(calendar.public_code == 20){
+                                    if(calendar.public_code == 10){
                                         return calendar.emp_id == `${userInfo.emp_code_id}`;
                                     }
+                                    return true;
                                 })
                                 .map((calendar) => (
                                     <div className="form-check form-switch">
