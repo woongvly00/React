@@ -3,7 +3,10 @@ import {create} from 'zustand';
 const useScheduleStore = create((set) => ({
     events: [],
 
-    setEvents: (events) => set({ events }),
+    setEvents: (newEvents) => 
+        set((state) => ({
+            events: [...state.events, ...newEvents]
+        })),
 
     addEvent: (event) => 
         set((state) => ({

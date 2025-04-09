@@ -26,9 +26,77 @@ const DemoApp = () => {
     emp_id: 0
   });
 
+  const [userInfo, setUserInfo ] = useState(null);
+
+  useEffect(()=>{
+    caxios.get("/mypage/info").then((resp)=>{
+        setUserInfo(resp.data);
+        console.log(resp.data);
+
+        setEventInput((prev) => ({
+          id: '',
+          title: '',
+          start_date: '',
+          end_date: '',
+          startTime: '',
+          endTime: '',
+          content: '',
+          c_id: 1, 
+          emp_id : resp.data.emp_code_id
+        }));
+        
+    }).catch((error) => {
+        console.error("실패", error);
+    });
+    
+}, [])
+
+
+
+
+
+// const [myInfo,setMyInfo] = useState(null);
+
+//   useEffect(() => {
+//     const userId = sessionStorage.getItem("userId");
+//     let mine = null;
+
+//     caxios.get("/Employee/SelectMine",{
+//         params: {userId: userId}
+//       }).then((userIdResp)=>{
+//         mine = userIdResp.data;
+//         setMyInfo(mine);
+//         console.log(mine.emp_code_id);
+        
+//         setEventInput((prev) => ({
+//           id: '',
+//           title: '',
+//           start_date: '',
+//           end_date: '',
+//           startTime: '',
+//           endTime: '',
+//           content: '',
+//           c_id: 1, 
+//           emp_id : mine.emp_code_id
+//         }));
+          
+//       })
+//       .catch((error) => {
+//         console.error("부서정보 불러오기 실패", error);
+//       })
+
+   
+//   }, []);
+
+
+
+
+
+
+
   useEffect(() => {
-    caxios.get('/schedule').then((resp) => {
-      const getAllevents = resp.data.map((event) => ({
+    caxios.get('/schedule/comEvents').then((resp) => {
+      const getComEvents = resp.data.map((event) => ({
         id:event.id,
         title: event.title,
         start: `${event.start_date}T${event.startTime}`,
@@ -39,7 +107,24 @@ const DemoApp = () => {
           color: event.color
         }
       }));
-    setEvents(getAllevents);
+    setEvents(getComEvents);
+    }).catch((error) => {
+      console.error("일정 정보 불러오기 실패", error);
+    })
+
+    caxios.get(`/schedule/myEvents/${userInfo.emp_code_id}`).then((resp)=>{
+      const getMyEvents = resp.date.map((event) => ({
+        id:event.id,
+        title: event.title,
+        start: `${event.start_date}T${event.startTime}`,
+        end: `${event.end_date}T${event.endTime}`,
+        allDay: false,
+        extendedProps: {
+          c_id: event.c_id,
+          color: event.color
+        }
+      }));
+      setEvents(getMyEvents);
     }).catch((error) => {
       console.error("일정 정보 불러오기 실패", error);
     })
@@ -48,36 +133,7 @@ const DemoApp = () => {
 
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
-  const [myInfo,setMyInfo] = useState(null);
-  useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    let mine = null;
-
-    caxios.get("/Employee/SelectMine",{
-        params: {userId: userId}
-      }).then((userIdResp)=>{
-        mine = userIdResp.data;
-        setMyInfo(mine);
-        
-        setEventInput((prev) => ({
-          id: '',
-          title: '',
-          start_date: '',
-          end_date: '',
-          startTime: '',
-          endTime: '',
-          content: '',
-          c_id: 1, 
-          emp_id : mine.emp_code_id
-        }));
-          
-      })
-      .catch((error) => {
-        console.error("부서정보 불러오기 실패", error);
-      })
-
-   
-  }, []);
+  
 
 
   const handleInput = (e) => {
@@ -248,17 +304,7 @@ const DemoApp = () => {
   };
 
 
-  const [userInfo, setUserInfo ] = useState(null);
 
-  useEffect(()=>{
-    caxios.get("/mypage/info").then((resp)=>{
-        setUserInfo(resp.data);
-        console.log(resp.data);
-    }).catch((error) => {
-        console.error("실패", error);
-    });
-    
-}, [])
 
   
 
@@ -307,6 +353,7 @@ const DemoApp = () => {
                     if (calender.public_code == 30) {
                       return userInfo.job_id >= 1007;
                    }
+
                    if(calender.public_code == 10){
                      return userInfo.emp_code_id == calender.emp_id;
                    }
