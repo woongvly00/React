@@ -1,46 +1,61 @@
-import React from "react";
-
-const dummyUsers = [
-  { id: 1, name: "김대리" },
-  { id: 2, name: "박과장" },
-  { id: 3, name: "이부장" },
-];
+// ApproverModal.jsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const ApproverModal = ({ isOpen, onClose, onSelect }) => {
-  if (!isOpen) return null;
+  const [employees, setEmployees] = useState([]);
+  const [selected, setSelected] = useState({
+    level1: null,
+    level2: null,
+    level3: null,
+    level4: null,
+    finalLevel: null,
+  });
 
-  const handleSelect = (user) => {
-    onSelect([user]);
+  useEffect(() => {
+    if (isOpen) {
+      axios.get("http://10.10.55.22/api/employee/list")
+        .then((res) => setEmployees(res.data))
+        .catch((err) => console.error("사원 목록 불러오기 실패", err));
+    }
+  }, [isOpen]);
+
+  const handleChange = (level, empCode) => {
+    const emp = employees.find(e => String(e.code) === empCode);
+    setSelected(prev => ({ ...prev, [level]: emp }));
   };
 
+  const handleConfirm = () => {
+    onSelect({
+      level1: selected.level1,
+      level2: selected.level2,
+      level3: selected.level3,
+      level4: selected.level4,
+      finalLevel: selected.finalLevel,
+    });
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.4)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 1000,
-      }}
-    >
-      <div style={{ background: "#fff", padding: "2rem", borderRadius: "10px" }}>
-        <h3>결재자 선택</h3>
-        <ul>
-          {dummyUsers.map((u) => (
-            <li key={u.id}>
-              <button onClick={() => handleSelect(u)}>{u.name}</button>
-            </li>
-          ))}
-        </ul>
-        <button onClick={onClose} style={{ marginTop: "1rem" }}>
-          닫기
-        </button>
-      </div>
+    <div className="modal">
+      <h3>결재자 선택</h3>
+      {["level1", "level2", "level3", "level4", "finalLevel"].map((level) => (
+        <div key={level}>
+          <label>{level}</label>
+          <select onChange={(e) => handleChange(level, e.target.value)}>
+            <option value="">선택하세요</option>
+            {employees.map((emp) => (
+              <option key={emp.code} value={emp.code}>
+                {emp.name} ({emp.position})
+              </option>
+            ))}
+          </select>
+        </div>
+      ))}
+      <button onClick={handleConfirm}>확인</button>
+      <button onClick={onClose}>취소</button>
     </div>
   );
 };
