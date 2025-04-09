@@ -7,7 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import calenderStyle from './DemoApp.module.css';
 import caxios from '../../Utils/caxios';
 import useScheduleStore from '../../store/useScheduleStore';
-const userId = sessionStorage.getItem("userId");
+// const userId = sessionStorage.getItem("userId");
 
 const DemoApp = () => {
   const { events, addEvent, setEvents, event, removeEvent } = useScheduleStore();
@@ -26,28 +26,30 @@ const DemoApp = () => {
     emp_id: 0
   });
 
-  const [userInfo, setUserInfo ] = useState(null);
+  const [userInfo, setUserInfo ] = useState({});
 
   useEffect(()=>{
     caxios.get("/mypage/info").then((resp)=>{
-        setUserInfo(resp.data);
-        console.log(resp.data);
+      const info = resp.data;
+      setUserInfo({
+        emp_code_id: `${info.emp_code_id}`,
+        emp_per_id:`${info.emp_per_id}`,
+        emp_dept_id: `${info.emp_dept_id}`,
+        emp_name:`${info.emp_name}`,
+        isDeft:`${info.isDeft}`
+      });
 
-        setEventInput((prev) => ({
-          id: '',
-          title: '',
-          start_date: '',
-          end_date: '',
-          startTime: '',
-          endTime: '',
-          content: '',
-          c_id: 1, 
-          emp_id : resp.data.emp_code_id
-        }));
-        
+      
+      setEventInput((prev) => ({
+        ...prev,
+        emp_id: info.emp_code_id
+      }));
+      console.log("인포 값 확인 : " + info.emp_code_id);
+
     }).catch((error) => {
         console.error("실패", error);
     });
+
     
 }, [])
 
@@ -96,6 +98,8 @@ const DemoApp = () => {
 
   useEffect(() => {
     caxios.get('/schedule/comEvents').then((resp) => {
+      
+      
       const getComEvents = resp.data.map((event) => ({
         id:event.id,
         title: event.title,
@@ -112,7 +116,17 @@ const DemoApp = () => {
       console.error("일정 정보 불러오기 실패", error);
     })
 
+  }, [])
+
+
+
+    useEffect(() => {
+      if (!userInfo.emp_code_id) return;
+      console.log("유저인포 값 확인 : " + userInfo.emp_code_id);
+
     caxios.get(`/schedule/myEvents/${userInfo.emp_code_id}`).then((resp)=>{
+      
+      
       const getMyEvents = resp.date.map((event) => ({
         id:event.id,
         title: event.title,
@@ -124,12 +138,12 @@ const DemoApp = () => {
           color: event.color
         }
       }));
-      setEvents(getMyEvents);
+      setEvents((prev) => [...prev, ...getMyEvents]);
     }).catch((error) => {
       console.error("일정 정보 불러오기 실패", error);
     })
     
-  }, [])
+  }, [userInfo.emp_code_id])
 
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
