@@ -2,18 +2,19 @@ import useAuthStore from "../../store/useAuthStore";
 import style from './Mypage.module.css';
 import { useEffect, useState } from "react";
 import axios from "../../axios/axiosConfig";
+import authAxios from '../../axios/axiosConfig';
 // 조휘영
 const Mypage = () => {
     const [edit, setEdit] = useState(false);
     const [formData, setFormData] = useState({});   
     const [userInfo, setUserInfo] = useState(null);
     const { userId, isInitialized } = useAuthStore();
-    const [profileImage, setProfileImage] = useState(null); // 미리보기용
+    const [profileImage, setProfileImage] = useState(null); // 미리보기용 1
     const [profileFile, setProfileFile] = useState(null);   // 서버로 보낼 파일
 
     useEffect(() => {
         if (!isInitialized || !userId) return;
-        axios.get("http://10.10.55.66/mypage/info")
+        authAxios.get("http://10.10.55.66/mypage/info")
             .then(res => {
                 setUserInfo(res.data);
                 setFormData({

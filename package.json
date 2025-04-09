@@ -20,6 +20,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -27,6 +28,7 @@
     "react-modal": "^3.16.3",
     "react-router-dom": "^7.4.1",
     "react-scripts": "5.0.1",
+    "react-select": "^5.10.1",
     "sockjs-client": "^1.6.1",
     "web-vitals": "^2.1.4",
     "zustand": "^5.0.3"

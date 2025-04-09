@@ -27,8 +27,8 @@ const AddEventform = ({ closeModal, selectedInfo }) => {
                 <select name="category_id" value={eventInput.category_id} onChange={handleInput}>
                     <option value="">캘린더 선택</option>
                     {
-                      <option key={calendar.c_id} value={calendar.c_id}>
-                        {calendar.c_title}
+                      <option key={calList.c_id} value={calList.c_id}>
+                        {calList.c_title}
                       </option>
                     }
                 </select>

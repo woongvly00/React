@@ -27,8 +27,8 @@ const AddCategory = ({ closeModal }) => {
             return;
           }
         console.log(mine.emp_dept_id);
-         setCalender((prev) => ({...prev, dept_code : mine.emp_dept_id}));
-          
+         setCalender((prev) => ({...prev, dept_code : mine.emp_dept_id, emp_id : mine.emp_code_id}));
+        
       });
 
    
@@ -66,14 +66,35 @@ const AddCategory = ({ closeModal }) => {
     setCalender({
       c_id: '',
       c_title: '',
+      emp_id: '',
       dept_code:'',
       color: '#FFFFFF',
+      created_date: '',
       public_code: '10'
     });
     setIsModalOpen(false);
     };
 
     const [selectedColor, setSelectedColor] = useState('');
+
+    const [selectedTargets, setSelectedTargets] = useState([]);
+
+  const handleAddTarget = (e) => {
+    const value = e.target.value;
+    if (!value) return;
+
+    const exists = selectedTargets.some(t => t.id === value);
+    if (exists) return;
+
+    const label = e.target.options[e.target.selectedIndex].text;
+    setSelectedTargets(prev => [...prev, { id: value, name: label }]);
+
+    e.target.selectedIndex = 0;
+  };
+
+  const removeTarget = (id) => {
+    setSelectedTargets(prev => prev.filter(t => t.id !== id));
+  };
 
     return (
         <div className={addCategoryStyle['modal-overlay']}>
@@ -84,6 +105,39 @@ const AddCategory = ({ closeModal }) => {
                <option value="10">내 캘린더</option>
                <option value="20">공유 캘린더</option>
             </select>
+            {
+              calender.public_code == 20 
+              ? <div>
+                  <div><strong>공유 대상</strong></div>
+                  <div>
+                    부서 선택
+                    <select name='target_id' onChange={handleAddTarget}>
+                      <option value="">부서</option>
+                      <option value="D001">총무팀</option>
+                      <option value="D002">개발팀</option>
+                    </select>
+                    개별 선택
+                    <select name='target_id' onChange={handleAddTarget}> 
+                      <option value="">개인</option>
+                      <option value="U1001">김철수</option>
+                      <option value="U1002">박영희</option>
+                    </select>
+                  </div>
+                  <div>
+                    <p>선택된 대상:</p>
+                    {selectedTargets.length > 0 ? (
+                      selectedTargets.map(t => (
+                        <span key={t.id} style={{ marginRight: '8px' }}>
+                          {t.name} <button onClick={() => removeTarget(t.id)}>❌</button>
+                        </span>
+                      ))
+                    ) : (
+                      <p style={{ color: '#888' }}>선택된 대상이 없습니다.</p>
+                    )}
+                  </div>
+                </div> 
+              : <></> 
+            }
 
             <div>
               캘린더 이름
@@ -116,7 +170,7 @@ const AddCategory = ({ closeModal }) => {
             </div>
             
             <div className={addCategoryStyle['modal-buttons']}>
-            <button onClick={handleAddCalender} disabled={!calender.dept_code || !calender.public_code} >
+            <button onClick={handleAddCalender}>
               저장
             </button>
             </div>
