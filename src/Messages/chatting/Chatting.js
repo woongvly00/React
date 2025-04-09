@@ -47,10 +47,11 @@ function Chatting() {
 
             console.log("WebSocket 연결 성공");
 
-            stompClient.subscribe("/topic/messages", (msg) => {
+            stompClient.subscribe(`/topic/messages/${seq}`, (msg) => {
                 const receivedMessage = JSON.parse(msg.body);
+                console.log(msg.body);
                 const isMine = receivedMessage.msg_emp_id === myId;
-              
+                
                 setMessages((prev) => [...prev, { ...receivedMessage, isMine }]);
             });
         };
@@ -74,7 +75,7 @@ function Chatting() {
 
 
             stompClient.publish({
-                destination: "/app/send",
+                destination: `/app/send/${seq}`,
                 body: JSON.stringify(msgData),
             });
             setMessage(""); // 입력 필드 초기화
