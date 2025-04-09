@@ -1,107 +1,122 @@
+// ✅ ApprovalWrite.jsx 안정화 버전
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Editor } from "@tinymce/tinymce-react";
 
 const ApprovalWrite = () => {
   const [forms, setForms] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [empCodeId, setEmpCodeId] = useState(null);
   const [selectedFormId, setSelectedFormId] = useState("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [previewContent, setPreviewContent] = useState("");
+  const [empCodeId, setEmpCodeId] = useState(null);
+  const [edmsCId, setEdmsCId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🔹 양식 목록
-    axios.get("http://10.10.55.22/api/forms", { withCredentials: true })
-      .then((res) => {
-        setForms(res.data);
-        console.log("📄 forms:", res.data);
-      })
-      .catch(() => alert("양식 목록을 불러올 수 없습니다."));
+    const fetchInitialData = async () => {
+      try {
+        const [formRes, categoryRes, empRes] = await Promise.all([
+          axios.get("http://10.10.55.22/api/forms"),
+          axios.get("http://10.10.55.22/api/category"),
+          axios.get("http://10.10.55.22/api/employee/code"),
+        ]);
+        setForms(formRes.data);
+        setCategories(categoryRes.data);
+        setEmpCodeId(empRes.data);
+      } catch (err) {
+        console.error("❌ 초기 데이터 불러오기 실패", err);
+      }
+    };
 
-    // 🔹 결재 종류
-    axios.get("http://10.10.55.22/api/category", { withCredentials: true })
-      .then((res) => {
-        setCategories(res.data);
-        console.log("🗂️ categories:", res.data);
-      })
-      .catch((err) => {
-        console.error("❌ 결재 종류 오류:", err);
-        alert("결재 종류를 불러올 수 없습니다.");
-      });
-
-    // 🔹 로그인 사원 코드
-    axios.get("http://10.10.55.22/api/employee/code", { withCredentials: true })
-      .then((res) => {
-        setEmpCodeId(res.data);
-        console.log("🙋 empCodeId:", res.data);
-      })
-      .catch((err) => {
-        console.error("❌ 사원 코드 오류:", err);
-        alert("로그인 정보를 불러오지 못했습니다.");
-      });
+    fetchInitialData();
   }, []);
 
+  useEffect(() => {
+    const fetchFormDetails = async () => {
+      if (!selectedFormId || categories.length === 0) return;
+      try {
+        const res = await axios.get(`http://10.10.55.22/api/forms/${selectedFormId}`);
+        const form = res.data;
+        setPreviewContent(form.formContent || "");
+
+        const matchedCategory = categories.find(
+          (cat) => cat.edmsCName === form.formType
+        );
+        setEdmsCId(matchedCategory?.edmsCId || "");
+      } catch (err) {
+        console.error("❌ 양식 상세 조회 실패", err);
+      }
+    };
+
+    fetchFormDetails();
+  }, [selectedFormId, categories]);
+
   const handleStart = () => {
-    if (!selectedFormId || !selectedCategoryId || !empCodeId) {
-      alert("모든 값을 선택해 주세요.");
+    if (!selectedFormId || !edmsCId || !empCodeId) {
+      alert("양식, 결재 종류, 사용자 정보가 필요합니다.");
       return;
     }
 
     navigate("/mainpage/maincontent/approval/write/next", {
       state: {
         formId: Number(selectedFormId),
-        edmsCId: Number(selectedCategoryId),
+        edmsCId: Number(edmsCId),
         comId: empCodeId,
         stateCode: 1,
         refDept: "D001",
         level1: 2,
         level2: 3,
-        level3: null,
-        level4: null,
         finalLevel: 2,
       },
     });
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>📄 사용할 양식 및 결재 종류를 선택하세요</h2>
+    <div style={{ padding: "2rem" }}>
+      <h2>📄 양식 선택 및 미리보기</h2>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <label>양식 선택:</label>
-        <select
-          value={selectedFormId}
-          onChange={(e) => setSelectedFormId(e.target.value)}
-          style={{ width: "100%", padding: "0.5rem" }}
-        >
-          <option value="">-- 양식을 선택하세요 --</option>
-          {forms.map((form) => (
-            <option key={form.formId} value={form.formId}>
-              {form.formName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <label>양식 선택</label>
+      <select onChange={(e) => setSelectedFormId(e.target.value)} value={selectedFormId}>
+        <option value="">-- 선택하세요 --</option>
+        {forms.map((f) => (
+          <option key={f.formId} value={f.formId}>
+            {f.formName}
+          </option>
+        ))}
+      </select>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <label>결재 종류 선택:</label>
-        <select
-          value={selectedCategoryId}
-          onChange={(e) => setSelectedCategoryId(e.target.value)}
-          style={{ width: "100%", padding: "0.5rem" }}
-        >
-          <option value="">-- 결재 종류를 선택하세요 --</option>
-          {categories.map((cat) => (
-            <option key={cat.edmsCId} value={cat.edmsCId}>
-              {cat.edmsCName}
-            </option>
-          ))}
-        </select>
-      </div>
+      {edmsCId && (
+        <div style={{ marginTop: "0.5rem", marginBottom: "1.5rem", color: "#333" }}>
+          <strong>결재 종류:</strong>{" "}
+          {
+            categories.find((c) => c.edmsCId === Number(edmsCId))?.edmsCName
+            || "알 수 없음"
+          }{" "}
+          (ID: {edmsCId})
+        </div>
+      )}
 
-      <button onClick={handleStart} style={{ padding: "0.75rem", width: "100%" }}>
-        ✍️ 작성 시작
+      {previewContent && (
+        <>
+          <h3>🧐 양식 미리보기</h3>
+          <Editor
+            apiKey="hxn7uw6e8li0hmpqrhwhgm2sr6jrapxrnjhu8g4bvl8cm8fg"
+            value={previewContent}
+            init={{
+              height: 300,
+              menubar: false,
+              readonly: true,
+              toolbar: false,
+              plugins: "preview",
+            }}
+          />
+        </>
+      )}
+
+      <button onClick={handleStart} style={{ marginTop: "1rem" }}>
+        작성 시작
       </button>
     </div>
   );
