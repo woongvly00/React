@@ -48,7 +48,6 @@ const DemoApp = () => {
   const [myInfo,setMyInfo] = useState(null);
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
-    console.log(userId);
     let mine = null;
 
       caxios.get("/Employee/SelectMine",{
@@ -57,14 +56,6 @@ const DemoApp = () => {
         mine = userIdResp.data;
         setMyInfo(mine);
         
-        
-
-        if (!mine || !mine.emp_code_id) {
-            console.error("내 정보가 잘못되었습니다:", mine);
-            return;
-          }
-        console.log(mine.emp_code_id);  
-        console.log(mine.emp_dept_id);
         setEventInput((prev) => ({
           id: '',
           title: '',
@@ -133,6 +124,9 @@ const DemoApp = () => {
     setEventInput({
       id: '', title: '', start_date: '', end_date: '', startTime: '', endTime: '', content: '', c_id: 1
     });
+
+    
+
   };
 
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -153,7 +147,8 @@ const DemoApp = () => {
         startTime: `${getEvent.startTime}`,
         endTime: `${getEvent.endTime}`,
         content: `${getEvent.content}`,
-        emp_id: getEvent.emp_id
+        emp_id: getEvent.emp_id,
+        color: `${getEvent.color}`
         
       };
 
@@ -194,8 +189,8 @@ const DemoApp = () => {
         title: selectedEvent.title || '',
         start_date: selectedEvent.start_date || '',
         end_date: selectedEvent.end_date || '',
-        startTime: selectedEvent.startTime || '',
-        endTime: selectedEvent.endTime || '',
+        startTime: formatTime(selectedEvent.startTime) || '',
+        endTime: formatTime(selectedEvent.endTime) || '',
         content: selectedEvent.content || ''
       });
     }
@@ -228,6 +223,12 @@ const DemoApp = () => {
       setCalList(resp.data);
     });
   }, []);
+
+  const formatTime = (timeStr) => {
+    if (!timeStr) return '';
+    const [h, m] = timeStr.split(':');
+    return `${h.padStart(2, '0')}:${m.padStart(2, '0')}`;
+  };
 
   return (
     <div className='demo-app'>
@@ -334,18 +335,18 @@ const DemoApp = () => {
       {isDetailOpen && selectedEvent && (
           <div className={calenderStyle['detail-overlay']}>
             <div className={calenderStyle['detail-container']}>
-              <h2>일정 상세 정보</h2>
+              <h2>일정 수정</h2>
 
               {isEditing ? (<>
                 <input type="hidden" name="id" value={update.id} />
                 <div><strong>제목:</strong><input type="text" name="title" value={update.title} onChange={handleUpdate} placeholder="일정 제목 입력" autoFocus/></div>
                 <div>
-                  시작일<input name="start_date" type="date" value={update.start} onChange={handleUpdate} />
-                  종료일<input name="end_date" type="date" value={update.end} onChange={handleUpdate} />
+                  시작일<input name="start_date" type="date" value={update.start_date } onChange={handleUpdate} />
+                  종료일<input name="end_date" type="date" value={update.end_date } onChange={handleUpdate} />
                 </div>
                 <div>
                   시작시간
-                  <select name="startTime" value={update.startTime} onChange={handleUpdate}>
+                  <select name="startTime" value={update.startTime || ''} onChange={handleUpdate}>
                     {Array.from({ length: 48 }).map((_, index) => {
                       const h = String(Math.floor(index / 2)).padStart(2, '0');
                       const m = index % 2 === 0 ? '00' : '30';
@@ -354,7 +355,7 @@ const DemoApp = () => {
                     })}
                   </select>
                   종료시간
-                  <select name="endTime" value={update.endTime} onChange={handleUpdate}>
+                  <select name="endTime" value={update.endTime || ''} onChange={handleUpdate}>
                     {Array.from({ length: 48 }).map((_, index) => {
                       const h = String(Math.floor(index / 2)).padStart(2, '0');
                       const m = index % 2 === 0 ? '00' : '30';
@@ -368,7 +369,7 @@ const DemoApp = () => {
                   <textarea name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" style={{ width: '300px', height: '150px', resize: 'none' }}></textarea></div>
               
               </>) : (<>
-                <div>{selectedEvent.id}</div>
+                {/* <div>{selectedEvent.id}</div> */}
                 <div><strong>제목:</strong> {selectedEvent.title}</div>
                 <div><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</div>
                 <div><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</div>
@@ -397,7 +398,6 @@ const renderEventContent = (eventInfo) => {
   const bgColor = eventInfo.event.extendedProps.color || 'dodgeblue';
  return (
     <div style={{backgroundColor:bgColor, borderRadius:'0px'}}>
-      <b>{eventInfo.timeText}</b>
       <b>{eventInfo.event.title}</b>
     </div>
   );

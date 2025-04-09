@@ -25,8 +25,6 @@ const ScheduleList = ({ closeModal }) => {
             }}
         ).then((resp) => {
             setMyCalendar(resp.data);
-            console.log(getMyCalendar.c_title);
-            console.log(getMyCalendar.c_id);
         })};
 
         const handlePublicCal = () => {
@@ -36,8 +34,6 @@ const ScheduleList = ({ closeModal }) => {
                 }}
             ).then((resp) => {
                 setPublicCalendar(resp.data);
-                console.log(getPublicCalendar.c_title);
-                console.log(getPublicCalendar.c_id);
             })};
 
         
@@ -48,8 +44,6 @@ const ScheduleList = ({ closeModal }) => {
                     }}
                 ).then((resp) => {
                     setGetComCalendar(resp.data);
-                    console.log(getComCalendar.c_title);
-                    console.log(getComCalendar.c_id);
                 })};
     
 
@@ -72,7 +66,12 @@ const ScheduleList = ({ closeModal }) => {
                         <div className="accordion-body">
                             {
                                 getMyCalendar.map((calendar) => (
-                                    <div key={calendar.c_id}><input type="checkbox"></input><strong>{calendar.c_title}</strong></div>
+                                    <label key={calendar.c_id} style={{
+                                        display: 'inline-block',
+                                        cursor: 'pointer',
+                                        backgroundColor: `${calendar.color}`,
+                                      }}><input type="checkbox" checked='true'
+                                    style={{ display: 'none' }}/><strong>{calendar.c_title}</strong></label>
                                   ))
                             }
                         </div>
@@ -88,7 +87,12 @@ const ScheduleList = ({ closeModal }) => {
                         <div className="accordion-body">
                             {
                                 getPublicCalendar.map((calendar) => (
-                                    <div key={calendar.c_id}><input type="checkbox"></input><strong>{calendar.c_title}</strong></div>
+                                    <label key={calendar.c_id} style={{
+                                        display: 'inline-block',
+                                        cursor: 'pointer',
+                                        backgroundColor: `${calendar.color}`,
+                                      }}><input type="checkbox" checked='true'
+                                    style={{ display: 'none' }}/><strong>{calendar.c_title}</strong></label>
                                   ))
                             }
                         </div>
@@ -104,7 +108,12 @@ const ScheduleList = ({ closeModal }) => {
                         <div className="accordion-body">
                             {
                                 getComCalendar.map((calendar) => (
-                                    <div key={calendar.c_id}><input type="checkbox"></input><strong>{calendar.c_title}</strong></div>
+                                    <label key={calendar.c_id} style={{
+                                        display: 'inline-block',
+                                        cursor: 'pointer',
+                                        backgroundColor: `${calendar.color}`,
+                                      }}><input type="checkbox" checked='true'
+                                    style={{ display: 'none' }}/><strong>{calendar.c_title}</strong></label>
                                   ))
                             }
                         </div>
