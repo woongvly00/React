@@ -20,6 +20,7 @@ const DemoApp = () => {
     startTime: '',
     endTime: '',
     content: '',
+    color: '',
     c_id: 1,
     emp_id: 0
   });
@@ -33,7 +34,8 @@ const DemoApp = () => {
         end: `${event.end_date}T${event.endTime}`,
         allDay: false,
         extendedProps: {
-          c_id: event.c_id
+          c_id: event.c_id,
+          color: event.color
         }
       }));
     setEvents(getAllevents);
@@ -107,6 +109,7 @@ const DemoApp = () => {
       start: `${eventInput.start_date}T${eventInput.startTime}`,
       end: `${eventInput.end_date}T${eventInput.endTime}`,
       allDay: false,
+      color:`${eventInput.color}`,
       extendedProps: {
         content: eventInput.content,
         c_id: eventInput.c_id,
