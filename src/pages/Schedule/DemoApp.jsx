@@ -10,7 +10,7 @@ import useScheduleStore from '../../store/useScheduleStore';
 // const userId = sessionStorage.getItem("userId");
 
 const DemoApp = () => {
-  const { events, addEvent, setEvents, event, removeEvent } = useScheduleStore();
+  const { events, addEvent, setEvents, addEvents, removeEvent } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
   const [eventInput, setEventInput] = useState({
@@ -111,7 +111,10 @@ const DemoApp = () => {
           color: event.color
         }
       }));
-    setEvents(getComEvents);
+
+
+      
+      addEvents(getComEvents);
     }).catch((error) => {
       console.error("일정 정보 불러오기 실패", error);
     })
@@ -138,7 +141,7 @@ const DemoApp = () => {
           color: event.color
         }
       }));
-      setEvents((prev) => [...prev, ...getMyEvents]);
+      addEvents(getMyEvents);
     }).catch((error) => {
       console.error("일정 정보 불러오기 실패", error);
     })
