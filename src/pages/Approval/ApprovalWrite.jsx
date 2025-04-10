@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import daxios from "../../axios/axiosConfig";
 import { Editor } from "@tinymce/tinymce-react";
 
 const ApprovalWrite = () => {
@@ -18,9 +18,9 @@ const ApprovalWrite = () => {
     const fetchInitialData = async () => {
       try {
         const [formRes, categoryRes, empRes] = await Promise.all([
-          axios.get("http://10.10.55.22/api/forms"),
-          axios.get("http://10.10.55.22/api/category"),
-          axios.get("http://10.10.55.22/api/employee/code"),
+          daxios.get("http://10.10.55.22/api/forms"),
+          daxios.get("http://10.10.55.22/api/category"),
+          daxios.get("http://10.10.55.22/api/employee/code"),
         ]);
         setForms(formRes.data);
         setCategories(categoryRes.data);
@@ -37,7 +37,7 @@ const ApprovalWrite = () => {
     const fetchFormDetails = async () => {
       if (!selectedFormId || categories.length === 0) return;
       try {
-        const res = await axios.get(`http://10.10.55.22/api/forms/${selectedFormId}`);
+        const res = await daxios.get(`http://10.10.55.22/api/forms/${selectedFormId}`);
         const form = res.data;
         setPreviewContent(form.formContent || "");
 

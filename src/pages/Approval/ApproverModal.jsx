@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import daxios from "../../axios/axiosConfig";
 
 const ApproverModal = ({ isOpen, onClose, onSelect }) => {
   const [employees, setEmployees] = useState([]);
@@ -13,7 +13,7 @@ const ApproverModal = ({ isOpen, onClose, onSelect }) => {
 
   useEffect(() => {
     if (!isOpen) return;
-    axios
+    daxios
       .get("http://10.10.55.22/api/employee/list")
       .then((res) => {
         setEmployees(res.data);

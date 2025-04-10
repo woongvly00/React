@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import daxios from "../../axios/axiosConfig";
 import { Editor } from "@tinymce/tinymce-react";
 import ApproverModal from "./ApproverModal";
 
@@ -46,10 +46,10 @@ const FormWriteNext = () => {
     const loadData = async () => {
       if (!state || !state.formId) return;
       try {
-        const codeRes = await axios.get("http://10.10.55.22/api/employee/code");
+        const codeRes = await daxios.get("http://10.10.55.22/api/employee/code");
         const code = codeRes.data;
 
-        const userRes = await axios.get(`http://10.10.55.22/api/employee/${code}`);
+        const userRes = await daxios.get(`http://10.10.55.22/api/employee/${code}`);
         setUserInfo({
           empCodeId: code,
           empName: userRes.data.empName,
@@ -61,7 +61,7 @@ const FormWriteNext = () => {
           comId: code,
         }));
 
-        const res = await axios.get(`http://10.10.55.22/api/forms/${state.formId}`);
+        const res = await daxios.get(`http://10.10.55.22/api/forms/${state.formId}`);
         const template = res.data.formContent;
         setTemplateHtml(template);
 
@@ -138,7 +138,7 @@ const FormWriteNext = () => {
 
       console.log("📤 제출할 formData:", JSON.stringify(payload, null, 2));
 
-      await axios.post("http://10.10.55.22/api/edms/register", payload);
+      await daxios.post("http://10.10.55.22/api/edms/register", payload);
       alert("✅ 제출 완료");
       navigate("/mainpage");
     } catch (err) {
