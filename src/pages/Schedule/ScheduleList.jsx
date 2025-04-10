@@ -5,16 +5,58 @@ import caxios from '../../Utils/caxios';
 const ScheduleList = ({ closeModal }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-      const [selectedInfo, setSelectedInfo] = useState(null);
+    const [selectedInfo, setSelectedInfo] = useState(null);
+    const [getMyCalendar, setMyCalendar] = useState([]);
+    const [getPublicCalendar, setPublicCalendar] = useState([]);
+    const [getComCalendar, setGetComCalendar] = useState([]);
+    const [userInfo, setUserInfo ] = useState(null);
+    const userId = sessionStorage.getItem("userId");
     
     
-      const handleModalOpen = (selectInfo) => {
+    const handleModalOpen = (selectInfo) => {
         setSelectedInfo(selectInfo);
         setIsModalOpen(true);
-      };
+    };
     
-      // 일정쪽에서 사용하는 코드
-      const [getCalendar, setGetCalendar] = useState([]);
+    useEffect(()=>{
+        caxios.get("/mypage/info").then((resp)=>{
+            setUserInfo(resp.data);
+        }).catch((error) => {
+            console.error("실패", error);
+        });
+        
+    }, [])
+    
+
+    const handleMyCal = () => {
+        caxios.get("/calendar/myCal", {
+            params: {
+              public_code: 10  
+            }}
+        ).then((resp) => {
+            setMyCalendar(resp.data);
+    })};
+
+    const handlePublicCal = () => {
+        caxios.get("/calendar/publicCal", {
+            params: {
+                public_code: 20  
+            }}
+        ).then((resp) => {
+            setPublicCalendar(resp.data);
+    })};
+
+        
+    const handleComCal = () => {
+        caxios.get("/calendar/comCal", {
+            params: {
+                public_code: 30  
+            }}
+        ).then((resp) => {
+            setGetComCalendar(resp.data);
+    })};
+    
+
 
 
     return (
@@ -26,37 +68,72 @@ const ScheduleList = ({ closeModal }) => {
             <div className="accordion" id="accordionExample">
                 <div className="accordion-item">
                     <h2 className="accordion-header">
-                        <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onClick={handleMyCal}>
                             내 캘린더
                         </button>
                     </h2>
-                    <div id="collapseOne" className="accordion-collapse collapse show">
+                    <div id="collapseOne" className="accordion-collapse collapse">
                         <div className="accordion-body">
-                            <input type="checkbox"></input><strong></strong>
+                            {
+                                getMyCalendar
+                                .filter((calendar)=>{
+                                    if(calendar.public_code == 10){
+                                        return calendar.emp_id == `${userInfo.emp_code_id}`;
+                                    }
+                                    return true;
+                                })
+                                .map((calendar, index) => (
+                                    <div className="form-check form-switch" key={calendar.c_id}>
+                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked/>
+                                        <label className="form-check-label" htmlFor="switchCheckChecked" style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
+                                            <strong>{calendar.c_title}</strong>
+                                        </label>
+                                    </div>
+                                  ))
+                            }
                         </div>
                     </div>
                 </div>
                 <div className="accordion-item">
                     <h2 className="accordion-header">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onClick={handlePublicCal}>
                             공유 캘린더
                         </button>
                     </h2>
                     <div id="collapseTwo" className="accordion-collapse collapse">
                         <div className="accordion-body">
-                            <input type="checkbox"></input><strong></strong>
+                            
+                            {
+                                getPublicCalendar.map((calendar) => (
+                                    <div className="form-check form-switch" key={calendar.c_id}>
+                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked />
+                                        <label className="form-check-label" htmlFor="switchCheckChecked" style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
+                                            <strong>{calendar.c_title}</strong>
+                                        </label>
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
                 <div className="accordion-item">
                     <h2 className="accordion-header">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            회사 전체 캘린더
+                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onClick={handleComCal}>
+                            회사 캘린더
                         </button>
                     </h2>
                     <div id="collapseThree" className="accordion-collapse collapse">
                         <div className="accordion-body">
-                            <input type="checkbox"></input><strong></strong>
+                            {
+                                getComCalendar.map((calendar) => (
+                                    <div className="form-check form-switch" key={calendar.c_id}>
+                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked />
+                                        <label className="form-check-label" htmlFor="switchCheckChecked" style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
+                                            <strong>{calendar.c_title}</strong>
+                                        </label>
+                                    </div>
+                                  ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -75,6 +152,5 @@ const ScheduleList = ({ closeModal }) => {
 
 
 export default ScheduleList;
-
 
 

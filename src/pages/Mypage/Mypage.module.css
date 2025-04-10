@@ -12,3 +12,56 @@
     min-width:1200px;
     min-height:900px;
 }
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.profileCard {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1.5rem;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+span {
+    color: #555;
+}
+  .previewWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profileImage {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    margin-bottom: 10px;
+  }
+  
+  .changeButton {
+    font-size: 0.8rem;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  

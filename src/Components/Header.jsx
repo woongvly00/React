@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Header.css';
 import useAuthStore from '../store/useAuthStore';
 import { Link, Route, useNavigate } from 'react-router-dom';
+import useScheduleStore from '../store/useScheduleStore';
 
 const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
   const {userId} = useAuthStore.getState();
+  const { setEvents } = useScheduleStore();
 
   const logout = useAuthStore((state) => state.logout);
   const navi = useNavigate();
@@ -46,10 +48,10 @@ const Header = () => {
           {showUserMenu && (
             <div className="user-dropdown">
               <ul>
-               <Link to= "/mainpage/maincontent/mypage" state={{userId}}> <li><i className="fa-solid fa-user"></i> 마이페이지</li></Link>
+               <Link to= "/mainpage/maincontent/mypage"> <li><i className="fa-solid fa-user"></i> 마이페이지</li></Link>
                <Link to="/home/header/test"> <li><i className="fa-solid fa-vial"></i> 테스트 페이지</li></Link>
                <Link to="/home/header/setting"> <li><i className="fa-solid fa-gear"></i> 설정</li></Link> 
-                <li onClick={() => { logout(); navi("/"); }}>
+                <li onClick={() => { logout(); navi("/"); setEvents([]);}}>
                   <i className="fa-solid fa-right-from-bracket"></i> 로그아웃
                 </li>
               </ul>

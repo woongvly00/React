@@ -30,7 +30,7 @@ const Board_reference = () => {
 
                 <h2>📄 게시판</h2>
                 <div className={bstyle.approval}>
-                    <table className={bstyle.cotainer}>
+                    <table className={bstyle.container}>
                         <thead>
                             <tr className={bstyle.navi}>
                                 <th>자료실</th>
@@ -52,6 +52,8 @@ const Board_reference = () => {
                                 <th>작성자</th>
                                 <th>작성일</th>
                                 <th>조회수</th>
+                                <th>추천수</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -60,21 +62,27 @@ const Board_reference = () => {
                                 group.map((message, index) => {
                                     return (
                                         <tr key={index}>
-                                            <td>{message.board_id}</td>
-                                            <Link to={`/mainpage/maincontent/titlelink/${message.board_id}`}>{message.board_title}</Link>
-                                            <td>{message.board_name}</td>
-                                            <td>{message.board_write_date}</td>
-                                            <td>{message.board_view}</td>
+                                            <td>{message.post_id}</td>
+                                            <td>
+                                            <Link to={`/mainpage/maincontent/titlelink/${message.post_id}`}>{message.post_title}</Link>
+                                           </td>
+                                            <td>{message.post_writer}</td>
+                                            <td>{message.post_date}</td>
+                                            <td>{message.post_view}</td>
+                                            <td>{message.post_like}</td>
                                         </tr>
                                     );
                                 })
                             }
 
                         </tbody>
+                        
                     </table>
+                    <div className={bstyle.writeButton}><Link to="/mainpage/maincontent/write_button" state={{ name: "board" }}> <button>작성하기</button></Link></div>
                 </div>
+               
             </div>
-
+            
         </div >
 
 
