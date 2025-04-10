@@ -1,20 +1,21 @@
+// ✅ Mainpage.jsx
 import React from 'react';
 import style from '../MainPage/Mainpage.module.css';
-import Header from '../../Components/Header.jsx';
-import Home from './Home.jsx';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainContent from './MainContent.jsx';
+import Header from '../../Components/Header';
+import Home from './Home';
+import MainContent from './MainContent';
+import { Outlet, Routes, Route } from 'react-router-dom';
 
 const Mainpage = () => {
   return (
     <div className={style.container}>
-        <Header />
-        <div className={style.mainpageContents}>
+      <Header />
+      <div className={style.mainpageContents}>
         <Routes>
-          <Route path="/" element={<Home/>}></Route>
-          <Route path="maincontent/*" element={<MainContent/>}></Route>
+          <Route path='/' element={<Home />} />
+          <Route path='maincontent/*' element={<MainContent />} />
         </Routes>
-        </div>
+      </div>
     </div>
   );
 };
