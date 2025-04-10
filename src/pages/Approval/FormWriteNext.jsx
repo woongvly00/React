@@ -1,4 +1,4 @@
-// ✅ FormWriteNext.jsx (전체 수정된 버전)
+// ✅ FormWriteNext.jsx (작성자 + 결재자 바인딩 완성판)
 
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -19,6 +19,7 @@ const FormWriteNext = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
+  const [userInfo, setUserInfo] = useState({ empCodeId: null, empName: "" });
   const [formData, setFormData] = useState({
     formId: "",
     edmsCId: "",
@@ -26,13 +27,13 @@ const FormWriteNext = () => {
     stateCode: 1,
     edmsTitle: "",
     edmsContent: "",
-    refDept: 1, // ✅ 숫자형 고정값
+    refDept: 1,
     rejectReason: null,
-    level1: "",
-    level2: "",
+    level1: null,
+    level2: null,
     level3: null,
     level4: null,
-    finalLevel: "",
+    finalLevel: null,
     시작일: "",
     종료일: "",
     제목: "",
@@ -45,12 +46,19 @@ const FormWriteNext = () => {
     const loadData = async () => {
       if (!state || !state.formId) return;
       try {
-        const empRes = await axios.get("http://10.10.55.22/api/employee/code");
+        const codeRes = await axios.get("http://10.10.55.22/api/employee/code");
+        const code = codeRes.data;
+
+        const userRes = await axios.get(`http://10.10.55.22/api/employee/${code}`);
+        setUserInfo({
+          empCodeId: code,
+          empName: userRes.data.empName,
+        });
 
         setFormData((prev) => ({
           ...prev,
           ...state,
-          comId: empRes.data,
+          comId: code,
         }));
 
         const res = await axios.get(`http://10.10.55.22/api/forms/${state.formId}`);
@@ -61,7 +69,7 @@ const FormWriteNext = () => {
           제목: "",
           시작일: "",
           종료일: "",
-          결재선: "",
+          신청자: userRes.data.empName,
         });
 
         setFormData((prev) => ({
@@ -78,16 +86,25 @@ const FormWriteNext = () => {
 
   useEffect(() => {
     if (templateHtml) {
-      const 결재선 = `${formData.level1 || ""} → ${formData.level2 || ""} → ${formData.finalLevel || ""}`;
       const replaced = applyTemplateData(templateHtml, {
         제목: formData.제목,
         시작일: formData.시작일,
         종료일: formData.종료일,
-        결재선,
+        신청자: userInfo.empName,
+        "level1.name": formData.level1?.empName || "",
+        "level1.position": formData.level1?.jobName || "",
+        "level2.name": formData.level2?.empName || "",
+        "level2.position": formData.level2?.jobName || "",
+        "level3.name": formData.level3?.empName || "",
+        "level3.position": formData.level3?.jobName || "",
+        "level4.name": formData.level4?.empName || "",
+        "level4.position": formData.level4?.jobName || "",
+        "finalLevel.name": formData.finalLevel?.empName || "",
+        "finalLevel.position": formData.finalLevel?.jobName || "",
       });
       setFormData((prev) => ({ ...prev, edmsContent: replaced }));
     }
-  }, [formData.제목, formData.시작일, formData.종료일, formData.level1, formData.level2, formData.finalLevel, templateHtml]);
+  }, [formData.제목, formData.시작일, formData.종료일, formData.level1, formData.level2, formData.level3, formData.level4, formData.finalLevel, templateHtml, userInfo.empName]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -108,11 +125,11 @@ const FormWriteNext = () => {
         comId: Number(formData.comId),
         stateCode: Number(formData.stateCode),
         refDept: Number(formData.refDept),
-        level1: Number(formData.level1),
-        level2: Number(formData.level2),
-        level3: formData.level3 ? Number(formData.level3) : null,
-        level4: formData.level4 ? Number(formData.level4) : null,
-        finalLevel: Number(formData.finalLevel),
+        level1: formData.level1?.empCodeId || null,
+        level2: formData.level2?.empCodeId || null,
+        level3: formData.level3?.empCodeId || null,
+        level4: formData.level4?.empCodeId || null,
+        finalLevel: formData.finalLevel?.empCodeId || null,
         edmsTitle: formData.제목 || "제목 없음",
         edmsContent: formData.edmsContent,
         startDate: formData.시작일 || null,
@@ -201,6 +218,8 @@ const FormWriteNext = () => {
             ...prev,
             level1: approvers.level1,
             level2: approvers.level2,
+            level3: approvers.level3,
+            level4: approvers.level4,
             finalLevel: approvers.finalLevel,
           }));
         }}

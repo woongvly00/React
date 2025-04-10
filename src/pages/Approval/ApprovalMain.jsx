@@ -1,29 +1,60 @@
-// ApprovalMain.jsx
-import React from 'react';
-import './ApprovalMain.css';
-import ApprovalDashboard from './ApprovalDashboard';
-import DashboardList from './DashboardList';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import ApprovalDashboard from "./ApprovalDashboard";
+import DashboardList from "./DashboardList";
+import "./ApprovalMain.css";
 
 const ApprovalMain = () => {
-  const waitingApprovals = [
-    { id: 1, title: '출장 신청서', requester: '김철수', date: '2025-04-04', status: '대기' },
-    { id: 2, title: '연차 신청서', requester: '이영희', date: '2025-04-03', status: '대기' },
-  ];
+  const [waitingApprovals, setWaitingApprovals] = useState([]);
+  const [myDrafts, setMyDrafts] = useState([]);
 
-  const myDrafts = [
-    { id: 10, title: '프로젝트 예산안', status: '진행 중', progress: '2/3 결재 완료' },
-    { id: 11, title: '기획안', status: '반려', progress: '1/3 결재 완료' },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [waitingRes, draftRes] = await Promise.all([
+          axios.get("http://10.10.55.22/api/edms/waiting"),
+          axios.get("http://10.10.55.22/api/edms/mydrafts"),
+        ]);
+
+        console.log("✅ 대기 문서 응답:", waitingRes);
+        console.log("📦 대기 문서 데이터:", waitingRes.data);
+
+        console.log("✅ 기안 문서 응답:", draftRes);
+        console.log("📦 기안 문서 데이터:", draftRes.data);
+
+        if (!Array.isArray(waitingRes.data)) {
+          console.warn("❗대기 문서 응답이 배열이 아님:", waitingRes.data);
+        }
+
+        if (!Array.isArray(draftRes.data)) {
+          console.warn("❗기안 문서 응답이 배열이 아님:", draftRes.data);
+        }
+
+        setWaitingApprovals(waitingRes.data || []);
+        setMyDrafts(draftRes.data || []);
+      } catch (err) {
+        console.error("❌ 문서 데이터 불러오기 실패");
+
+        if (err.response) {
+          console.error("📛 서버 응답 상태코드:", err.response.status);
+          console.error("📛 응답 데이터:", err.response.data);
+        } else if (err.request) {
+          console.error("📛 요청은 보냈는데 응답이 없어요:", err.request);
+        } else {
+          console.error("📛 뭔가 이상한 에러입니다:", err.message);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-
     <div className="approval-main">
       <h2 className="approval-title">전자결재 대시보드</h2>
 
-      {/* ✅ 상단 카드 요약 */}
       <ApprovalDashboard />
 
-      {/* ✅ 리스트 영역 */}
       <div className="approval-section">
         <h3>내가 결재할 문서</h3>
         <DashboardList list={waitingApprovals} type="waiting" />
@@ -32,7 +63,6 @@ const ApprovalMain = () => {
       <div className="approval-section">
         <h3>내가 기안한 문서</h3>
         <DashboardList list={myDrafts} type="drafts" />
-
       </div>
     </div>
   );
