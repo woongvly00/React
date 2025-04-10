@@ -1,8 +1,20 @@
 // DashboardList.jsx
 import React from 'react';
-import './DashboardList.css';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardList = ({ list, type }) => {
+  const navigate = useNavigate();
+
+  console.log("📦 들어온 list:", list);
+
+  // 🛡 리스트가 없거나 비었을 경우
+  if (!list || list.length === 0) {
+    return <div style={{ padding: '1rem' }}>📭 문서가 없습니다</div>;
+  }
+
+  // 🧼 혹시 null item 끼어들었는지 방어
+  const safeList = list.filter(Boolean);
+
   return (
     <table className="dashboard-table">
       <thead>
@@ -15,15 +27,44 @@ const DashboardList = ({ list, type }) => {
         </tr>
       </thead>
       <tbody>
-        {list.map((item) => (
-          <tr key={item.id}>
-            <td>{item.title}</td>
-            {type === 'waiting' && <td>{item.requester}</td>}
-            <td>{item.formType || '일반'}</td>
-            <td>{item.status}</td>
-            <td>{item.date}</td>
-          </tr>
-        ))}
+        {safeList.map((item, index) => {
+          if (!item) return null;
+
+          console.log("🔍 item sample:", item);
+
+          const title = item.edmsTitle || item.title || '제목 없음';
+          const drafter = item.drafterName || item.empName || '-';
+          const formType = item.formName || item.documentType || '일반';
+          const stateText =
+            item.stateCode === 1 ? '대기' :
+            item.stateCode === 2 ? '진행 중' :
+            item.stateCode === 3 ? '반려' :
+            item.stateCode === 4 ? '승인' : '알 수 없음';
+
+          const submitDate = item.submitDate
+            ? new Date(item.submitDate).toLocaleDateString()
+            : '-';
+
+          const edmsId = item.edmsId || item.id || index;
+
+          return (
+            <tr
+              key={edmsId}
+              onClick={() =>
+                navigate(`/mainpage/maincontent/approval/detail/${edmsId}`, {
+                  state: { edmsId },
+                })
+              }
+              style={{ cursor: 'pointer' }}
+            >
+              <td>{title}</td>
+              {type === 'waiting' && <td>{drafter}</td>}
+              <td>{formType}</td>
+              <td>{stateText}</td>
+              <td>{submitDate}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
