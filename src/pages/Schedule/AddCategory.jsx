@@ -58,10 +58,23 @@ const AddCategory = ({ closeModal }) => {
 
   const handleAddCalender = () => {
 
-    caxios.post("/calendar", {calender:calender, selectedTargets:selectedTargets}).catch((error) => {
+    caxios.post("/calendar", calender).then((resp)=> {
+      const c_id = resp.data.c_id;
+      console.log(c_id);
+      const shareData = selectedTargets.map(t => ({
+        c_id: c_id,
+        target_type: t.target_type,
+        target_id: t.target_id
+      }));
+
+      return caxios.post("/calendar/calendarShare", shareData);
+    })
+    .catch((error) => {
         if (error.response?.status === 404 || 500) {
           alert("등록에 실패했습니다.");
     }})
+
+    
 
     
     setCalender({
@@ -88,7 +101,7 @@ const AddCategory = ({ closeModal }) => {
     if (exists) return;
 
     const label = e.target.options[e.target.selectedIndex].text;
-    setSelectedTargets(prev => [...prev, { id: value, name: label }]);
+    setSelectedTargets(prev => [...prev, { target_id: Number(value), target_type:label, name:label }]);
 
     e.target.selectedIndex = 0;
   };
@@ -141,9 +154,7 @@ const AddCategory = ({ closeModal }) => {
                       
                       {
                         departments.map((dept) => (
-                          <>
-                          <option value={dept.dept_id}>{dept.dept_name}</option>
-                          </>
+                          <option key={dept.dept_id} value={dept.dept_id}>{dept.dept_name}</option>
                         ))
                       }
                     </select>
@@ -152,9 +163,7 @@ const AddCategory = ({ closeModal }) => {
                       <option value="">개인</option>
                       {
                         employees.map((emp) => (
-                          <>
-                          <option value={emp.emp_code_id}>{emp.emp_name}{emp.job_}</option>
-                          </>
+                          <option key={emp.emp_code_id} value={emp.emp_code_id}>{emp.emp_name}{emp.job_}</option>
                         ))
                       }
                     </select>

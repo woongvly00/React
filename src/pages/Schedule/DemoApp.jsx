@@ -55,6 +55,7 @@ const DemoApp = () => {
 
 
   useEffect(() => {
+    setEvents([]);
     caxios.get('/schedule/comEvents').then((resp) => {
       const getComEvents = resp.data.map((event) => ({
         id:event.id,
@@ -72,14 +73,14 @@ const DemoApp = () => {
       console.error("일정 정보 불러오기 실패", error);
     })
 
-  }, [])
+  }, [userInfo.emp_code_id])
 
 
 
     useEffect(() => {
       if (!userInfo.emp_code_id) return;
       console.log("유저인포 값 확인 : " + userInfo.emp_code_id);
-
+      
     caxios.get(`/schedule/myEvents/${userInfo.emp_code_id}`).then((resp)=>{
       
       
@@ -486,8 +487,8 @@ const Sidebar = ({ weekendsVisible, handleWeekendsToggle, currentEvents }) => {
       <div className='demo-app-sidebar-section'>
         <h2>All Events ({currentEvents.length})</h2>
         <ul>
-          {currentEvents.map((event) => (
-            <SidebarEvent event={event} />
+          {currentEvents.map((event, index) => (
+            <SidebarEvent key={index} event={event} />
           ))}
         </ul>
       </div>
