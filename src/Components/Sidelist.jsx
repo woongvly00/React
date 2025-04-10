@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import sideliststyle from './Sidelist.module.css';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import AddCategory from '../pages/Schedule/AddCategory';
+import ScheduleList from '../pages/Schedule/ScheduleList';
 
 const Sidelist = () => {
   const location = useLocation();
   const name = location.state?.name;
-
+  
 
   const renderContent = () => {
     switch (name) {
@@ -23,7 +25,6 @@ const Sidelist = () => {
         <div className={sideliststyle.boardsidebar}>
           <div className={sideliststyle.wholegasy}>게시판 전체보기</div>
           <div><Link to="/mainpage/maincontent/standard" state={{ name: "board" }}>공지사항</Link></div>
-          <div><Link to="/mainpage/maincontent/listmanager" state={{ name: "board" }}>게시판 관리</Link></div>
           <div><Link to="/mainpage/maincontent/reference" state={{ name: "board" }}>자료실</Link></div>
           <div>전사 게시판
             <li><Link to="/mainpage/maincontent/free" state={{ name: "board" }}>자유게시판</Link></li>
@@ -82,47 +83,8 @@ const Sidelist = () => {
       // 일정 list
       case 'schedule':
         return <div className={sideliststyle.sideList}>
-          <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                <strong>내 캘린더</strong>
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  <strong>공유 캘린더</strong>
-                </button>
-              </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                  
-                </div>
-              </div>
-            </div>
-          </div>
           <div>
-            커스텀뷰 넣기
-          </div>
-          <div>
-            내 캘린더
-            <ul>
-              <li>개인 일정</li>
-            </ul>
-          </div>
-          <div>
-            공유 캘린더
-            <ul>
-              <li>프로젝트1 일정</li>
-              <li>회사 단체 일정</li>
-            </ul>
+            <ScheduleList />
           </div>
         </div>;
 

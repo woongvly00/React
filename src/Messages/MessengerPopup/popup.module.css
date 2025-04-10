@@ -51,7 +51,7 @@
     border-right: 1px solid black;
 }
 
-.empbtn{
+.left>.empbtn{
     width: 50px;
     height: 50px;
     border-radius: 100%;
@@ -64,7 +64,7 @@
     cursor: pointer;
 }
 
-.chatbtn{
+.left>.chatbtn{
     margin-top: 20px;
     margin-left: 15px;
     width: 50px;
@@ -72,6 +72,20 @@
     border-radius: 100%;
     border: none;
     background-color: #66B2FF;
+    color: white;
+    font-Weight: bold;
+    cursor: pointer;
+}
+
+.left>.groupbtn{
+    margin-top: 20px;
+    margin-left: 15px;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    border: none;
+    background-color: #66B2FF;
+    font-size: 15px;
     color: white;
     font-Weight: bold;
     cursor: pointer;

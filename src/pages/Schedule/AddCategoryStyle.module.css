@@ -1,0 +1,56 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    z-index: 9999;
+  }
+  
+
+  .modal-container {
+    background: white;
+    padding:50px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    min-width: 500px;
+    min-height: 300px;
+  }
+  
+
+  .modal-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+
+  .radio-option {
+  display: inline-block;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.custom-radio {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  transition: border 0.3s ease;
+}
+
+.radio-option input:checked + .custom-radio {
+  border: 3px solid #2196F3; /* 선택된 경우 테두리 강조 */
+}
+
+.closeBtn{
+    display: flex;
+    justify-content:right;
+    align-items: flex-end;
+}

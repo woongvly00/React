@@ -1,71 +1,125 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// ✅ ApprovalWrite.jsx 안정화 버전
 
-const FormWrite = () => {
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Editor } from "@tinymce/tinymce-react";
+
+const ApprovalWrite = () => {
   const [forms, setForms] = useState([]);
-  const [selectedForm, setSelectedForm] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [selectedFormId, setSelectedFormId] = useState("");
+  const [previewContent, setPreviewContent] = useState("");
+  const [empCodeId, setEmpCodeId] = useState(null);
+  const [edmsCId, setEdmsCId] = useState(null);
   const navigate = useNavigate();
 
-  // 🔹 양식 목록 호출
   useEffect(() => {
-    axios.get("/api/forms")
-      .then(res => setForms(res.data))
-      .catch(err => console.error("양식 목록 호출 실패", err));
+    const fetchInitialData = async () => {
+      try {
+        const [formRes, categoryRes, empRes] = await Promise.all([
+          axios.get("http://10.10.55.22/api/forms"),
+          axios.get("http://10.10.55.22/api/category"),
+          axios.get("http://10.10.55.22/api/employee/code"),
+        ]);
+        setForms(formRes.data);
+        setCategories(categoryRes.data);
+        setEmpCodeId(empRes.data);
+      } catch (err) {
+        console.error("❌ 초기 데이터 불러오기 실패", err);
+      }
+    };
+
+    fetchInitialData();
   }, []);
 
-  const handleFormSelect = (e) => {
-    const formId = parseInt(e.target.value);
-    const selected = forms.find(f => f.formId === formId);
-    setSelectedForm(selected);
-  };
+  useEffect(() => {
+    const fetchFormDetails = async () => {
+      if (!selectedFormId || categories.length === 0) return;
+      try {
+        const res = await axios.get(`http://10.10.55.22/api/forms/${selectedFormId}`);
+        const form = res.data;
+        setPreviewContent(form.formContent || "");
 
-  const handleNext = () => {
-    if (!selectedForm) {
-      alert("양식을 선택해주세요.");
+        const matchedCategory = categories.find(
+          (cat) => cat.edmsCName === form.formType
+        );
+        setEdmsCId(matchedCategory?.edmsCId || "");
+      } catch (err) {
+        console.error("❌ 양식 상세 조회 실패", err);
+      }
+    };
+
+    fetchFormDetails();
+  }, [selectedFormId, categories]);
+
+  const handleStart = () => {
+    if (!selectedFormId || !edmsCId || !empCodeId) {
+      alert("양식, 결재 종류, 사용자 정보가 필요합니다.");
       return;
     }
 
-    // formId만 넘김 → 다음 화면에서 제목, 내용, 파일, 결재선 작성
-    navigate("/approval/write/next", {
+    navigate("/mainpage/maincontent/approval/write/next", {
       state: {
-        formId: selectedForm.formId,
-        formName: selectedForm.formName,
-        formDesc: selectedForm.formDesc
-      }
+        formId: Number(selectedFormId),
+        edmsCId: Number(edmsCId),
+        comId: empCodeId,
+        stateCode: 1,
+        refDept: "D001",
+        level1: 2,
+        level2: 3,
+        finalLevel: 2,
+      },
     });
   };
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h2>📄 전자결재 양식 선택</h2>
+      <h2>📄 양식 선택 및 미리보기</h2>
 
-      <div>
-        <label>양식 선택</label><br />
-        <select onChange={handleFormSelect} defaultValue="">
-          <option value="" disabled>양식을 선택하세요</option>
-          {forms.map(form => (
-            <option key={form.formId} value={form.formId}>
-              {form.formName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <label>양식 선택</label>
+      <select onChange={(e) => setSelectedFormId(e.target.value)} value={selectedFormId}>
+        <option value="">-- 선택하세요 --</option>
+        {forms.map((f) => (
+          <option key={f.formId} value={f.formId}>
+            {f.formName}
+          </option>
+        ))}
+      </select>
 
-      {selectedForm && (
-        <div style={{ marginTop: "2rem", border: "1px solid #ccc", padding: "1rem", borderRadius: "5px" }}>
-          <h4>📑 양식 미리보기</h4>
-          <p><strong>제목:</strong> {selectedForm.formName}</p>
-          <p><strong>설명:</strong> {selectedForm.formDesc}</p>
-          {/* 필요 시 샘플 미리보기 html도 여기에 렌더링 가능 */}
+      {edmsCId && (
+        <div style={{ marginTop: "0.5rem", marginBottom: "1.5rem", color: "#333" }}>
+          <strong>결재 종류:</strong>{" "}
+          {
+            categories.find((c) => c.edmsCId === Number(edmsCId))?.edmsCName
+            || "알 수 없음"
+          }{" "}
+          (ID: {edmsCId})
         </div>
       )}
 
-      <div style={{ marginTop: "2rem" }}>
-        <button onClick={handleNext}>다음 단계 ➡️</button>
-      </div>
+      {previewContent && (
+        <>
+          <h3>🧐 양식 미리보기</h3>
+          <Editor
+            apiKey="hxn7uw6e8li0hmpqrhwhgm2sr6jrapxrnjhu8g4bvl8cm8fg"
+            value={previewContent}
+            init={{
+              height: 300,
+              menubar: false,
+              readonly: true,
+              toolbar: false,
+              plugins: "preview",
+            }}
+          />
+        </>
+      )}
+
+      <button onClick={handleStart} style={{ marginTop: "1rem" }}>
+        작성 시작
+      </button>
     </div>
   );
 };
 
-export default FormWrite;
+export default ApprovalWrite;

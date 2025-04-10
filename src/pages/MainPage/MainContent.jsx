@@ -7,7 +7,6 @@ import ReserveMain from '../Reserve/ReserveMain';
 import style from './MainContent.module.css';
 import ApprovalForm from '../Approval/ApprovalForm';
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
-import Board_listmanager from '../Boardlist/Board_listmanager';
 import Board_reference from '../Boardlist/Board_refernece';
 import Board_free from '../Boardlist/Board_free';
 import Board_club from '../Boardlist/Board_club';
@@ -16,12 +15,20 @@ import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
 import Mypage from '../Mypage/Mypage';
 import Board_write_button from '../Boardlist/Board_write_button';
+import Board_titlelink from '../Boardlist/Board_titlelink';
+
+
+
 import FormWrite from "../Approval/ApprovalWrite";
+import FormWriteNext from "../Approval/FormWriteNext";
+
 
 
 
 const MainContent = () => {
 
+  const location = useLocation();
+  const isMypage = location.pathname.includes('/mainpage/maincontent/mypage');
 
 
   return (
@@ -36,28 +43,31 @@ const MainContent = () => {
         <Link to="/mainpage/maincontent/reserve" state={{ name: "reserve" }}><i className="fa-solid fa-2x fa-clock" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
         <Link to="/mainpage/maincontent/msg"><i className="fa-solid fa-2x fa-comment" style={{ color: '#FFFFFF', margin: '20px 0' }}></i></Link>
       </div>
+   
+        {!isMypage && <Sidelist />}
+     
       
-      <Sidelist />
       <div className={style.mainContents}>
         <Routes>
           {/* 전자결제 */}
           <Route path="approval" element={<ApprovalMain />}></Route>
-          <Route path="/approval/write" element={<FormWrite />} />
+
+          <Route path="approval/write" element={<FormWrite />} />
+          <Route path="approval/write/next" element={<FormWriteNext />} />
+
 
 
 
 
           {/* 인사관리 */}
           {/* 인사관리 페이지가 없는 상태에서 만들어졌습니다. 인사관리 페이지 만들어지면 아래 전자결졔로 연결되는 부분 인사관리로만 바꿔주세요! */}
-          <Route path="hr" element={<ApprovalMain />}></Route>
+          <Route path="hr" element={<Mypage />}></Route>
           
 
-
-
           {/* 게시판 */}
+          <Route path="titlelink/:boardId" element={<Board_titlelink/>}></Route>
           <Route path="write_button" element={<Board_write_button/>}></Route>
           <Route path="standard" element={<Boardlist />}></Route>
-          <Route path="listmanager" element={<Board_listmanager />}></Route>
           <Route path="reference" element={<Board_reference />}></Route>
           <Route path="free" element={<Board_free />}></Route>
           <Route path="club" element={<Board_club />}></Route>
