@@ -54,52 +54,8 @@ const DemoApp = () => {
 }, [])
 
 
-
-
-
-// const [myInfo,setMyInfo] = useState(null);
-
-//   useEffect(() => {
-//     const userId = sessionStorage.getItem("userId");
-//     let mine = null;
-
-//     caxios.get("/Employee/SelectMine",{
-//         params: {userId: userId}
-//       }).then((userIdResp)=>{
-//         mine = userIdResp.data;
-//         setMyInfo(mine);
-//         console.log(mine.emp_code_id);
-        
-//         setEventInput((prev) => ({
-//           id: '',
-//           title: '',
-//           start_date: '',
-//           end_date: '',
-//           startTime: '',
-//           endTime: '',
-//           content: '',
-//           c_id: 1, 
-//           emp_id : mine.emp_code_id
-//         }));
-          
-//       })
-//       .catch((error) => {
-//         console.error("부서정보 불러오기 실패", error);
-//       })
-
-   
-//   }, []);
-
-
-
-
-
-
-
   useEffect(() => {
     caxios.get('/schedule/comEvents').then((resp) => {
-      
-      
       const getComEvents = resp.data.map((event) => ({
         id:event.id,
         title: event.title,
@@ -111,9 +67,6 @@ const DemoApp = () => {
           color: event.color
         }
       }));
-
-
-      
       addEvents(getComEvents);
     }).catch((error) => {
       console.error("일정 정보 불러오기 실패", error);
@@ -356,7 +309,9 @@ const DemoApp = () => {
 
       {isModalOpen && (
          <div className={calenderStyle['modal-overlay']}>
+          
          <div className={calenderStyle['modal-container']}>
+          <div className={calenderStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close" onClick={() => setIsModalOpen(false)}></button></div>
          <h2>일정 추가</h2>
          <div>
              일정 종류
@@ -435,7 +390,6 @@ const DemoApp = () => {
          </div>
          <div className={calenderStyle['modal-buttons']}>
              <button onClick={handleAddEvent}>저장</button>
-             <button onClick={() => setIsModalOpen(false)}>취소</button>
          </div>
          </div>
      </div>
@@ -444,7 +398,12 @@ const DemoApp = () => {
       {isDetailOpen && selectedEvent && (
           <div className={calenderStyle['detail-overlay']}>
             <div className={calenderStyle['detail-container']}>
-              <h2>일정 수정</h2>
+            <div className={calenderStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close"  onClick={() => {setIsDetailOpen(false); setIsEditing(false);}}></button></div>
+                {
+                  isEditing ? <h2>일정 수정</h2>
+                            : <h2>상세 내용</h2>
+                }
+              
 
               {isEditing ? (<>
                 <input type="hidden" name="id" value={update.id} />
@@ -488,7 +447,7 @@ const DemoApp = () => {
               <div id="editBtns" className={calenderStyle['detail-buttons']}>
                 {
                   isEditing ? <><button onClick={handleSave}>저장</button><button onClick={() => setIsEditing(false)}>취소</button></>
-                            : <><button onClick={handleUpdate}>수정</button><button onClick={handleDelete}>삭제</button><button onClick={() => {setIsDetailOpen(false); setIsEditing(false);}}>닫기</button></>
+                            : <><button onClick={handleUpdate}>수정</button><button onClick={handleDelete}>삭제</button></>
                 }
               </div>
             </div>
