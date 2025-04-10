@@ -37,13 +37,20 @@ const ScheduleList = ({ closeModal }) => {
             setMyCalendar(resp.data);
     })};
 
+
+    const [ sharedList, setSharedList] = useStore ([]);
     const handlePublicCal = () => {
+        const calCodes = resp.data.map(cal => cal.c_id);
         caxios.get("/calendar/publicCal", {
             params: {
                 public_code: 20  
             }}
         ).then((resp) => {
             setPublicCalendar(resp.data);
+
+        caxios.get("/calendar/sharedList")
+
+
     })};
 
         
@@ -55,6 +62,7 @@ const ScheduleList = ({ closeModal }) => {
         ).then((resp) => {
             setGetComCalendar(resp.data);
     })};
+    
     
 
 
@@ -104,7 +112,14 @@ const ScheduleList = ({ closeModal }) => {
                         <div className="accordion-body">
                             
                             {
-                                getPublicCalendar.map((calendar) => (
+                                getPublicCalendar
+                                .filter((calendar)=>{
+                                    if(calendar.public_code == 20){
+                                        return calendar.deft_id == `${userInfo.emp_code_id}`;// 현재 캘린더 생성자일때 보여주고 있음.
+                                    }
+                                    return true;
+                                })
+                                .map((calendar) => (
                                     <div className="form-check form-switch" key={calendar.c_id}>
                                         <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked />
                                         <label className="form-check-label" htmlFor="switchCheckChecked" style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
