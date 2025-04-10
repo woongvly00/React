@@ -127,7 +127,7 @@ const DemoApp = () => {
     caxios.get(`/schedule/myEvents/${userInfo.emp_code_id}`).then((resp)=>{
       
       
-      const getMyEvents = resp.date.map((event) => ({
+      const getMyEvents = resp.data.map((event) => ({
         id:event.id,
         title: event.title,
         start: `${event.start_date}T${event.startTime}`,
