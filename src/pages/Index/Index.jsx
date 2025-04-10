@@ -9,6 +9,7 @@ const Index = () => {
     const navi = useNavigate();
     const [login, setLogin] = useState({ id: '', pw: '' });
     const setAuth = useAuthStore((state) => state.setAuth);
+    
 
     useEffect(() => {
         // ✅ Axios 요청 시 자동으로 JWT 헤더 추가
@@ -34,7 +35,7 @@ const Index = () => {
         e.preventDefault();
 
         axios
-            .post('http://10.5.5.6/auth/login', login)
+            .post('http://10.10.55.6/auth/login', login)
             .then((resp) => {
                 const token = resp.data;
                 const decodedToken = jwtDecode(token);

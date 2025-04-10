@@ -7,10 +7,10 @@ import interactionPlugin from '@fullcalendar/interaction'
 import calenderStyle from './DemoApp.module.css';
 import caxios from '../../Utils/caxios';
 import useScheduleStore from '../../store/useScheduleStore';
-const userId = sessionStorage.getItem("userId");
+// const userId = sessionStorage.getItem("userId");
 
 const DemoApp = () => {
-  const { events, addEvent, setEvents, event, removeEvent } = useScheduleStore();
+  const { events, addEvent, setEvents, addEvents, removeEvent } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
   const [eventInput, setEventInput] = useState({
@@ -26,9 +26,38 @@ const DemoApp = () => {
     emp_id: 0
   });
 
+  const [userInfo, setUserInfo ] = useState({});
+
+  useEffect(()=>{
+    caxios.get("/mypage/info").then((resp)=>{
+      const info = resp.data;
+      setUserInfo({
+        emp_code_id: `${info.emp_code_id}`,
+        emp_per_id:`${info.emp_per_id}`,
+        emp_dept_id: `${info.emp_dept_id}`,
+        emp_name:`${info.emp_name}`,
+        isDeft:`${info.isDeft}`
+      });
+
+      
+      setEventInput((prev) => ({
+        ...prev,
+        emp_id: info.emp_code_id
+      }));
+      console.log("인포 값 확인 : " + info.emp_code_id);
+
+    }).catch((error) => {
+        console.error("실패", error);
+    });
+
+    
+}, [])
+
+
   useEffect(() => {
-    caxios.get('/schedule').then((resp) => {
-      const getAllevents = resp.data.map((event) => ({
+    setEvents([]);
+    caxios.get('/schedule/comEvents').then((resp) => {
+      const getComEvents = resp.data.map((event) => ({
         id:event.id,
         title: event.title,
         start: `${event.start_date}T${event.startTime}`,
@@ -39,45 +68,43 @@ const DemoApp = () => {
           color: event.color
         }
       }));
-    setEvents(getAllevents);
+      addEvents(getComEvents);
+    }).catch((error) => {
+      console.error("일정 정보 불러오기 실패", error);
+    })
+
+  }, [userInfo.emp_code_id])
+
+
+
+    useEffect(() => {
+      if (!userInfo.emp_code_id) return;
+      console.log("유저인포 값 확인 : " + userInfo.emp_code_id);
+      
+    caxios.get(`/schedule/myEvents/${userInfo.emp_code_id}`).then((resp)=>{
+      
+      
+      const getMyEvents = resp.data.map((event) => ({
+        id:event.id,
+        title: event.title,
+        start: `${event.start_date}T${event.startTime}`,
+        end: `${event.end_date}T${event.endTime}`,
+        allDay: false,
+        extendedProps: {
+          c_id: event.c_id,
+          color: event.color
+        }
+      }));
+      addEvents(getMyEvents);
     }).catch((error) => {
       console.error("일정 정보 불러오기 실패", error);
     })
     
-  }, [])
+  }, [userInfo.emp_code_id])
 
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
-  const [myInfo,setMyInfo] = useState(null);
-  useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    let mine = null;
-
-    caxios.get("/Employee/SelectMine",{
-        params: {userId: userId}
-      }).then((userIdResp)=>{
-        mine = userIdResp.data;
-        setMyInfo(mine);
-        
-        setEventInput((prev) => ({
-          id: '',
-          title: '',
-          start_date: '',
-          end_date: '',
-          startTime: '',
-          endTime: '',
-          content: '',
-          c_id: 1, 
-          emp_id : mine.emp_code_id
-        }));
-          
-      })
-      .catch((error) => {
-        console.error("부서정보 불러오기 실패", error);
-      })
-
-   
-  }, []);
+  
 
 
   const handleInput = (e) => {
@@ -248,17 +275,7 @@ const DemoApp = () => {
   };
 
 
-  const [userInfo, setUserInfo ] = useState(null);
 
-  useEffect(()=>{
-    caxios.get("/mypage/info").then((resp)=>{
-        setUserInfo(resp.data);
-        console.log(resp.data);
-    }).catch((error) => {
-        console.error("실패", error);
-    });
-    
-}, [])
 
   
 
@@ -293,7 +310,9 @@ const DemoApp = () => {
 
       {isModalOpen && (
          <div className={calenderStyle['modal-overlay']}>
+          
          <div className={calenderStyle['modal-container']}>
+          <div className={calenderStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close" onClick={() => setIsModalOpen(false)}></button></div>
          <h2>일정 추가</h2>
          <div>
              일정 종류
@@ -307,6 +326,7 @@ const DemoApp = () => {
                     if (calender.public_code == 30) {
                       return userInfo.job_id >= 1007;
                    }
+
                    if(calender.public_code == 10){
                      return userInfo.emp_code_id == calender.emp_id;
                    }
@@ -371,7 +391,6 @@ const DemoApp = () => {
          </div>
          <div className={calenderStyle['modal-buttons']}>
              <button onClick={handleAddEvent}>저장</button>
-             <button onClick={() => setIsModalOpen(false)}>취소</button>
          </div>
          </div>
      </div>
@@ -380,7 +399,12 @@ const DemoApp = () => {
       {isDetailOpen && selectedEvent && (
           <div className={calenderStyle['detail-overlay']}>
             <div className={calenderStyle['detail-container']}>
-              <h2>일정 수정</h2>
+            <div className={calenderStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close"  onClick={() => {setIsDetailOpen(false); setIsEditing(false);}}></button></div>
+                {
+                  isEditing ? <h2>일정 수정</h2>
+                            : <h2>상세 내용</h2>
+                }
+              
 
               {isEditing ? (<>
                 <input type="hidden" name="id" value={update.id} />
@@ -424,7 +448,7 @@ const DemoApp = () => {
               <div id="editBtns" className={calenderStyle['detail-buttons']}>
                 {
                   isEditing ? <><button onClick={handleSave}>저장</button><button onClick={() => setIsEditing(false)}>취소</button></>
-                            : <><button onClick={handleUpdate}>수정</button><button onClick={handleDelete}>삭제</button><button onClick={() => {setIsDetailOpen(false); setIsEditing(false);}}>닫기</button></>
+                            : <><button onClick={handleUpdate}>수정</button><button onClick={handleDelete}>삭제</button></>
                 }
               </div>
             </div>
@@ -463,8 +487,8 @@ const Sidebar = ({ weekendsVisible, handleWeekendsToggle, currentEvents }) => {
       <div className='demo-app-sidebar-section'>
         <h2>All Events ({currentEvents.length})</h2>
         <ul>
-          {currentEvents.map((event) => (
-            <SidebarEvent key={event.id} event={event} />
+          {currentEvents.map((event, index) => (
+            <SidebarEvent key={index} event={event} />
           ))}
         </ul>
       </div>
