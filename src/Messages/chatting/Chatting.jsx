@@ -9,6 +9,8 @@ function Chatting() {
 
     const [message, setMessage] = useState(""); //채팅한 메시지
     const [messages, setMessages] = useState([]); //메시지 저장
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [empMap, setEmpMap] = useState({});
 
     const contentRef = useRef(null);
     const location = useLocation();
@@ -18,6 +20,19 @@ function Chatting() {
     const targetId = params.get("to"); //대화상대 id
     const myId = Number(params.get("from")); //내 id
     const seq = Number(params.get("seq")); //방 번호
+    
+   
+    useEffect(()=>{
+        axios.get("http://10.5.5.2/Employee/SelectEmp")
+        .then(resp=>{
+            const empObj = {};
+            resp.data.forEach(emp =>{
+                empObj[emp.emp_code_id] = emp.emp_name;
+            });
+            setEmpMap(empObj);
+        })
+    },[]);
+
 
     const showMessages = () => {
         axios.get("http://10.5.5.2/Employee/showMessages", {
@@ -25,22 +40,28 @@ function Chatting() {
                 seq: seq
             }
         }).then((resp) => {
-       
+           
             const fetchedMessages = resp.data.map(msg => ({
                 ...msg,
-                isMine: msg.msg_emp_id === myId
+                isMine: msg.msg_emp_id === myId,
+                emp_name: empMap[msg.msg_emp_id]
             }));
             setMessages(fetchedMessages);
+            setIsLoaded(true);
         })
     }
 
+    useEffect(()=>{
+        if(Object.keys(empMap).length > 0) {
+            showMessages();
+        }
+    },[empMap]);
 
 
     useEffect(() => {
 
 
-        showMessages();
-
+        if(!isLoaded) return;
 
         stompClient.onConnect = () => {
 
@@ -49,10 +70,10 @@ function Chatting() {
 
             stompClient.subscribe(`/topic/messages/${seq}`, (msg) => {
                 const receivedMessage = JSON.parse(msg.body);
-                console.log(msg.body);
+                console.log("메시지받음"+msg.body);
                 const isMine = receivedMessage.msg_emp_id === myId;
-                
-                setMessages((prev) => [...prev, { ...receivedMessage, isMine }]);
+                const emp_name = empMap[receivedMessage.msg_emp_id];
+                setMessages((prev) => [...prev, { ...receivedMessage, isMine, emp_name }]);
             });
         };
 
@@ -61,11 +82,11 @@ function Chatting() {
         return () => {
             stompClient.deactivate(); // 컴포넌트가 사라질 때 연결 해제
         };
-    }, [location.search]);
+    }, [seq,isLoaded]);
 
     const sendMessage = () => {
         if (message.trim() !== "") {
-         
+
 
             const msgData = {
                 msg_content: message,
@@ -81,8 +102,6 @@ function Chatting() {
             setMessage(""); // 입력 필드 초기화
         }
     };
-
-
 
 
     //엔터누르면 전송
@@ -110,6 +129,7 @@ function Chatting() {
                         className={msg.isMine ? msgstyle.myMessageWrapper : ""}
                     >
                         <div className={msg.isMine ? msgstyle.myMessage : msgstyle.otherMessage}>
+                            {!msg.isMine && <div className={msgstyle.sender || empMap[msg.msg_emp_id]}>{msg.emp_name}</div>}
                             <div>{msg.msg_content}</div>
                             <div className={msgstyle.time}>{dayjs(msg.send_date).format("A hh:mm")}</div>
                         </div>
@@ -123,6 +143,7 @@ function Chatting() {
             <div className={msgstyle.service}>
                 <button className={msgstyle.send} onClick={sendMessage}>전송</button>
             </div>
+          
         </div>
     )
 

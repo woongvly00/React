@@ -10,14 +10,10 @@ function EmployeePage({openChat}) {
     const [groupedEmployees, setGroupedEmployees] = useState({});
     const [myInfo,setMyInfo] = useState(null);
  
-    
-  
-
- 
-
 
     //사원목록 가져오기
     useEffect(() => {
+        
         const userId = sessionStorage.getItem("userId");
       
         let mine = null;
@@ -29,20 +25,12 @@ function EmployeePage({openChat}) {
           }).then((userIdResp)=>{
              mine = userIdResp.data;
           
-            
-
-            if (!mine || !mine.emp_code_id) {
-                console.error("내 정보가 잘못되었습니다:", mine);
-                return; // 데이터가 잘못되면 여기서 중단
-              }
-
               setMyInfo(mine);
 
-            return axios.get("http://10.5.5.2/Employee/SelectEmp");
+             return axios.get("http://10.5.5.2/Employee/SelectEmp");
         }).then((resp) => {
-         
+             console.log(resp.data);
              const filtered = resp.data.filter(emp => emp.emp_code_id !== mine.emp_code_id); // 나 자신 제외
-    
              setEmployees(filtered);
     
             // 부서별로 직원 그룹화
