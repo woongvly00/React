@@ -47,7 +47,7 @@ const Sidebar = () => {
         "http://10.5.5.6/work/checkOut",
         {
           checkOutTime: currentTime,
-          emp_loginId: userId  // ✅ userId 사용 가능
+          emp_loginId: userId  // ✅ userId 사용 가능e
         },
         {
           headers: {
