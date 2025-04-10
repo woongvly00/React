@@ -487,7 +487,7 @@ const Sidebar = ({ weekendsVisible, handleWeekendsToggle, currentEvents }) => {
         <h2>All Events ({currentEvents.length})</h2>
         <ul>
           {currentEvents.map((event) => (
-            <SidebarEvent key={event.id} event={event} />
+            <SidebarEvent event={event} />
           ))}
         </ul>
       </div>

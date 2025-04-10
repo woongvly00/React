@@ -44,7 +44,7 @@ const AddCategory = ({ closeModal }) => {
     public_code: '10'
   });
 
-  const handleInput = (e) => {
+  const handleCalInput = (e) => {
     const { name, value } = e.target;
 
     if (name === 'color') {
@@ -54,10 +54,11 @@ const AddCategory = ({ closeModal }) => {
   };
   const colors = ['#ee5074', '#fa7227', '#ac725e', '#f7d915', '#a3b90a', '#57b92a', '#4fced8', '#5990d5', '#777dbf', '#844285'];
 
-  const handleAddCalender = () => {
-    console.log("최종 전송할 데이터:", calender);
 
-    caxios.post("/calendar", calender).catch((error) => {
+
+  const handleAddCalender = () => {
+
+    caxios.post("/calendar", {calender:calender, selectedTargets:selectedTargets}).catch((error) => {
         if (error.response?.status === 404 || 500) {
           alert("등록에 실패했습니다.");
     }})
@@ -72,11 +73,11 @@ const AddCategory = ({ closeModal }) => {
       created_date: '',
       public_code: '10'
     });
+
     setIsModalOpen(false);
     };
 
     const [selectedColor, setSelectedColor] = useState('');
-
     const [selectedTargets, setSelectedTargets] = useState([]);
 
   const handleAddTarget = (e) => {
@@ -96,12 +97,36 @@ const AddCategory = ({ closeModal }) => {
     setSelectedTargets(prev => prev.filter(t => t.id !== id));
   };
 
+  const [employees, setEmployees] = useState([]);
+  const [ departments, setDepartments ] = useState([]);
+
+  useEffect(() => {
+    caxios.get("/emp/selectAllEmps").then((resp) => {
+      const emps = resp.data;
+      setEmployees(emps);
+
+    }).catch((error) => {
+      if (error.response?.status === 404 || 500) {
+        alert("부서 목록을 불러오는데 실패했습니다.");
+    }});
+
+    caxios.get("/emp/selectAllDepts").then((resp) => {
+      const depts = resp.data;
+      setDepartments(depts);
+
+    }).catch((error) => {
+      if (error.response?.status === 404 || 500) {
+        alert("부서 목록을 불러오는데 실패했습니다.");
+    }});
+
+  },[])
+
+
     return (
         <div className={addCategoryStyle['modal-overlay']}>
-          
           <div className={addCategoryStyle['modal-container']}>
             <div className={addCategoryStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button></div>
-            <select name="public_code" value={calender.public_code} onChange={handleInput}>
+            <select name="public_code" value={calender.public_code} onChange={handleCalInput}>
                <option value="10">내 캘린더</option>
                <option value="20">공유 캘린더</option>
             </select>
@@ -113,14 +138,25 @@ const AddCategory = ({ closeModal }) => {
                     부서 선택
                     <select name='target_id' onChange={handleAddTarget}>
                       <option value="">부서</option>
-                      <option value="D001">총무팀</option>
-                      <option value="D002">개발팀</option>
+                      
+                      {
+                        departments.map((dept) => (
+                          <>
+                          <option value={dept.dept_id}>{dept.dept_name}</option>
+                          </>
+                        ))
+                      }
                     </select>
                     개별 선택
                     <select name='target_id' onChange={handleAddTarget}> 
                       <option value="">개인</option>
-                      <option value="U1001">김철수</option>
-                      <option value="U1002">박영희</option>
+                      {
+                        employees.map((emp) => (
+                          <>
+                          <option value={emp.emp_code_id}>{emp.emp_name}{emp.job_}</option>
+                          </>
+                        ))
+                      }
                     </select>
                   </div>
                   <div>
@@ -141,7 +177,7 @@ const AddCategory = ({ closeModal }) => {
 
             <div>
               캘린더 이름
-              <input type="text" name="c_title" value={calender.c_title}  onChange={handleInput}/>
+              <input type="text" name="c_title" value={calender.c_title}  onChange={handleCalInput}/>
             </div>
             <div>
               색상
@@ -151,7 +187,7 @@ const AddCategory = ({ closeModal }) => {
                   type="radio"
                   name="color"
                   value={color}
-                  onChange={handleInput}
+                  onChange={handleCalInput}
                   checked={selectedColor === color}
                   style={{ display: 'none' }}
                 />
