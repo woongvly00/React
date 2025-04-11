@@ -34,7 +34,7 @@ const Index = () => {
         e.preventDefault();
 
         axios
-            .post('http://10.5.5.6/auth/login', login)
+            .post('http://10.5.5.12/auth/login', login)
             .then((resp) => {
                 const token = resp.data;
                 const decodedToken = jwtDecode(token);
