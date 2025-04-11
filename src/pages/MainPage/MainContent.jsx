@@ -1,5 +1,3 @@
-
-// ✅ MainContent.jsx
 import React from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import ApprovalMain from '../Approval/ApprovalMain';
@@ -20,6 +18,7 @@ import Board_titlelink from '../Boardlist/Board_titlelink';
 import ReserveMain from '../Reserve/ReserveMain';
 import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
+import ApprovalListPage from "../Approval/ApprovalListPage";
 
 const MainContent = () => {
   const location = useLocation();
@@ -41,13 +40,22 @@ const MainContent = () => {
 
       <div className={style.mainContents}>
         <Routes>
-          <Route path='approval' element={<ApprovalMain />} />
-          <Route path='approval/detail/:id' element={<ApprovalDetail />} />
-          <Route path='approval/write' element={<FormWrite />} />
-          <Route path='approval/write/next' element={<FormWriteNext />} />
+          <Route path='approval'>
+            <Route index element={<ApprovalMain />} />
+            <Route path="write" element={<FormWrite />} />
+            <Route path="write/next" element={<FormWriteNext />} />
+            <Route path="detail/:id" element={<ApprovalDetail />} />
+            <Route path="pending" element={<ApprovalListPage />} />
+            <Route path="requested" element={<ApprovalListPage />} />
+            <Route path="complete" element={<ApprovalListPage />} />
+            <Route path="rejected" element={<ApprovalListPage />} />
+            <Route path="department">
+              <Route path="referenced" element={<ApprovalListPage />} />
+              <Route path="created" element={<ApprovalListPage />} />
+            </Route>
+          </Route>
 
           <Route path='hr' element={<Mypage />} />
-
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />
           <Route path='write_button' element={<Board_write_button />} />
           <Route path='standard' element={<Boardlist />} />
@@ -57,7 +65,6 @@ const MainContent = () => {
           <Route path='department' element={<Board_department />} />
           <Route path='business' element={<Board_business />} />
           <Route path='support' element={<Board_support />} />
-
           <Route path='schedule' element={<ScheduleMain />} />
           <Route path='reserve' element={<ReserveMain />} />
           <Route path='msg' element={<ApprovalMain />} />
