@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import daxios from "../../axios/axiosConfig";
 import ApprovalDashboard from "./ApprovalDashboard";
 import DashboardList from "./DashboardList";
 import "./ApprovalMain.css";
@@ -12,8 +12,8 @@ const ApprovalMain = () => {
     const fetchData = async () => {
       try {
         const [waitingRes, draftRes] = await Promise.all([
-          axios.get("http://10.10.55.22/api/edms/waiting"),
-          axios.get("http://10.10.55.22/api/edms/mydrafts"),
+          daxios.get("http://10.10.55.22/api/edms/waiting"),
+          daxios.get("http://10.10.55.22/api/edms/mydrafts"),
         ]);
 
         console.log("✅ 대기 문서 응답:", waitingRes);

@@ -22,22 +22,25 @@ import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
 
 const MainContent = () => {
-  const location = useLocation();
-  const isMypage = location.pathname.includes('/mainpage/maincontent/mypage');
+const location = useLocation();
+const hideSidelistPaths = ['/mainpage/maincontent/mypage']; // 더 숨기고 싶은 페이지가 있다면 배열에 추가
+const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
+
+
 
   return (
     <div className={style.maincontainer}>
       <div className={style.mainSidebar}>
         <div className={style.icons}><Link to="/mainpage"><i className="fa-solid fa-2x fa-house" /></Link></div>
-        <Link to="/mainpage/maincontent/approval"><i className="fa-solid fa-2x fa-inbox" /></Link>
-        <Link to="/mainpage/maincontent/hr"><i className="fa-solid fa-2x fa-person" /></Link>
-        <Link to="/mainpage/maincontent/board"><i className="fa-solid fa-2x fa-clipboard" /></Link>
-        <Link to="/mainpage/maincontent/schedule"><i className="fa-solid fa-2x fa-calendar" /></Link>
-        <Link to="/mainpage/maincontent/reserve"><i className="fa-solid fa-2x fa-clock" /></Link>
-        <Link to="/mainpage/maincontent/msg"><i className="fa-solid fa-2x fa-comment" /></Link>
+        <Link to={{ pathname: "/mainpage/maincontent/approval"}}><i className="fa-solid fa-2x fa-inbox" /></Link>
+        <Link to={{ pathname: "/mainpage/maincontent/hr"}}><i className="fa-solid fa-2x fa-person" /></Link>
+        <Link to={{ pathname: "/mainpage/maincontent/board"}}><i className="fa-solid fa-2x fa-clipboard" /></Link>
+        <Link to={{ pathname: "/mainpage/maincontent/schedule"}}><i className="fa-solid fa-2x fa-calendar"/></Link>
+        <Link to={{ pathname: "/mainpage/maincontent/reserve"}}><i className="fa-solid fa-2x fa-clock" /></Link>
       </div>
-
-      {!isMypage && <Sidelist />}
+      
+      {isSidelistVisible && <Sidelist />}
+      
 
       <div className={style.mainContents}>
         <Routes>

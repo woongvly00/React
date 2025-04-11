@@ -1,53 +1,89 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Sidebar.css';
-import axios from 'axios';
+import daxios from '../axios/axiosConfig';
 import { format } from 'date-fns';
 import useAuthStore from '../store/useAuthStore';
+import useWorkStore from '../store/useWorkStore';
 
 const Sidebar = () => {
-  // ✅ 전역 상태에서 token, userId 가져오기 (컴포넌트 최상단에서)
-  const { token, userId } = useAuthStore.getState();
+  const { token, userId } = useAuthStore();
+  const {
+    checkInTime,
+    checkOutTime,
+    isCheckedIn,
+    isCheckedOut,
+    setCheckInTime,
+    setCheckOutTime,
+    setIsCheckedIn,
+    setIsCheckedOut,
+    setCurrentActivity
+  } = useWorkStore();
 
-  const [isCheckedIn, setIsCheckedIn] = useState(false);
-  const [isCheckedOut, setIsCheckedOut] = useState(false);
-  const [currentActivity, setCurrentActivity] = useState("");
-  const [checkInTime, setCheckInTime] = useState("");
-  const [checkOutTime, setCheckOutTime] = useState("");
+  const [currentActivity] = useState("");
   const [outingTime, setOutingTime] = useState("");
   const [workTime, setWorkTime] = useState("");
 
+  useEffect(() => {
+    const fetchCheckInTime = async () => {
+      try {
+        const response = await daxios.get("http://10.10.55.69/work/checkInTime", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        const time = response.data;
+        
+        if (time) {
+          setCheckInTime(new Date(time));
+          setIsCheckedIn(true);
+        } else {
+          setCheckInTime(null);
+          setIsCheckedIn(false);
+        }
+      } catch (error) {
+        setCheckInTime(null);
+        setIsCheckedIn(false); // 서버 실패 시 확실하게 리셋
+        console.error("출근 시간 불러오기 실패", error);
+      }
+    };
+  
+    fetchCheckInTime();
+  }, [setCheckInTime, setIsCheckedIn, token]);
+  
+
   const handleCheckIn = async () => {
     const currentTime = new Date().toISOString();
-
+  
     try {
-      const response = await axios.post(
-        "http://10.5.5.6/work/checkIn",
-        { checkInTime: currentTime },
+      const response = // ✅ 백엔드가 JWT에서 userId를 추출하므로 body에 아무것도 안 넣어도 됨
+      await daxios.post(
+        "http://10.10.55.69/work/checkIn",
+        {}, // 데이터 없음
         {
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`  // ✅ 토큰 사용 가능
-          }
-        }
-      );
-      console.log('서버 응답:', response.data);
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        } );
+  
+      console.log('✅ 출근 완료:', response.data);
       setIsCheckedIn(true);
+      setCheckInTime(new Date(currentTime));
       setCurrentActivity("출근");
-      setCheckInTime(currentTime);
     } catch (error) {
-      console.log('출근 시간 전송 오류', error);
+      console.error('❌ 출근 시간 전송 오류', error.response?.data || error.message);
     }
   };
+  
 
   const handleCheckOut = async () => {
     const currentTime = new Date().toISOString();
 
     try {
-      const response = await axios.post(
-        "http://10.5.5.6/work/checkOut",
+      const response = await daxios.post(
+        "http://10.10.55.69/work/checkOut",
         {
-          checkOutTime: currentTime,
-          emp_loginId: userId  // ✅ userId 사용 가능e
+          checkOutTime: currentTime
         },
         {
           headers: {
@@ -60,8 +96,8 @@ const Sidebar = () => {
       console.log('서버 응답:', response.data);
       setIsCheckedOut(true);
       setIsCheckedIn(false);
+      setCheckOutTime(new Date(currentTime));
       setCurrentActivity("퇴근");
-      setCheckOutTime(currentTime);
     } catch (error) {
       console.log('퇴근 시간 전송 오류', error);
     }
@@ -76,7 +112,7 @@ const Sidebar = () => {
     console.log("외근 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.10.55.69/work/outing",
+      const response = await daxios.post("http://10.10.55.69/work/outing",
         {
           outingTime: formattedTime,
           emp_loginId: userId
@@ -103,7 +139,7 @@ const Sidebar = () => {
     console.log("업무 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.10.55.69/work/work",
+      const response = await daxios.post("http://10.10.55.69/work/work",
         {
           workTime: formattedTime,
           emp_loginId: userId

@@ -102,6 +102,34 @@ const DemoApp = () => {
     
   }, [userInfo.emp_code_id])
 
+
+  useEffect(() => {
+    if (!userInfo.emp_code_id) return;
+    console.log("유저인포 값 확인 : " + userInfo.emp_code_id);
+    
+  caxios.get(`/schedule/shareEvents/${userInfo.emp_code_id}`).then((resp)=>{
+    
+    
+    const shareEvents = resp.data.map((event) => ({
+      id:event.id,
+      title: event.title,
+      start: `${event.start_date}T${event.startTime}`,
+      end: `${event.end_date}T${event.endTime}`,
+      allDay: false,
+      extendedProps: {
+        c_id: event.c_id,
+        color: event.color
+      }
+    }));
+    addEvents(shareEvents);
+  }).catch((error) => {
+    console.error("일정 정보 불러오기 실패", error);
+  })
+  
+}, [userInfo.emp_code_id])
+
+
+
   const [weekendsVisible, setWeekendsVisible] = useState(true);
 
   
@@ -324,12 +352,16 @@ const DemoApp = () => {
                    calList
                    .filter((calender) => {
                     if (calender.public_code == 30) {
-                      return userInfo.job_id >= 1007;
+                      return userInfo.job_id >= 1011;
                    }
 
                    if(calender.public_code == 10){
                      return userInfo.emp_code_id == calender.emp_id;
                    }
+
+                   if(calender.public_code == 20){
+                    return userInfo.emp_code_id == calender.emp_id || userInfo.emp_dept_id == calender.emp_dept_id; // 필터링 잘못됨. 공유 테이블에서 해당 캘린더코드를 가진 모든 공유대상목록을 가져와서 비교해야함.
+                  }
                    
                    return true;
                   })

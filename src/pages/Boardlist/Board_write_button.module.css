@@ -91,6 +91,18 @@
     border: 1px solid #ccc; 
 }
 
+.titlewrtie {
+  display: flex;  
+  align-items: center;  
+  padding-bottom:20px;
+  font-size:bold;
+}
+
+.title4, .text4 {
+  margin-right: 60px; 
+  font-size:bold;
+}
+
 
 .checkbox2 label {
     display: flex; 
@@ -134,9 +146,9 @@ input[type="file"] {
 }
 
 
-.demo-wrapper {
-  margin-top: 20px;
-}
+
+
+
 
 /* 에디터 내부 영역 */
 .demo-editor {
