@@ -37,7 +37,7 @@ const MeetingRoom = ()=> {
         caxios.get(`/reserve/resources`).then((resp)=>{
             setResourceList(resp.data);
         }).catch((error) => {
-            console.error("일정 정보 불러오기 실패", error);
+            console.error("자원 정보 불러오기 실패", error);
         })
       
     }, [])
@@ -50,9 +50,9 @@ const MeetingRoom = ()=> {
                 <select>
                 {
                     resouceList.map((resc, index) => (
-                        <div key={index}>
-                            {resc.resc_type}
-                        </div>
+                        <option key={index}>
+                            {resc.resc_name}
+                        </option>
                       ))
                 }
                 </select>
