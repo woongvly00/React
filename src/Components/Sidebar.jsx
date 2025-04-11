@@ -26,7 +26,9 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchCheckInTime = async () => {
       try {
-        const response = await daxios.get("http://10.10.55.69/work/checkInTime", {
+
+        const response = await axios.get("http://10.10.55.22/work/checkInTime", {
+
           headers: {
             Authorization: `Bearer ${token}`
           },
