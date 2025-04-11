@@ -93,12 +93,12 @@ const Sidelist = () => {
       // 예약 list
       case 'reserve':
         return <div className={sideliststyle.sideList}>
-                <ur>
+                <ul>
                   <li>나의 예약 목록</li>
                   <li>회의실</li>
                   <li>차량</li>
                   <li>비품</li>
-                </ur>
+                </ul>
               </div>;
       
 

@@ -35,11 +35,15 @@ const MeetingRoom = ()=> {
         <div className={rStyle.reservTable}>
             <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView='timeGridDay'
+            allDaySlot={false} 
+            initialView='timeGridWeek'
+            slotMinTime="08:00:00"
+            slotMaxTime="24:00:00"
+            slotDuration="00:30:00"
             headerToolbar={{
-                left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                left: '',
                 center: 'prev today next',
-                right: ''
+                right: 'dayGridMonth,timeGridWeek'
             }}
             
             selectable={true}
