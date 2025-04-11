@@ -20,6 +20,7 @@
     overflow-y: auto;
     gap:5px;
     flex-direction: column;
+    padding:10px 0;
     
 }
 
@@ -28,6 +29,9 @@
     display: flex;
     justify-content: flex-end; /* 내가 보낸 메시지는 오른쪽 정렬 */
     width: 100%;
+    align-items: center;
+    flex-shrink: 0;
+
 }
 
 .message{
@@ -107,4 +111,8 @@ textarea{
 .sender{
     font-size: 18px;
     font-weight: bold;
+}
+
+.unreadCount{
+    color: rgb(173, 173, 43);
 }

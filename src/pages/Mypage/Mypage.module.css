@@ -38,9 +38,7 @@ label {
     color: #333;
 }
 
-span {
-    color: #555;
-}
+
   .previewWrapper {
     display: flex;
     flex-direction: column;

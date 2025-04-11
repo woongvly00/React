@@ -4,6 +4,8 @@ import { replace, useLocation, useNavigate } from 'react-router-dom';
 import stompClient from "../../Components/websocket/websocket";
 import axios from 'axios';
 import dayjs from 'dayjs';
+import "dayjs/locale/ko";
+dayjs.locale("ko");
 
 function Chatting() {
 
@@ -34,13 +36,23 @@ function Chatting() {
     },[]);
 
 
+    useEffect(()=>{
+        axios.post("http://10.5.5.2/Employee/readAllMessages",{
+            empId:myId,
+            groupId: seq
+        }).then(()=>{
+            console.log("읽음")
+        })
+    })
+
+
     const showMessages = () => {
         axios.get("http://10.5.5.2/Employee/showMessages", {
             params: {
                 seq: seq
             }
         }).then((resp) => {
-           
+            console.log(resp)
             const fetchedMessages = resp.data.map(msg => ({
                 ...msg,
                 isMine: msg.msg_emp_id === myId,
@@ -70,10 +82,19 @@ function Chatting() {
 
             stompClient.subscribe(`/topic/messages/${seq}`, (msg) => {
                 const receivedMessage = JSON.parse(msg.body);
-                console.log("메시지받음"+msg.body);
                 const isMine = receivedMessage.msg_emp_id === myId;
                 const emp_name = empMap[receivedMessage.msg_emp_id];
                 setMessages((prev) => [...prev, { ...receivedMessage, isMine, emp_name }]);
+                
+                if(!isMine) {
+                    axios.post("http://10.5.5.2/Employee/readMessage",{
+                        seq: seq,
+                        empId: myId
+                    }).then(()=>{
+                        console.log("바로 읽음")
+                    })
+                }
+                
             });
         };
 
@@ -132,6 +153,9 @@ function Chatting() {
                             {!msg.isMine && <div className={msgstyle.sender || empMap[msg.msg_emp_id]}>{msg.emp_name}</div>}
                             <div>{msg.msg_content}</div>
                             <div className={msgstyle.time}>{dayjs(msg.send_date).format("A hh:mm")}</div>
+                                {/* 읽음표시 */}
+                                <div className={msgstyle.unreadCount}>{msg.unread_count}</div>
+                            
                         </div>
                     </div>
                 ))}

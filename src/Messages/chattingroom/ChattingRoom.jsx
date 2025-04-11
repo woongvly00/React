@@ -23,7 +23,6 @@ function ChattingRoom({openChat}) {
                     myId:myId
                 }
             }).then((room)=>{
-                console.log(room.data);
                 const sortedRooms = room.data.sort((a, b) =>
                     new Date(b.LAST_SEND_DATE) - new Date(a.LAST_SEND_DATE)
                 );

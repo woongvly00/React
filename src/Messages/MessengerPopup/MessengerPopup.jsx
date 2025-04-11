@@ -130,7 +130,7 @@ function MessengerPopup({ onClose }) {
     if (showPopup) {
       axios.get("http://10.5.5.2/Employee/SelectEmp")
         .then((resp) => {
-          console.log(resp.data);
+         
           const filtered = resp.data.filter(emp => emp.emp_code_id !== myInfo.emp_code_id);
           console.log(filtered);
           setEmployees(filtered);
@@ -179,7 +179,7 @@ function MessengerPopup({ onClose }) {
 
   
   useEffect(()=>{
-    console.log(selected);
+
   },[selected]);
 
 

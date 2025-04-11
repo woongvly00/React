@@ -1,36 +1,69 @@
-
-.another{
-   
-    height: 60px;
+  .another {
     display: flex;
-}
-
-.anotherimg{
-    border: 1px solid black;
-    border-radius: 40%;
-    width: 40px;
-    height: 40px;
-    margin-top: 10px;
-    margin-left: 20px;
-
-}
-
-.anothername{
-    margin-top: 18px;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+  }
+  
+  .another:hover {
+    background-color: #f8f8f8;
+  }
+  
+  .imgbox {
+    margin-right: 12px;
+  }
+  
+  .anotherimg {
+    width: 48px;
+    height: 48px;
+    background-color: #ccc;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .namebox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .anothername {
+    font-size: 16px;
     font-weight: bold;
+    color: #222;
+    margin-bottom: 4px;
     cursor: default;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
-}
-
-.imgbox{
-   
-    width: 30%;
-}
-
-.namebox{
+  }
+  
+  .lastMessage {
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    cursor: default;
     
-    width: 70%;
-}
+  }
+  
+  .bottomRow {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+  
+  .sendTime {
+    font-size: 13px;
+    color: #aaa;
+    cursor: default;
+  }
+  
+  .memberCount {
+    font-size: 13px;
+    color: #666;
+    cursor: default;
+  }

@@ -1,36 +1,3 @@
-
-/* .another{
-   
-    height: 60px;
-    display: flex;
-}
-
-.anotherimg{
-    border: 1px solid black;
-    border-radius: 40%;
-    width: 40px;
-    height: 40px;
-    margin-top: 10px;
-    margin-left: 20px;
-
-}
-
-.anothername{
-    margin-top: 18px;
-    font-weight: bold;
-    cursor: default;
-}
-
-.imgbox{
-   
-    width: 30%;
-}
-
-.namebox{
-    
-    width: 70%;
-} */
-
 .another {
     display: flex;
     align-items: center;
@@ -76,12 +43,12 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 240px;
+    max-width: 180px;
     cursor:default;
   }
   
   .lasttime {
-    font-size: 12px;
+    font-size: 14px;
     color: #aaa;
     align-self: flex-end;
     margin-top: 4px;
