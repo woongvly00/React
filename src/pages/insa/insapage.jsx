@@ -42,9 +42,9 @@ const InsaPage = () => {
     return () => clearInterval(interval);
   }, [checkInTime, checkOutTime, isCheckedOut]);
 
-  const totalWorkedHours = 38.5;
+  const totalWorkedHours = 50;
   const maxWeeklyHours = 52;
-  const overtimeHours = 6.5;
+  const overtimeHours = 1;
 
   const averageStart = "09:12";
   const averageEnd = "18:34";
@@ -73,7 +73,7 @@ const InsaPage = () => {
           </div>
           <div className={styles.cardBody}>
             <div className={styles.statRow}>
-              <span>출근한 날</span>
+              <span>연속 근속일</span>
               <span className={styles.statValue}>5일</span>
             </div>
             <div className={styles.statRow}>
