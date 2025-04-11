@@ -20,6 +20,8 @@ import Board_titlelink from '../Boardlist/Board_titlelink';
 import ReserveMain from '../Reserve/ReserveMain';
 import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
+import Insapage from '../insa/insapage';
+import Annaul from '../insa/Annaul';
 
 const MainContent = () => {
   const location = useLocation();
@@ -46,8 +48,10 @@ const MainContent = () => {
           <Route path='approval/write' element={<FormWrite />} />
           <Route path='approval/write/next' element={<FormWriteNext />} />
 
-          <Route path='hr' element={<Mypage />} />
-
+          <Route path='hr' element={<Insapage />} />
+          <Route path='attend' element={<Insapage/>}></Route>
+          <Route path='record' element={<Annaul/>}></Route>
+          
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />
           <Route path='write_button' element={<Board_write_button />} />
           <Route path='standard' element={<Boardlist />} />

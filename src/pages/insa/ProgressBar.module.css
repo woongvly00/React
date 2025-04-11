@@ -1,0 +1,19 @@
+.progress-container {
+    width: 100%;                /* 전체 바 너비 */
+    height: 24px;               /* 막대 높이 */
+    background-color: #e0e0e0;  /* 연한 회색 */
+    border-radius: 20px;        /* 둥글게 */
+    overflow: hidden;
+    margin-top: 5px;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background-color: #4caf50;  /* 초록색 */
+    color: white;
+    text-align: center;
+    line-height: 24px;
+    font-weight: bold;
+    transition: width 0.3s ease-in-out;
+  }
+  
