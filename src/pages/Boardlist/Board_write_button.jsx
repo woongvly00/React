@@ -11,44 +11,73 @@ import { convertToRaw } from 'draft-js';
 
 const Board_write_button = () => {
     const navigate = useNavigate();
-  
+
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  
+
     const [message, setMessage] = useState({
-      post_title: '',
-      post_content: '',
-      post_writer: '',
+        post_title: '',
+        post_content: '',
     });
-  
+
+    const [files, setFiles] = useState([]); 
+
+    const [defaultBoardData, setDefaultBoardData] = useState({
+        post_writer: '1004', //  로그인 연동 
+        parent_board: 0,
+        post_view: 0,
+        post_like: 0,
+        post_per: 'a',
+        post_tag: '자유 게시판'
+    });
+
+    const handleInput = (e) => {
+        const { name, value } = e.target;
+        setMessage((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+//파일 다운로드
+    // 등록 버튼 클릭 시
     const handleBoardwrite = async () => {
-      const rawContentState = convertToRaw(editorState.getCurrentContent());
-      const htmlContent = draftToHtml(rawContentState); // 에디터 내용을 HTML로 변환
-  
-      const finalMessage = {
-        ...message,
-        post_content: htmlContent,
-      };
-  
-      try {
-        const response = await axios.post('http://10.5.5.12/board/insert', finalMessage);
+        const htmlContent = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+
+        // FormData 생성
+    const formData = new FormData();
+    
+    // 기존의 게시글 데이터 (finalMessage의 내용)을 FormData에 추가
+    formData.append('post_title', message.post_title);
+    formData.append('post_content', htmlContent);
+    formData.append('post_writer', defaultBoardData.post_writer);
+    formData.append('post_tag', defaultBoardData.post_tag);
+    formData.append('post_per', defaultBoardData.post_per);
+    formData.append('parent_board', defaultBoardData.parent_board);
+    formData.append('post_view', defaultBoardData.post_view);
+    formData.append('post_like', defaultBoardData.post_like);
+
+    // 파일을 FormData에 추가
+    Array.from(files).forEach((file) => {
+        formData.append('files', file);  // 'files'라는 이름으로 파일을 추가
+    });
+
+    try {
+        const response = await axios.post('http://10.5.5.12/board/insert', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',  // 파일 업로드를 위한 Content-Type 설정
+            },
+        });
+
         if (response.status === 200) {
-          alert('게시글이 성공적으로 등록되었습니다!');
-          navigate(-1);
+            alert('게시글이 성공적으로 등록되었습니다!');
+            navigate(-1);
         }
-      } catch (error) {
+    } catch (error) {
         console.error('등록 중 오류 발생:', error);
         alert('게시글 등록 실패');
-      }
+    }
     };
-  
-    const handleInput = (e) => {
-      const { name, value } = e.target;
-      setMessage((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    };
-  
+
 
     return (
         <div className={bstyle.SBoardContainer}>
@@ -74,29 +103,39 @@ const Board_write_button = () => {
                                     <option value="option3">부서 게시판</option>
                                     <option value="option4">거래처별 변경사항</option>
                                     <option value="option5">업체교육/업무지원 보고서</option>
-                                    <option value="option 6">신규 아이디어 상품건의</option>
+                                    <option value="option6">신규 아이디어 상품건의</option>
                                 </select>
                             </div>
                         </div>
+                        <div className={bstyle.titlewrtie}>
+                            <div className={bstyle.title4}>작성자</div>
+                            <div className={bstyle.text4}>1004</div>
+                        </div>
                         <div className={bstyle.titlewrite}>
-                            <div className={bstyle.title2}>작성자</div>
-                            <div className={bstyle.text2}>
-                            <input type="text" name="board_name" placeholder="이름을 입력하세요" onChange={handleInput} value={message.post_writer}></input></div>
+
                             <div className={bstyle.title2}>제목</div>
                             <div className={bstyle.text2}>
-                                <input type="text" name="board_title" placeholder="제목을 입력하세요" onChange={handleInput} value={message.post_title}></input></div>
+                                <input type="text" name="post_title" placeholder="제목을 입력하세요" onChange={handleInput} value={message.post_title}></input></div>
                             <div className={bstyle.checkbox2}>
                                 <label>
-                                    <input type="checkbox" />
+                                    <input
+                                        type="checkbox"
+                                        onChange={(e) =>
+                                            setDefaultBoardData((prev) => ({
+                                                ...prev,
+                                                post_per: e.target.checked ? 'notice' : 'public'
+                                            }))
+                                        }
+                                    />
                                     공지로 등록
                                 </label>
                             </div>
                         </div>
                         <div className={bstyle.file}>
-                            <input type="file"></input>
+                            <input type="file" multiple onChange={(e) => { setFiles(e.target.files) }}></input>
                         </div>
                         <div className={bstyle.editorWrapper}>
-         
+
                             <Editor
                                 editorState={editorState}
                                 onEditorStateChange={setEditorState}

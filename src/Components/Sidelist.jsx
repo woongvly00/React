@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import { useLocation } from 'react-router-dom';
 import AddCategory from '../pages/Schedule/AddCategory';
 import ScheduleList from '../pages/Schedule/ScheduleList';
+import Insapage from '../pages/insa/insapage';
+import Annaul from '../pages/insa/Annaul';
 
 const Sidelist = () => {
   const location = useLocation();
@@ -76,7 +78,16 @@ const Sidelist = () => {
        // 인사관리 list
        case 'hr':
         return <div className={sideliststyle.sideList}>
-                인사관리
+                <aside className={sideliststyle.sidebar}>
+        <div className={sideliststyle.boardsidebar}>
+          <div className={sideliststyle.wholegasy}>인사관리</div>
+          <ul>
+            <li><Link to="/mainpage/maincontent/attend" state={{ name: "hr" }}>개인 근태관리</Link></li>
+            <li><Link to="/mainpage/maincontent/record" state={{ name: "hr" }}>휴가 / 출장 기록관리</Link></li>
+          </ul>
+        </div>
+      </aside>
+                 
               </div>;  
 
 
