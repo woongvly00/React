@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import { useLocation } from 'react-router-dom';
 import AddCategory from '../pages/Schedule/AddCategory';
 import ScheduleList from '../pages/Schedule/ScheduleList';
+import Annaul from '../pages/insa/Annaul';
 
 const Sidelist = () => {
   const location = useLocation();
@@ -76,7 +77,7 @@ const Sidelist = () => {
        // 인사관리 list
        case 'hr':
         return <div className={sideliststyle.sideList}>
-                인사관리
+                <Annaul/>
               </div>;  
 
 
