@@ -38,20 +38,25 @@ const ScheduleList = ({ closeModal }) => {
     })};
 
 
-    const [ sharedList, setSharedList] = useStore ([]);
+    const [ sharedList, setSharedList] = useState([]);
     const handlePublicCal = () => {
-        const calCodes = resp.data.map(cal => cal.c_id);
-        caxios.get("/calendar/publicCal", {
-            params: {
-                public_code: 20  
-            }}
-        ).then((resp) => {
-            setPublicCalendar(resp.data);
+        // const calCodes = resp.data.map(cal => cal.c_id);
+    //     caxios.get("/calendar/publicCal", {
+            
+    //         params: {
+    //             public_code: 20  
+    //         }}
+    //     ).then((resp) => {
+    //         setPublicCalendar(resp.data);
 
-        caxios.get("/calendar/sharedList")
+        
 
 
-    })};
+    // })
+    caxios.get(`/calendar/sharedList`).then((resp)=>{
+                setPublicCalendar(resp.data);
+            })
+};
 
         
     const handleComCal = () => {
@@ -115,7 +120,7 @@ const ScheduleList = ({ closeModal }) => {
                                 getPublicCalendar
                                 .filter((calendar)=>{
                                     if(calendar.public_code == 20){
-                                        return calendar.deft_id == `${userInfo.emp_code_id}`;// 현재 캘린더 생성자일때 보여주고 있음.
+                                        return calendar.deft_id == `${userInfo.emp_code_id}` || `${userInfo.deft_id}`;// 현재 캘린더 생성자일때 보여주고 있음.
                                     }
                                     return true;
                                 })
