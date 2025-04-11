@@ -9,7 +9,7 @@ import htmlToDraft from 'html-to-draftjs';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const Board_titellink = () => {
- 
+
     const { boardId } = useParams();
     const navigate = useNavigate();
 
@@ -27,10 +27,16 @@ const Board_titellink = () => {
 
 
     //추천수
-    const [postlike, setPostLike] = useState(0); 
+    const [postlike, setPostLike] = useState(0);
 
     //파일 다운로드
-    const [fileUrl, setFileUrl] = useState(""); // 파일 URL 상태 추가
+    const [fileList, setFileList] = useState([]);
+
+    //파일 수정
+    const [deletedFiles, setDeletedFiles] = useState([]); 
+    const [newFiles, setNewFiles] = useState([]);
+    const [showUploadInput, setShowUploadInput] = useState(false);
+
 
     // 게시글 조회
     useEffect(() => {
@@ -38,7 +44,7 @@ const Board_titellink = () => {
             .then(res => {
                 setBoardData(res.data);
                 setMessage({ post_title: res.data.post_title });
-                setPostLike(res.data.post_like); // 초기 추천수 설정
+                setPostLike(res.data.post_like); 
 
                 const blocksFromHtml = htmlToDraft(res.data.post_content || "");
                 const contentState = ContentState.createFromBlockArray(blocksFromHtml.contentBlocks);
@@ -49,7 +55,7 @@ const Board_titellink = () => {
 
     // 댓글 조회
     useEffect(() => {
-        axios.get(`http://10.5.5.12/reply`,{
+        axios.get(`http://10.5.5.12/reply`, {
             params: { board_id: boardId }
         })
             .then(res => {
@@ -76,7 +82,7 @@ const Board_titellink = () => {
             post_id: parseInt(boardId),
             post_title: message.post_title,
             post_content: htmlContent,
-            post_writer: boardData.post_writer ?? "",  // fallback
+            post_writer: boardData.post_writer ?? "", 
             post_per: boardData.post_per ?? "",
             post_tag: boardData.post_tag ?? ""
         }).then(() => {
@@ -118,14 +124,14 @@ const Board_titellink = () => {
             reply_coontent: newReply,
             reply_writer: "잇츠미"
         }).then(() => {
-            axios.get(`http://10.5.5.12/reply`,{
+            axios.get(`http://10.5.5.12/reply`, {
                 params: { board_id: boardId }
             })
-            .then(res => {
-                setReplies(res.data); // 전체 목록 갱신
-            });
-    
-        setNewReply("");
+                .then(res => {
+                    setReplies(res.data); 
+                });
+
+            setNewReply("");
         });
     };
 
@@ -140,7 +146,7 @@ const Board_titellink = () => {
         axios.put(`http://10.5.5.12/reply/update`, {
             reply_id: editingReplyId,
             reply_coontent: editedContent,
-             reply_writer: "잇츠미"
+            reply_writer: "잇츠미"
         }).then(() => {
             setReplies(prev =>
                 prev.map(reply =>
@@ -158,110 +164,136 @@ const Board_titellink = () => {
     // 댓글 삭제
     const handleReplyDelete = (replyId) => {
         if (window.confirm("댓글을 삭제할까요?")) {
-          axios.delete(`http://10.5.5.12/reply/${replyId}`)
-            .then(() => {
-              setReplies(prev => prev.filter(reply => reply.reply_id !== replyId));
-            })
-            .catch(err => {
-              console.error("댓글 삭제 실패:", err);
-              alert("삭제 중 오류가 발생했습니다.");
-            });
+            axios.delete(`http://10.5.5.12/reply/${replyId}`)
+                .then(() => {
+                    setReplies(prev => prev.filter(reply => reply.reply_id !== replyId));
+                })
+                .catch(err => {
+                    console.error("댓글 삭제 실패:", err);
+                    alert("삭제 중 오류가 발생했습니다.");
+                });
         }
-      };
+    };
 
-          // 추천수 증가 함수
+    // 추천수 증가 함수
     const increaseLikeCount = () => {
         axios.post(`http://10.5.5.12/board/increaseLikeCount/${boardId}`)
             .then(response => {
-                setPostLike(prev => prev + 1); // 추천수 증가
+                setPostLike(prev => prev + 1); 
             })
             .catch(error => {
                 console.error("추천수 증가 실패:", error);
             });
     };
-
     //파일 다운로드
     useEffect(() => {
-        // 게시글 조회
-        axios.get(`http://10.5.5.12/board/${boardId}`)
-            .then(res => {
-                setBoardData(res.data);
-                setFileUrl(res.data.file_url); // 서버에서 파일 URL 가져오기
-            });
+        axios.get(`http://10.5.5.12/board/${boardId}`).then((res) => {
+            setBoardData(res.data);
+            setMessage({ post_title: res.data.post_title });
+            setPostLike(res.data.post_like);
+
+            const blocksFromHtml = htmlToDraft(res.data.post_content || '');
+            const contentState = ContentState.createFromBlockArray(blocksFromHtml.contentBlocks);
+            const state = EditorState.createWithContent(contentState);
+            setEditorState(state);
+        });
+
+        axios.get(`http://10.5.5.12/files`, { params: { post_id: boardId } }).then((res) => {
+            setFileList(res.data);
+        });
     }, [boardId]);
 
-    // 파일 다운로드 함수
-    const handleFileDownload = () => {
-        if (fileUrl) {
-            window.location.href = `http://10.5.5.12/download/${fileUrl}`; // 파일 다운로드 API 호출
-        } else {
-            alert("다운로드할 파일이 없습니다.");
+    const handleFileDownload = (sysname, oriname) => {
+        const link = document.createElement('a');
+        link.href = `http://10.5.5.12/download/${sysname}?oriname=${encodeURIComponent(oriname)}`;
+        link.setAttribute("download", oriname); 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+    useEffect(() => {
+        console.log("📁 fileList", fileList); 
+    }, [fileList]);
+
+
+    const handleAllFileDownload = () => {
+        if (fileList.length === 1) {
+            const file = fileList[0];
+            handleFileDownload(file.b_sysname, file.b_oriname); 
+        } else if (fileList.length > 1) {
+            const link = document.createElement("a");
+            link.href = `http://10.5.5.12/download/all/${boardId}`;
+            link.setAttribute("download", "files.zip");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     };
 
+    //수정시 파일 삭제 후 수정
+    const handleFileDelete = (fileId) => {
+        setFileList(prev => prev.filter(file => file.b_file_id !== fileId));
+        setDeletedFiles(prev => [...prev, fileId]); 
 
-    return (
-        <div className={bstyle.gasyclick}>
-            <div className={bstyle.standardwrite10}>글쓰기</div>
+        setShowUploadInput(true); 
+    };
 
-            <div className={bstyle.titlewrite}>
-                <div className={bstyle.title2}>작성자</div>
-                <div className={bstyle.text2}>{boardData.post_writer}</div>
-            </div>
+    const handleFileUpdate = () => {
+        const htmlContent = draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
-            <div className={bstyle.titlewrite}>
-                <div className={bstyle.title2}>제목</div>
-                {editMode ? (
-                    <input
-                        type="text"
-                        className={bstyle.text2}
-                        name="post_title"
-                        onChange={handletitlelinkUpdateChange}
-                        value={message.post_title}
-                    />
-                ) : (
-                    <div className={bstyle.text2}>{boardData.post_title}</div>
-                )}
-            </div>
+        const formData = new FormData();
+        formData.append("post_id", boardId);
+        formData.append("post_title", message.post_title);
+        formData.append("post_content", htmlContent);
+        formData.append("post_writer", boardData.post_writer);
+        formData.append("post_per", boardData.post_per || "공개");
+        formData.append("post_tag", boardData.post_tag || "");
 
-            <div className={bstyle.file}>
-                <div className={bstyle.text2}>📥 파일다운로드</div>
-            </div>
+        deletedFiles.forEach(id => formData.append("deleted_files", id));
+        newFiles.forEach(file => formData.append("files", file));
 
-            <div className={bstyle.contentwrite}>
-                {editMode ? (
-                    <Editor
-                        editorState={editorState}
-                        onEditorStateChange={handleEditorChange}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                    />
-                ) : (
-                    <div
-                        className={bstyle.text2}
-                        dangerouslySetInnerHTML={{ __html: boardData.post_content }}
-                    />
-                )}
-            </div>
+        axios.put("http://10.5.5.12/board/updateWithFiles", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+            .then(() => {
+                alert("수정 완료!");
+                axios.get(`http://10.5.5.12/files`, { params: { post_id: boardId } })
+                    .then((res) => {
+                        setFileList(res.data);
+                    });
 
-            <div className={bstyle.good2}>
-                <button className={bstyle.thumbsbutton} onClick={increaseLikeCount}>
-                    <div className={bstyle.finger}>👍</div>
-                    {postlike > 0 && <div className={bstyle.plus}>+{postlike}</div>}
-                </button>
-            </div>
 
-            <div className={bstyle.buttoncontainer}>
-                <div className={bstyle.list3}><button onClick={() => navigate(-1)}>목록으로</button></div>
-                <div className={bstyle.rightbuttons}>
-                    <div className={bstyle.list4}>
-                        {!editMode && <button onClick={() => setEditMode(true)}>수정</button>}
-                        {editMode && <button onClick={handletitlelinkUpdate}>저장</button>}
-                    </div>
-                    <div className={bstyle.list5}><button onClick={handleDelete}>삭제</button></div>
-                </div>
-            </div>
+                axios.get(`http://10.5.5.12/files`, { params: { post_id: boardId } })
+                    .then((res) => {
+                        setFileList(res.data);
+                    });
 
+                setBoardData(prev => ({
+                    ...prev,
+                    post_title: message.post_title,
+                    post_content: htmlContent
+                }));
+
+                setEditMode(false);
+            })
+            .catch(err => {
+                console.error("수정 실패:", err);
+                alert("수정 실패!");
+            });
+    };
+
+    useEffect(() => {
+        if (editMode && fileList.length === 0) {
+            setShowUploadInput(true);
+        }
+    }, [fileList, editMode]);
+
+
+    //댓글 ui
+    const renderRepliesSection = () => (
+        <>
             {/* 댓글 출력 */}
             <div>댓글</div>
             {Array.isArray(replies) && replies.map((reply) => (
@@ -303,6 +335,128 @@ const Board_titellink = () => {
                 />
                 <button className={bstyle.okbutton} onClick={handleNewReplySubmit}>확인</button>
             </div>
+        </>
+    );
+
+
+    return (
+        <div className={bstyle.gasyclick}>
+            <div className={bstyle.standardwrite10}>글쓰기</div>
+
+            <div className={bstyle.titlewrite}>
+                <div className={bstyle.title2}>작성자</div>
+                <div className={bstyle.text2}>{boardData.post_writer}</div>
+            </div>
+
+            <div className={bstyle.titlewrite}>
+                <div className={bstyle.title2}>제목</div>
+                {editMode ? (
+                    <input
+                        type="text"
+                        className={bstyle.text2}
+                        name="post_title"
+                        onChange={handletitlelinkUpdateChange}
+                        value={message.post_title}
+                    />
+                ) : (
+                    <div className={bstyle.text2}>{boardData.post_title}</div>
+                )}
+            </div>
+
+
+            <div className={bstyle.file}>
+                {!editMode ? (
+                    <div
+                        className={bstyle.text2}
+                        onClick={handleAllFileDownload}
+                        style={{ cursor: "pointer", color: "#0a58ca", textDecoration: "underline" }}
+                    >
+                        📥 전체 파일 다운로드 ({fileList.length}개)
+                    </div>
+                ) : (
+                    <>
+                        {fileList.length > 0 && (
+                            <div style={{ marginTop: '10px' }}>
+                                {fileList.map((file, idx) => (
+                                    <span key={idx} style={{ marginRight: '15px' }}>
+                                        {file.b_oriname}
+                                        <span
+                                            onClick={() => handleFileDelete(file.b_file_id)}
+                                            style={{
+                                                marginLeft: '6px',
+                                                color: 'red',
+                                                cursor: 'pointer',
+                                                fontWeight: 'bold'
+                                            }}
+                                        >
+                                            ❌
+                                        </span>
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        {showUploadInput && (
+                            <div className={bstyle.file}>
+                                <input
+                                    type="file"
+                                    multiple
+                                    onChange={(e) => setNewFiles(Array.from(e.target.files))}
+                                />
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+
+
+            <div className={bstyle.contentwrite}>
+                {editMode ? (
+                    <Editor
+                        editorState={editorState}
+                        onEditorStateChange={handleEditorChange}
+                        wrapperClassName="demo-wrapper"
+                        editorClassName="demo-editor"
+                    />
+                ) : (
+                    <div
+                        className={bstyle.text2}
+                        dangerouslySetInnerHTML={{ __html: boardData.post_content }}
+                    />
+                )}
+            </div>
+
+            {!editMode && (
+                <div className={bstyle.good2}>
+                    <button className={bstyle.thumbsbutton} onClick={increaseLikeCount}>
+                        <div className={bstyle.finger}>👍</div>
+                        {postlike > 0 && <div className={bstyle.plus}>+{postlike}</div>}
+                    </button>
+                </div>
+            )}
+            <div className={bstyle.buttoncontainer}>
+                <div className={bstyle.list3}><button onClick={() => navigate(-1)}>목록으로</button></div>
+                <div className={bstyle.rightbuttons}>
+                    <div className={bstyle.list4}>
+                        {!editMode && <button onClick={() => setEditMode(true)}>수정</button>}
+                        {editMode && <button onClick={handleFileUpdate}>저장</button>}
+                    </div>
+                    <div className={bstyle.list5}>
+                        {!editMode ? (
+                            <button onClick={handleDelete}>삭제</button>
+                        ) : (
+                            <button onClick={() => setEditMode(false)}>취소</button>
+                        )}
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            {/* 댓글 출력 */}
+            {!editMode && renderRepliesSection()}
+
         </div>
     );
 };
