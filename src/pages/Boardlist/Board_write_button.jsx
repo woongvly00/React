@@ -19,7 +19,7 @@ const Board_write_button = () => {
         post_content: '',
     });
 
-    const [files, setFiles] = useState([]); 
+    const [files, setFiles] = useState([]);
 
     const [defaultBoardData, setDefaultBoardData] = useState({
         post_writer: '1004', //  로그인 연동 
@@ -38,47 +38,43 @@ const Board_write_button = () => {
         }));
     };
 
-//파일 다운로드
-    // 등록 버튼 클릭 시
+    //파일 다운로드
     const handleBoardwrite = async () => {
         const htmlContent = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-
-        // FormData 생성
-    const formData = new FormData();
-    
-    // 기존의 게시글 데이터 (finalMessage의 내용)을 FormData에 추가
-    formData.append('post_title', message.post_title);
-    formData.append('post_content', htmlContent);
-    formData.append('post_writer', defaultBoardData.post_writer);
-    formData.append('post_tag', defaultBoardData.post_tag);
-    formData.append('post_per', defaultBoardData.post_per);
-    formData.append('parent_board', defaultBoardData.parent_board);
-    formData.append('post_view', defaultBoardData.post_view);
-    formData.append('post_like', defaultBoardData.post_like);
-
-    // 파일을 FormData에 추가
-    Array.from(files).forEach((file) => {
-        formData.append('files', file);  // 'files'라는 이름으로 파일을 추가
-    });
-
-    try {
-        const response = await axios.post('http://10.5.5.12/board/insert', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',  // 파일 업로드를 위한 Content-Type 설정
-            },
-        });
-
-        if (response.status === 200) {
-            alert('게시글이 성공적으로 등록되었습니다!');
-            navigate(-1);
+        const formData = new FormData();
+      
+        formData.append('post_title', message.post_title);
+        formData.append('post_content', htmlContent);
+        formData.append('post_writer', defaultBoardData.post_writer);
+        formData.append('post_tag', defaultBoardData.post_tag);
+        formData.append('post_per', defaultBoardData.post_per);
+        formData.append('parent_board', defaultBoardData.parent_board);
+        formData.append('post_view', defaultBoardData.post_view);
+        formData.append('post_like', defaultBoardData.post_like);
+      
+        // ✅ 파일이 있을 때만 formData에 추가
+        if (files.length > 0) {
+          Array.from(files).forEach((file) => {
+            formData.append('files', file);
+          });
         }
-    } catch (error) {
-        console.error('등록 중 오류 발생:', error);
-        alert('게시글 등록 실패');
-    }
-    };
-
-
+      
+        try {
+          const response = await axios.post('http://10.5.5.12/board/filedownload', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+      
+          if (response.status === 200) {
+            alert('게시글이 성공적으로 등록되었습니다!');
+            // 서버에서 post_id를 반환하는 구조라면 이동 처리 가능
+            // navigate(`/board/${response.data.post_id}`);
+            navigate(-1); // 또는 목록 페이지로 이동
+          }
+        } catch (error) {
+          console.error('등록 중 오류 발생:', error);
+          alert('게시글 등록 실패');
+        }
+      };
     return (
         <div className={bstyle.SBoardContainer}>
 
@@ -132,7 +128,12 @@ const Board_write_button = () => {
                             </div>
                         </div>
                         <div className={bstyle.file}>
-                            <input type="file" multiple onChange={(e) => { setFiles(e.target.files) }}></input>
+                            <input
+                                type="file"
+                                multiple
+                                onChange={(e) => setFiles(e.target.files)} // 파일 배열로 저장
+                            />
+                            {/* <input type="file" multiple onChange={(e) => { setFiles(e.target.files) }}></input> */}
                         </div>
                         <div className={bstyle.editorWrapper}>
 

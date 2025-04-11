@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './Sidebar.css';
-import axios from 'axios';
+import daxios from '../axios/axiosConfig';
 import { format } from 'date-fns';
 import useAuthStore from '../store/useAuthStore';
 import useWorkStore from '../store/useWorkStore';
 
 const Sidebar = () => {
   const { token, userId } = useAuthStore();
-  console.log("token:", token);
   const {
     checkInTime,
     checkOutTime,
@@ -27,13 +26,15 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchCheckInTime = async () => {
       try {
+
         const response = await axios.get("http://10.10.55.22/work/checkInTime", {
+
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`
           },
         });
-        console.log("📦 token:", token);
         const time = response.data;
+        
         if (time) {
           setCheckInTime(new Date(time));
           setIsCheckedIn(true);
@@ -57,8 +58,8 @@ const Sidebar = () => {
   
     try {
       const response = // ✅ 백엔드가 JWT에서 userId를 추출하므로 body에 아무것도 안 넣어도 됨
-      await axios.post(
-        "http://10.10.55.22/work/checkIn",
+      await daxios.post(
+        "http://10.10.55.69/work/checkIn",
         {}, // 데이터 없음
         {
           headers: {
@@ -66,7 +67,6 @@ const Sidebar = () => {
             'Content-Type': 'application/json'
           },
         } );
-      
   
       console.log('✅ 출근 완료:', response.data);
       setIsCheckedIn(true);
@@ -82,8 +82,8 @@ const Sidebar = () => {
     const currentTime = new Date().toISOString();
 
     try {
-      const response = await axios.post(
-        "http://10.10.55.22/work/checkOut",
+      const response = await daxios.post(
+        "http://10.10.55.69/work/checkOut",
         {
           checkOutTime: currentTime
         },
@@ -114,7 +114,7 @@ const Sidebar = () => {
     console.log("외근 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.10.55.22/work/outing",
+      const response = await daxios.post("http://10.10.55.69/work/outing",
         {
           outingTime: formattedTime,
           emp_loginId: userId
@@ -141,7 +141,7 @@ const Sidebar = () => {
     console.log("업무 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.10.55.22/work/work",
+      const response = await daxios.post("http://10.10.55.69/work/work",
         {
           workTime: formattedTime,
           emp_loginId: userId
