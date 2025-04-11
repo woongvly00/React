@@ -1,9 +1,4 @@
-// // src/axios/axiosConfig.js
 import daxios from 'axios';
-
-// // 기본 API 베이스 주소 설정 (옵션)
-// axios.defaults.baseURL = 'http://10.10.55.66';
-
 // 요청 인터셉터: JWT 토큰 자동 첨부
 daxios.interceptors.request.use(
   (config) => {
