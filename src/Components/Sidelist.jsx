@@ -58,16 +58,16 @@ const Sidelist = () => {
       
               <div className={sideliststyle.boardsidebar}>
                 <div className={sideliststyle.wholegasy}>결재 문서함</div>
-                <div><Link to="/approval/pending" state={{ name: "approval" }}>내가 결재할 문서</Link></div>
-                <div><Link to="/approval/requested" state={{ name: "approval" }}>내가 상신한 문서</Link></div>
-                <div><Link to="/approval/complete" state={{ name: "approval" }}>완료된 문서</Link></div>
-                <div><Link to="/approval/rejected" state={{ name: "approval" }}>반려된 문서</Link></div>
+                <div><Link to="/mainpage/maincontent/approval/pending" state={{ name: "approval" }}>내가 결재할 문서</Link></div>
+                <div><Link to="/mainpage/maincontent/approval/requested" state={{ name: "approval" }}>내가 상신한 문서</Link></div>
+                <div><Link to="/mainpage/maincontent/approval/complete" state={{ name: "approval" }}>완료된 문서</Link></div>
+                <div><Link to="/mainpage/maincontent/approval/rejected" state={{ name: "approval" }}>반려된 문서</Link></div>
               </div>
       
               <div className={sideliststyle.boardsidebar}>
                 <div className={sideliststyle.wholegasy}>부서 문서함</div>
-                <div><Link to="/approval/department/referenced" state={{ name: "approval" }}>부서 참조 문서</Link></div>
-                <div><Link to="/approval/department/created" state={{ name: "approval" }}>부서 생산 문서</Link></div>
+                <div><Link to="/mainpage/maincontent/approval/department/referenced" state={{ name: "approval" }}>부서 참조 문서</Link></div>
+                <div><Link to="/mainpage/maincontent/approval/department/created" state={{ name: "approval" }}>부서 생산 문서</Link></div>
               </div>
       
             </aside>

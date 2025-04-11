@@ -41,7 +41,7 @@ const Navigation = () => {
  
   return (
     <nav className="navigation">
-        <button className="nav-btn" onClick={ toApproval }>전자결제</button>
+        <button className="nav-btn" onClick={ toApproval }>전자결재</button>
         <button className="nav-btn" onClick={ toBoard }>게시판</button>
         <button className="nav-btn" onClick={ toHR }>인사관리</button>
         <button className="nav-btn" onClick={openMessenger}>메신저</button>
