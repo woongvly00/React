@@ -6,6 +6,7 @@ import AddCategory from '../pages/Schedule/AddCategory';
 import ScheduleList from '../pages/Schedule/ScheduleList';
 import Insapage from '../pages/insa/insapage';
 import Annaul from '../pages/insa/Annaul';
+import ResvSideList from '../pages/Reserve/ResvSideList';
 
 const Sidelist = () => {
   const location = useLocation();
@@ -104,12 +105,7 @@ const Sidelist = () => {
       // 예약 list
       case 'reserve':
         return <div className={sideliststyle.sideList}>
-                <ul>
-                  <li>나의 예약 목록</li>
-                  <li>회의실</li>
-                  <li>차량</li>
-                  <li>비품</li>
-                </ul>
+                <ResvSideList />
               </div>;
       
 
