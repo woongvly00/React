@@ -7,6 +7,7 @@ import useWorkStore from '../store/useWorkStore';
 
 const Sidebar = () => {
   const { token, userId } = useAuthStore();
+  console.log("token:", token);
   const {
     checkInTime,
     checkOutTime,
@@ -26,12 +27,12 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchCheckInTime = async () => {
       try {
-        const response = await axios.get("http://10.5.5.6/work/checkInTime", {
+        const response = await axios.get("http://10.10.55.69/work/checkInTime", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+        console.log("📦 token:", token);
         const time = response.data;
         if (time) {
           setCheckInTime(new Date(time));
@@ -57,15 +58,15 @@ const Sidebar = () => {
     try {
       const response = // ✅ 백엔드가 JWT에서 userId를 추출하므로 body에 아무것도 안 넣어도 됨
       await axios.post(
-        "http://10.5.5.6/work/checkIn",
+        "http://10.10.55.22/work/checkIn",
         {}, // 데이터 없음
         {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
-          }
-        }
-      );
+          },
+          withCredentials: true
+        } );
       
   
       console.log('✅ 출근 완료:', response.data);
@@ -83,7 +84,7 @@ const Sidebar = () => {
 
     try {
       const response = await axios.post(
-        "http://10.5.5.6/work/checkOut",
+        "http://10.10.55.22/work/checkOut",
         {
           checkOutTime: currentTime
         },
@@ -114,7 +115,7 @@ const Sidebar = () => {
     console.log("외근 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.5.5.6/work/outing",
+      const response = await axios.post("http://10.10.55.22/work/outing",
         {
           outingTime: formattedTime,
           emp_loginId: userId
@@ -141,7 +142,7 @@ const Sidebar = () => {
     console.log("업무 시간:", formattedTime);
 
     try {
-      const response = await axios.post("http://10.5.5.6/work/work",
+      const response = await axios.post("http://10.10.55.22/work/work",
         {
           workTime: formattedTime,
           emp_loginId: userId
