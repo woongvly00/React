@@ -3,18 +3,16 @@ import caxios from '../../Utils/caxios';
 
 const ResvSideList = ({ closeModal }) => {
 
-    const [userInfo, setUserInfo ] = useState(null);
-    
-    useEffect(()=>{
-        caxios.get("/mypage/info").then((resp)=>{
-            setUserInfo(resp.data);
-        }).catch((error) => {
-            console.error("실패", error);
-        });
-        
-    }, [])
+
+    const [ rescList, setRescList ] = useState([]);
+
 
     const getResources = () => {
+        caxios.get("/reserve/resourceType").then((resp) => {
+            setRescList(resp.data);
+        }).catch((error) => {
+            console.error("자원유형 불러오기 실패", error);
+        })
 
     }
 
@@ -32,7 +30,11 @@ const ResvSideList = ({ closeModal }) => {
                     <div id="collapseOne" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             {
-                                // 자원 이름 리스트
+                                rescList.map((resc, index) => (
+                                    <div key={index}>
+                                        {resc.resc_type}
+                                    </div>
+                                  ))
                             }
                         </div>
                     </div>
@@ -46,7 +48,9 @@ const ResvSideList = ({ closeModal }) => {
                     <div id="collapseTwo" className="accordion-collapse collapse">
                         <div className="accordion-body">
                             {
-                                // 자원 이름 리스트
+                                rescList.map((resc, index) => (
+                                    <div key={index}>{resc.resc_type}</div>
+                                  ))
                             }
                         </div>
                     </div>

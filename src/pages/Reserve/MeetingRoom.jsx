@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect,  useState } from 'react'
 import { formatDate } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -15,6 +15,7 @@ const MeetingRoom = ()=> {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
+    const [ resouceList, setResourceList ] = useState([]);
 
     const handleDateSelect = (selectInfo) => {
         setSelectedInfo(selectInfo);
@@ -30,9 +31,33 @@ const MeetingRoom = ()=> {
           }
       ]
 
+     
+      useEffect(() => {
+        
+        caxios.get(`/reserve/resources`).then((resp)=>{
+            setResourceList(resp.data);
+        }).catch((error) => {
+            console.error("일정 정보 불러오기 실패", error);
+        })
+      
+    }, [])
+    
+
     return (
         <div>
         <div className={rStyle.reservTable}>
+            <div>
+                <select>
+                {
+                    resouceList.map((resc, index) => (
+                        <div key={index}>
+                            {resc.resc_type}
+                        </div>
+                      ))
+                }
+                </select>
+            </div>
+            <div>
             <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             allDaySlot={false} 
@@ -40,6 +65,7 @@ const MeetingRoom = ()=> {
             slotMinTime="08:00:00"
             slotMaxTime="24:00:00"
             slotDuration="00:30:00"
+            
             headerToolbar={{
                 left: '',
                 center: 'prev today next',
@@ -51,6 +77,7 @@ const MeetingRoom = ()=> {
             select={handleDateSelect}
             events={events}
             />
+            </div>
         </div>
         
         {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo}/>)}
