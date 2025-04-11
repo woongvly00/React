@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import resvStyle from './InputReserv.module.css'
+import caxios from '../../Utils/caxios';
 
 
 
@@ -8,32 +9,35 @@ const InputResev = ({ closeModal, selectedInfo }) => {
     console.log("모달 열림", selectedInfo);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [eventInput, setEventInput] = useState({
-    id: '',
-    title: '',
-    start: '',
-    end: '',
-    startTime: '',
-    endTime: '',
-    content: '',
-    category_id: 1,
-    color: ''
+  const [resvInput, setResvInput] = useState({
+    resv_id : 0,
+    resource_id : 0,
+    resv_emp: 0,
+    resv_date:'',
+    resv_stime: '',
+    resv_etime: '',
+    resv_title: ''
   });
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setEventInput((prev) => ({ ...prev, [name]: value }));
+    setResvInput((prev) => ({ ...prev, [name]: value }));
   };
 
 
-  const handleAddEvent = () => {
+  const AddReservation = () => {
     
-    setEventInput({
-        id: 1234,
-        start:`${eventInput.start}T${eventInput.startTime}`,
-        startTime: `${eventInput.startTime}`,
-        endTime:`${eventInput.endTime}`,
-        title:eventInput.title
+    setResvInput({
+      resource_id : 0,
+      resv_emp: 0,
+      resv_date:`${resvInput.start}T${resvInput.startTime}`,
+      resv_stime: `${resvInput.startTime}`,
+      resv_etime: `${resvInput.endTime}`,
+      resv_title: resvInput.title
+    })
+
+    caxios.post("/reserve/addReserve", resvInput).catch((error) =>{
+
     })
     closeModal();
 
@@ -44,17 +48,17 @@ const InputResev = ({ closeModal, selectedInfo }) => {
     return (
         <div className={resvStyle['modal-overlay']}>
           <div className={resvStyle['modal-container']}>
-            <h2>회의실 예약</h2>
+            <h2>예약 하기</h2>
             
             <div>
               날짜
-              <input name="start" type="date" value={eventInput.start} onChange={handleInput} />
+              <input name="start" type="date" value={resvInput.start} onChange={handleInput} />
             </div>
             <div>
               예약 시간<br></br>
               시작
-              <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
-                {Array.from({ length: 48 }).map((_, index) => {
+              <select name="startTime" value={resvInput.startTime} onChange={handleInput}>
+                {Array.from({ length: 32 }, (_,i) => i +16).map((index) => {
                   const h = String(Math.floor(index / 2)).padStart(2, '0');
                   const m = index % 2 === 0 ? '00' : '30';
                   const time = `${h}:${m}`;
@@ -63,8 +67,8 @@ const InputResev = ({ closeModal, selectedInfo }) => {
               </select>
               <br></br>
               종료
-              <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
-                {Array.from({ length: 48 }).map((_, index) => {
+              <select name="endTime" value={resvInput.endTime} onChange={handleInput}>
+                {Array.from({ length: 32 }, (_,i) => i +16).map((index) => {
                   const h = String(Math.floor(index / 2)).padStart(2, '0');
                   const m = index % 2 === 0 ? '00' : '30';
                   const time = `${h}:${m}`;
@@ -73,15 +77,15 @@ const InputResev = ({ closeModal, selectedInfo }) => {
               </select>
             </div>
             <div>
-              사용 용도
+              사용 목적
               <textarea
                 name="title"
-                value={eventInput.title}
+                value={resvInput.title}
                 onChange={handleInput}
               />
             </div>
             <div className={resvStyle['modal-buttons']}>
-              <button onClick={handleAddEvent}>저장</button>
+              <button onClick={AddReservation}>저장</button>
               <button onClick={closeModal}>취소</button>
             </div>
           </div>
