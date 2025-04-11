@@ -40,19 +40,18 @@ const InputResev = ({ closeModal, selectedInfo, resourceId }) => {
 
 
   const AddReservation = () => {
-    
-    setResvInput({
-      resv_id : 0,
-      resource_id : resourceId,
+    const reservation = {
+      resv_id: 0,
+      resource_id: Number(resourceId),
       resv_emp: myInfo.emp_code_id,
-      resv_date:`${resvInput.resv_date}T${resvInput.resv_stime}`,
+      resv_date: `${resvInput.resv_date}`,
       resv_stime: `${resvInput.resv_stime}`,
       resv_etime: `${resvInput.resv_etime}`,
       resv_title: resvInput.resv_title
-    })
+    };
 
-    caxios.post("/reserve/addReserve", resvInput).catch((error) =>{
-
+    caxios.post("/reserve/addReserve", reservation).catch((error) =>{
+      console.error("예약 실패:", error);
     })
     closeModal();
 
