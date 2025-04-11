@@ -22,7 +22,8 @@ const Sidelist = () => {
 
   const hrPaths =[
     '/attend',
-    '/record'
+    '/record',
+    '/insa'
   ];
 
 
@@ -95,8 +96,8 @@ const Sidelist = () => {
         <div className={sideliststyle.boardsidebar}>
           <div className={sideliststyle.wholegasy}>인사관리</div>
           <ul>
-            <li><Link to="/mainpage/maincontent/hr/attend">개인 근태관리</Link></li>
-            <li><Link to="/mainpage/maincontent/hr/record">휴가 / 출장 기록관리</Link></li>
+            <li><Link to="/mainpage/maincontent/insa/attend">개인 근태관리</Link></li>
+            <li><Link to="/mainpage/maincontent/insa/record">휴가 / 출장 기록관리</Link></li>
           </ul>
         </div>
       </aside>
@@ -108,7 +109,7 @@ const Sidelist = () => {
       if (boardPaths.some(path => pathname.includes(path))) return <BoardSidelist />;
       if (pathname.includes('/schedule')) return <ScheduleSidelist />;
       if (pathname.includes('/reserve')) return <ReserveSidelist />;
-      if (pathname.includes('/hr')) return <HrSidelist />;
+      if (hrPaths.some(path => pathname.includes(path))) return <HrSidelist />;
 
       return <div className={sideliststyle.sideList}></div>;
 };
