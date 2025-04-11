@@ -108,7 +108,7 @@ const MeetingRoom = ()=> {
             </div>
         </div>
         
-        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo}/>)}
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
         
         </div>
     )
