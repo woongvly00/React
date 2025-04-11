@@ -10,15 +10,13 @@ const InputResev = ({ closeModal, selectedInfo }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resvInput, setResvInput] = useState({
-    id: '',
-    title: '',
-    start: '',
-    end: '',
-    startTime: '',
-    endTime: '',
-    content: '',
-    category_id: 1,
-    color: ''
+    resv_id : 0,
+    resource_id : 0,
+    resv_emp: 0,
+    resv_date:'',
+    resv_stime: '',
+    resv_etime: '',
+    resv_title: ''
   });
 
   const handleInput = (e) => {
@@ -27,14 +25,15 @@ const InputResev = ({ closeModal, selectedInfo }) => {
   };
 
 
-  const handleAddEvent = () => {
+  const AddReservation = () => {
     
     setResvInput({
-        id: 1234,
-        start:`${resvInput.start}T${resvInput.startTime}`,
-        startTime: `${resvInput.startTime}`,
-        endTime:`${resvInput.endTime}`,
-        title:resvInput.title
+      resource_id : 0,
+      resv_emp: 0,
+      resv_date:`${resvInput.start}T${resvInput.startTime}`,
+      resv_stime: `${resvInput.startTime}`,
+      resv_etime: `${resvInput.endTime}`,
+      resv_title: resvInput.title
     })
 
     caxios.post("/reserve/addReserve", resvInput).catch((error) =>{
@@ -86,7 +85,7 @@ const InputResev = ({ closeModal, selectedInfo }) => {
               />
             </div>
             <div className={resvStyle['modal-buttons']}>
-              <button onClick={handleAddEvent}>저장</button>
+              <button onClick={AddReservation}>저장</button>
               <button onClick={closeModal}>취소</button>
             </div>
           </div>
