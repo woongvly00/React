@@ -25,12 +25,20 @@ const Board_titellink = () => {
     const [editingReplyId, setEditingReplyId] = useState(null);
     const [editedContent, setEditedContent] = useState("");
 
+
+    //추천수
+    const [postlike, setPostLike] = useState(0); 
+
+    //파일 다운로드
+    const [fileUrl, setFileUrl] = useState(""); // 파일 URL 상태 추가
+
     // 게시글 조회
     useEffect(() => {
         axios.get(`http://10.5.5.12/board/${boardId}`)
             .then(res => {
                 setBoardData(res.data);
                 setMessage({ post_title: res.data.post_title });
+                setPostLike(res.data.post_like); // 초기 추천수 설정
 
                 const blocksFromHtml = htmlToDraft(res.data.post_content || "");
                 const contentState = ContentState.createFromBlockArray(blocksFromHtml.contentBlocks);
@@ -67,7 +75,10 @@ const Board_titellink = () => {
         axios.put(`http://10.5.5.12/board/update`, {
             post_id: parseInt(boardId),
             post_title: message.post_title,
-            post_content: htmlContent
+            post_content: htmlContent,
+            post_writer: boardData.post_writer ?? "",  // fallback
+            post_per: boardData.post_per ?? "",
+            post_tag: boardData.post_tag ?? ""
         }).then(() => {
             alert("수정 완료!");
             setBoardData(prev => ({
@@ -158,6 +169,37 @@ const Board_titellink = () => {
         }
       };
 
+          // 추천수 증가 함수
+    const increaseLikeCount = () => {
+        axios.post(`http://10.5.5.12/board/increaseLikeCount/${boardId}`)
+            .then(response => {
+                setPostLike(prev => prev + 1); // 추천수 증가
+            })
+            .catch(error => {
+                console.error("추천수 증가 실패:", error);
+            });
+    };
+
+    //파일 다운로드
+    useEffect(() => {
+        // 게시글 조회
+        axios.get(`http://10.5.5.12/board/${boardId}`)
+            .then(res => {
+                setBoardData(res.data);
+                setFileUrl(res.data.file_url); // 서버에서 파일 URL 가져오기
+            });
+    }, [boardId]);
+
+    // 파일 다운로드 함수
+    const handleFileDownload = () => {
+        if (fileUrl) {
+            window.location.href = `http://10.5.5.12/download/${fileUrl}`; // 파일 다운로드 API 호출
+        } else {
+            alert("다운로드할 파일이 없습니다.");
+        }
+    };
+
+
     return (
         <div className={bstyle.gasyclick}>
             <div className={bstyle.standardwrite10}>글쓰기</div>
@@ -203,9 +245,9 @@ const Board_titellink = () => {
             </div>
 
             <div className={bstyle.good2}>
-                <button className={bstyle.thumbsbutton}>
+                <button className={bstyle.thumbsbutton} onClick={increaseLikeCount}>
                     <div className={bstyle.finger}>👍</div>
-                    <div className={bstyle.plus}>+n</div>
+                    {postlike > 0 && <div className={bstyle.plus}>+{postlike}</div>}
                 </button>
             </div>
 
@@ -221,6 +263,7 @@ const Board_titellink = () => {
             </div>
 
             {/* 댓글 출력 */}
+            <div>댓글</div>
             {Array.isArray(replies) && replies.map((reply) => (
                 <div key={reply.reply_id} className={bstyle.commentwrite}>
                     <div className={bstyle.profile}>프로필 사진</div>
