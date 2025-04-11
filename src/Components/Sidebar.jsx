@@ -27,7 +27,7 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchCheckInTime = async () => {
       try {
-        const response = await axios.get("http://10.10.55.69/work/checkInTime", {
+        const response = await axios.get("http://10.10.55.22/work/checkInTime", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -65,7 +65,6 @@ const Sidebar = () => {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
-          withCredentials: true
         } );
       
   

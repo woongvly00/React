@@ -82,8 +82,8 @@ const Sidelist = () => {
         <div className={sideliststyle.boardsidebar}>
           <div className={sideliststyle.wholegasy}>인사관리</div>
           <ul>
-            <li><Link to="/mainpage/maincontent/attend" state={{ name: "hr" }}>개인 근태관리</Link></li>
-            <li><Link to="/mainpage/maincontent/record" state={{ name: "hr" }}>휴가 / 출장 기록관리</Link></li>
+            <li><Link to="/mainpage/maincontent/insa/attend" state={{ name: "hr" }}>개인 근태관리</Link></li>
+            <li><Link to="/mainpage/maincontent/insa/record" state={{ name: "hr" }}>휴가 / 출장 기록관리</Link></li>
           </ul>
         </div>
       </aside>
