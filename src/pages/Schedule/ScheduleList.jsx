@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AddCategory from './AddCategory';
 import caxios from '../../Utils/caxios';
+import MySchedule from './MySchedule';
+
 
 const ScheduleList = ({ closeModal }) => {
 
@@ -10,8 +12,8 @@ const ScheduleList = ({ closeModal }) => {
     const [getPublicCalendar, setPublicCalendar] = useState([]);
     const [getComCalendar, setGetComCalendar] = useState([]);
     const [userInfo, setUserInfo ] = useState(null);
-    const userId = sessionStorage.getItem("userId");
-    
+    const [weekendsVisible, setWeekendsVisible] = useState(true);
+    const handleWeekendsToggle = () => setWeekendsVisible(!weekendsVisible)
     
     const handleModalOpen = (selectInfo) => {
         setSelectedInfo(selectInfo);
@@ -29,42 +31,20 @@ const ScheduleList = ({ closeModal }) => {
     
 
     const handleMyCal = () => {
-        caxios.get("/calendar/myCal", {
-            params: {
-              public_code: 10  
-            }}
-        ).then((resp) => {
+        caxios.get(`/calendar/myCal/${userInfo.emp_code_id}`).then((resp) => {
             setMyCalendar(resp.data);
     })};
 
 
-    const [ sharedList, setSharedList] = useState([]);
+    
     const handlePublicCal = () => {
-        // const calCodes = resp.data.map(cal => cal.c_id);
-    //     caxios.get("/calendar/publicCal", {
-            
-    //         params: {
-    //             public_code: 20  
-    //         }}
-    //     ).then((resp) => {
-    //         setPublicCalendar(resp.data);
-
-        
-
-
-    // })
-    caxios.get(`/calendar/sharedList`).then((resp)=>{
+        caxios.get(`/calendar/sharedList/${userInfo.emp_code_id}`).then((resp)=>{
                 setPublicCalendar(resp.data);
-            })
-};
+    })};
 
         
     const handleComCal = () => {
-        caxios.get("/calendar/comCal", {
-            params: {
-                public_code: 30  
-            }}
-        ).then((resp) => {
+        caxios.get(`/calendar/comCal/${userInfo.emp_code_id}`).then((resp) => {
             setGetComCalendar(resp.data);
     })};
     
@@ -74,10 +54,7 @@ const ScheduleList = ({ closeModal }) => {
 
     return (
         <div>
-            <div>
-                커스텀뷰 넣기
-            </div>
-
+            {/* <MySchedule/> */}
             <div className="accordion" id="accordionExample">
                 <div className="accordion-item">
                     <h2 className="accordion-header">
@@ -85,7 +62,7 @@ const ScheduleList = ({ closeModal }) => {
                             내 캘린더
                         </button>
                     </h2>
-                    <div id="collapseOne" className="accordion-collapse collapse">
+                    <div id="collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                         <div className="accordion-body">
                             {
                                 getMyCalendar
@@ -113,17 +90,11 @@ const ScheduleList = ({ closeModal }) => {
                             공유 캘린더
                         </button>
                     </h2>
-                    <div id="collapseTwo" className="accordion-collapse collapse">
+                    <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                         <div className="accordion-body">
                             
                             {
                                 getPublicCalendar
-                                .filter((calendar)=>{
-                                    if(calendar.public_code == 20){
-                                        return calendar.deft_id == `${userInfo.emp_code_id}` || `${userInfo.deft_id}`;// 현재 캘린더 생성자일때 보여주고 있음.
-                                    }
-                                    return true;
-                                })
                                 .map((calendar) => (
                                     <div className="form-check form-switch" key={calendar.c_id}>
                                         <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked />
@@ -142,7 +113,7 @@ const ScheduleList = ({ closeModal }) => {
                             회사 캘린더
                         </button>
                     </h2>
-                    <div id="collapseThree" className="accordion-collapse collapse">
+                    <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                         <div className="accordion-body">
                             {
                                 getComCalendar.map((calendar) => (

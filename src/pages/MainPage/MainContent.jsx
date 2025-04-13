@@ -22,6 +22,7 @@ import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
 import InsaPage from '../insa/insapage';
 import Annaul from '../insa/Annaul';
+import MeetingRoom from '../Reserve/MeetingRoom';
 
 const MainContent = () => {
 const location = useLocation();
@@ -66,7 +67,7 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
           <Route path='support' element={<Board_support />} />
 
           <Route path='schedule' element={<ScheduleMain />} />
-          <Route path='reserve' element={<ReserveMain />} />
+          <Route path='reserve/*' element={<ReserveMain />} />
           <Route path='msg' element={<ApprovalMain />} />
           <Route path='mypage' element={<Mypage />} />
         </Routes>

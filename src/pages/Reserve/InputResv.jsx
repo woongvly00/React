@@ -6,22 +6,21 @@ import caxios from '../../Utils/caxios';
 
 
 const InputResev = ({ closeModal, selectedInfo, resourceId }) => {
+  useEffect(() => {
+    console.log("넘어온 리소스:", resourceId);
+  }, [resourceId]);
+  
 
-  const [myInfo,setMyInfo] = useState(null);
-    useEffect(() => {
-      const userId = sessionStorage.getItem("userId");
-      let mine = null;
-        caxios.get("/Employee/SelectMine",{
-          params: {userId: userId}
-        }).then((userIdResp)=>{
-          mine = userIdResp.data;
-          setMyInfo(mine);
-          if (!mine || !mine.emp_code_id) {
-              console.error("내 정보가 잘못되었습니다:", mine);
-              return;
-            }
-        });
-    }, []);
+  const [ userInfo, setUserInfo ] = useState({});
+  useEffect(()=>{
+      caxios.get("/mypage/info").then((resp)=>{
+        const info = resp.data;
+        console.log(info);
+        setUserInfo(info);
+      }).catch((error) => {
+          console.error("실패", error);
+      });
+  }, [])
 
   const [resvInput, setResvInput] = useState({
     resv_id : 0,
@@ -43,13 +42,13 @@ const InputResev = ({ closeModal, selectedInfo, resourceId }) => {
     const reservation = {
       resv_id: 0,
       resource_id: Number(resourceId),
-      resv_emp: myInfo.emp_code_id,
+      resv_emp: userInfo.emp_code_id,
       resv_date: `${resvInput.resv_date}`,
       resv_stime: `${resvInput.resv_stime}`,
       resv_etime: `${resvInput.resv_etime}`,
       resv_title: resvInput.resv_title
     };
-
+    console.log("저장 전 예약 내용:", reservation);
     caxios.post("/reserve/addReserve", reservation).catch((error) =>{
       console.error("예약 실패:", error);
     })

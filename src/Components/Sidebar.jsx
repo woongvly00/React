@@ -4,8 +4,13 @@ import daxios from '../axios/axiosConfig';
 import { format } from 'date-fns';
 import useAuthStore from '../store/useAuthStore';
 import useWorkStore from '../store/useWorkStore';
+import MainpageSchedule from '../pages/Schedule/MainpageSchedule';
+
 
 const Sidebar = () => {
+
+
+
   const { token, userId } = useAuthStore();
   const {
     checkInTime,
@@ -27,7 +32,7 @@ const Sidebar = () => {
     const fetchCheckInTime = async () => {
       try {
 
-        const response = await axios.get("http://10.10.55.22/work/checkInTime", {
+        const response = await daxios.get("http://10.10.55.22/work/checkInTime", {
 
           headers: {
             Authorization: `Bearer ${token}`
@@ -188,8 +193,7 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar">
-        <h3>일정</h3>
-        <div>내용 알아서 추가해주세요!</div>
+        <div><MainpageSchedule /></div>
       </div>
     </div>
   );

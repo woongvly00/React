@@ -7,7 +7,6 @@ import interactionPlugin from '@fullcalendar/interaction'
 import calenderStyle from './DemoApp.module.css';
 import caxios from '../../Utils/caxios';
 import useScheduleStore from '../../store/useScheduleStore';
-// const userId = sessionStorage.getItem("userId");
 
 const DemoApp = () => {
   const { events, addEvent, setEvents, addEvents, removeEvent } = useScheduleStore();
@@ -31,13 +30,8 @@ const DemoApp = () => {
   useEffect(()=>{
     caxios.get("/mypage/info").then((resp)=>{
       const info = resp.data;
-      setUserInfo({
-        emp_code_id: `${info.emp_code_id}`,
-        emp_per_id:`${info.emp_per_id}`,
-        emp_dept_id: `${info.emp_dept_id}`,
-        emp_name:`${info.emp_name}`,
-        isDeft:`${info.isDeft}`
-      });
+      console.log(info);
+      setUserInfo(info);
 
       
       setEventInput((prev) => ({
@@ -108,7 +102,7 @@ const DemoApp = () => {
     console.log("유저인포 값 확인 : " + userInfo.emp_code_id);
     
   caxios.get(`/schedule/shareEvents/${userInfo.emp_code_id}`).then((resp)=>{
-    
+    console.log("공유 일정 목록 : " + resp.data);
     
     const shareEvents = resp.data.map((event) => ({
       id:event.id,
@@ -167,6 +161,7 @@ const DemoApp = () => {
         content: eventInput.content,
         c_id: eventInput.c_id,
         emp_id: eventInput.emp_id
+        
       }
     };
 
@@ -309,12 +304,17 @@ const DemoApp = () => {
 
   return (
     <div className='demo-app'>
-      <Sidebar
-        weekendsVisible={weekendsVisible}
-        handleWeekendsToggle={handleWeekendsToggle}
-        currentEvents={events}
-      />
-
+      
+      <div className='demo-app-sidebar-section'>
+        <label>
+          <input
+            type='checkbox'
+            checked={weekendsVisible}
+            onChange={handleWeekendsToggle}
+          />
+          toggle weekends
+        </label>
+      </div>
       <div className='demo-app-main'>
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -348,25 +348,21 @@ const DemoApp = () => {
                  <option value="">캘린더 선택</option>
 
                  {
-                  // 일정 추가 시 캘린터 선택지에 직급에 따라 필터링 거는 중 (회사캘린더의 경우 팀장 이상만 일정 추가 가능)
+                  // 일정 추가 시 캘린터 선택지에 직급에 따라 필터링 거는 중 (회사캘린더의 경우 부서장 이상만 일정 추가 가능)
                    calList
-                   .filter((calender) => {
-                    if (calender.public_code == 30) {
-                      return userInfo.job_id >= 1011;
-                   }
-
-                   if(calender.public_code == 10){
-                     return userInfo.emp_code_id == calender.emp_id;
-                   }
-
-                   if(calender.public_code == 20){
-                    return userInfo.emp_code_id == calender.emp_id || userInfo.emp_dept_id == calender.emp_dept_id; // 필터링 잘못됨. 공유 테이블에서 해당 캘린더코드를 가진 모든 공유대상목록을 가져와서 비교해야함.
-                  }
-                   
-                   return true;
+                   .filter((calendar) => {
+                    return (
+                      (calendar.public_code === 30 && userInfo.job_id >= 1011) ||
+                
+                      (calendar.public_code === 10 && userInfo.emp_code_id == calendar.emp_id) ||
+                
+                      (calendar.public_code === 20 &&
+                        userInfo.emp_job_id >= 1002 &&
+                        (userInfo.emp_dept_id == calendar.target_id || userInfo.emp_code_id == calendar.target_id))
+                    );
                   })
-                   .map((calender) => (
-                    <option key={calender.c_id} value={calender.c_id}>
+                   .map((calender, index) => (
+                    <option key={index} value={calender.c_id}>
                       {calender.c_title}
                     </option>
                   ))
@@ -445,26 +441,31 @@ const DemoApp = () => {
                   시작일<input name="start_date" type="date" value={update.start_date } onChange={handleUpdate} />
                   종료일<input name="end_date" type="date" value={update.end_date } onChange={handleUpdate} />
                 </div>
-                <div>
-                  시작시간
-                  <select name="startTime" value={update.startTime || ''} onChange={handleUpdate}>
-                    {Array.from({ length: 48 }).map((_, index) => {
-                      const h = String(Math.floor(index / 2)).padStart(2, '0');
-                      const m = index % 2 === 0 ? '00' : '30';
-                      const time = `${h}:${m}`;
-                      return <option key={time} value={time}>{time}</option>;
-                    })}
-                  </select>
-                  종료시간
-                  <select name="endTime" value={update.endTime || ''} onChange={handleUpdate}>
-                    {Array.from({ length: 48 }).map((_, index) => {
-                      const h = String(Math.floor(index / 2)).padStart(2, '0');
-                      const m = index % 2 === 0 ? '00' : '30';
-                      const time = `${h}:${m}`;
-                      return <option key={time} value={time}>{time}</option>;
-                    })}
-                  </select>
+                <div className={calenderStyle['time-row']}>
+                  <div className={calenderStyle['time-item']}>
+                    <label>시작시간</label>
+                    <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
+                      {Array.from({ length: 48 }).map((_, index) => {
+                        const h = String(Math.floor(index / 2)).padStart(2, '0');
+                        const m = index % 2 === 0 ? '00' : '30';
+                        const time = `${h}:${m}`;
+                        return <option key={time} value={time}>{time}</option>;
+                      })}
+                    </select>
+                  </div>
+                  <div className={calenderStyle['time-item']}>
+                    <label>종료시간</label>
+                    <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
+                      {Array.from({ length: 48 }).map((_, index) => {
+                        const h = String(Math.floor(index / 2)).padStart(2, '0');
+                        const m = index % 2 === 0 ? '00' : '30';
+                        const time = `${h}:${m}`;
+                        return <option key={time} value={time}>{time}</option>;
+                      })}
+                    </select>
+                  </div>
                 </div>
+
                 <div>
                   <strong>내용:</strong>
                   <textarea name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" style={{ width: '300px', height: '150px', resize: 'none' }}></textarea></div>
@@ -500,40 +501,6 @@ const renderEventContent = (eventInfo) => {
     <div style={{backgroundColor:bgColor, borderRadius:'0px'}}>
       <b>{eventInfo.event.title}</b>
     </div>
-  );
-};
-
-const Sidebar = ({ weekendsVisible, handleWeekendsToggle, currentEvents }) => {
-  return (
-    <div className='demo-app-sidebar'>
-      <div className='demo-app-sidebar-section'>
-        <label>
-          <input
-            type='checkbox'
-            checked={weekendsVisible}
-            onChange={handleWeekendsToggle}
-          />
-          toggle weekends
-        </label>
-      </div>
-      <div className='demo-app-sidebar-section'>
-        <h2>All Events ({currentEvents.length})</h2>
-        <ul>
-          {currentEvents.map((event, index) => (
-            <SidebarEvent key={index} event={event} />
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-};
-
-const SidebarEvent = ({ event }) => {
-  return (
-    <li key={event.id}>
-      <b>{formatDate(event.start, { year: 'numeric', month: 'short', day: 'numeric' })}</b>
-      <i>{event.title}</i>
-    </li>
   );
 };
 

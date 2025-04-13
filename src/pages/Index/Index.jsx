@@ -36,7 +36,7 @@ const Index = () => {
 
 
         axios
-            .post('http://221.150.27.169:8888/auth/login', login)
+            .post('http://192.168.219.102/auth/login', login)
             .then((resp) => {
                 const token = resp.data;
                 const decodedToken = jwtDecode(token);
@@ -45,6 +45,7 @@ const Index = () => {
 
                 // ✅ 로컬스토리지에 저장
                 localStorage.setItem('jwtToken', token);
+                sessionStorage.setItem("token", token);
 
                 // ✅ 상태관리도 병행 (Zustand 등)
                 setAuth(token, login.id, per_function, per_secure);
