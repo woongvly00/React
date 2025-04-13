@@ -39,15 +39,34 @@ const Navigation = () => {
   
   }
  
+
   return (
-    <nav className="navigation">
-        <button className="nav-btn" onClick={ toApproval }>전자결재</button>
-        <button className="nav-btn" onClick={ toBoard }>게시판</button>
-        <button className="nav-btn" onClick={ toHR }>인사관리</button>
-        <button className="nav-btn" onClick={openMessenger}>메신저</button>
-        <button className="nav-btn" onClick={ toReserve }>예약</button>
-        <button className="nav-btn" onClick={ toSchedule }>일정</button>
-    </nav>
+      <nav className="navigation">
+        <div className="nav-item" onClick={toApproval}>
+        <i className="fa-solid fa-4x fa-inbox"  style={{ color: "#1a3c6c" }}/>   
+          <span>전자결재</span>
+        </div>
+        <div className="nav-item" onClick={toBoard}>
+        <i className="fa-solid fa-4x fa-clipboard" style={{ color: "#1a3c6c" }} />
+          <span>게시판</span>
+        </div>
+        <div className="nav-item" onClick={toHR}>
+          <i className="fa-solid fa-4x fa-user"  style={{ color: "#1a3c6c" }}/>  
+          <span>인사관리</span>
+        </div>
+        <div className="nav-item" onClick={openMessenger}>
+          <i className="fa-solid fa-4x fa-comments"></i>
+          <span>메신저</span>
+        </div>
+        <div className="nav-item" onClick={toReserve}>
+        <i className="fa-solid fa-4x fa-clock"  style={{ color: "#1a3c6c" }}/>
+          <span>예약</span>
+        </div>
+        <div className="nav-item" onClick={toSchedule}>
+          <i className="fa-solid fa-4x fa-calendar" style={{ color: "#1a3c6c" }}/> 
+          <span>일정</span>
+        </div>
+      </nav>
   );
 };
 

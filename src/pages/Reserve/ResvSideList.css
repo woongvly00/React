@@ -1,0 +1,70 @@
+.accordionContainer {
+    padding: 16px;
+    background-color: #f8fbfe;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #1a3c6c;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* 아코디언 버튼 */
+  .accordion-button {
+    background-color: #e5f1ff;
+    color: #1a3c6c;
+    font-weight: 600;
+    border-radius: 6px 6px 0 0;
+    padding: 10px 16px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .accordion-button:hover {
+    background-color: #d0e7fc;
+  }
+  
+  /* 아코디언 내부 */
+  .accordion-body {
+    background-color: #ffffff;
+    padding: 12px;
+    border: 1px solid #dce9f5;
+    border-radius: 0 0 6px 6px;
+  }
+  
+  .accordion-item {
+    margin-bottom: 12px;
+    border: none;
+  }
+  
+  /* 각 링크 항목 */
+  .rescLink {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #1a3c6c;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .rescLink:hover {
+    background-color: #edf6ff;
+    font-weight: 500;
+  }
+  
+  /* 내 예약 목록 버튼 스타일 */
+  .myReservationLink {
+    display: block;
+    padding: 10px;
+    margin-top: 8px;
+    background-color: #a8cfff;
+    color: #1a3c6c;
+    text-align: center;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  
+  .myReservationLink:hover {
+    background-color: #91bff2;
+  }
+  

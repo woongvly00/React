@@ -31,7 +31,7 @@ const MainpageSchedule = () => {
 
 
     if (!todayEvents || todayEvents.length === 0) {
-      return <p>이벤트가 없습니다.</p>;
+      return <><h3>오늘의 일정</h3><br></br><p>예정된 일정이 없습니다.</p></>;
     }
   
     return (

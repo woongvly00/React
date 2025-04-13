@@ -303,39 +303,25 @@ const DemoApp = () => {
   
 
   return (
-    <div className='demo-app'>
-      
-      <div className='demo-app-sidebar-section'>
-        <label>
-          <input
-            type='checkbox'
-            checked={weekendsVisible}
-            onChange={handleWeekendsToggle}
-          />
-          toggle weekends
-        </label>
-      </div>
-      <div className='demo-app-main'>
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView='dayGridMonth'
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-          }}
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          dayMaxEvents={true}
-          weekends={weekendsVisible}
-          select={handleDateSelect}
-          eventContent={renderEventContent}
-          events={events}
-          eventClick={handleEventClick}
-        />
-      </div>
-
+    <div className={calenderStyle['demo-app']}>
+      <FullCalendar
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        initialView='dayGridMonth'
+        headerToolbar={{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        }}
+        editable={true}
+        selectable={true}
+        selectMirror={true}
+        dayMaxEvents={true}
+        weekends={weekendsVisible}
+        select={handleDateSelect}
+        eventContent={renderEventContent}
+        events={events}
+        eventClick={handleEventClick}
+      />
       {isModalOpen && (
          <div className={calenderStyle['modal-overlay']}>
           

@@ -22,7 +22,6 @@ import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
 import InsaPage from '../insa/insapage';
 import Annaul from '../insa/Annaul';
-import MeetingRoom from '../Reserve/MeetingRoom';
 
 const MainContent = () => {
 const location = useLocation();
@@ -34,13 +33,15 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
   return (
     <div className={style.maincontainer}>
       <div className={style.mainSidebar}>
-        <div className={style.icons}><Link to="/mainpage"><i className="fa-solid fa-2x fa-house" /></Link></div>
-        <Link to={{ pathname: "/mainpage/maincontent/approval"}}><i className="fa-solid fa-2x fa-inbox" /></Link>
-        <Link to={{ pathname: "/mainpage/maincontent/hr"}}><i className="fa-solid fa-2x fa-person" /></Link>
-        <Link to={{ pathname: "/mainpage/maincontent/board"}}><i className="fa-solid fa-2x fa-clipboard" /></Link>
-        <Link to={{ pathname: "/mainpage/maincontent/schedule"}}><i className="fa-solid fa-2x fa-calendar"/></Link>
-        <Link to={{ pathname: "/mainpage/maincontent/reserve"}}><i className="fa-solid fa-2x fa-clock" /></Link>
+      {/* <button className={style.toggleBtn} onClick={toggleSidelist}>{isSidelistOpen ? '◀' : '▶'}</button> */}
+        <div className={style.icons}><Link to="/mainpage"><i className="fa-solid fa-2x fa-house"  style={{ color: "#ecf0f1" }}/></Link></div>
+        <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/approval"}}><i className="fa-solid fa-2x fa-inbox"  style={{ color: "#ecf0f1" }}/></Link></div>
+        <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/hr"}}><i className="fa-solid fa-2x fa-user" style={{ color: "#ecf0f1" }}/></Link></div>
+        <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/board"}}><i className="fa-solid fa-2x fa-clipboard" style={{ color: "#ecf0f1" }} /></Link></div>
+        <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/schedule"}}><i className="fa-solid fa-2x fa-calendar" style={{ color: "#ecf0f1" }}/></Link></div>
+        <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/reserve"}}><i className="fa-solid fa-2x fa-clock"  style={{ color: "#ecf0f1" }}/></Link></div>
       </div>
+      
       
       {isSidelistVisible && <Sidelist />}
       

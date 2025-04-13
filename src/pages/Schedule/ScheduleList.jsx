@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AddCategory from './AddCategory';
 import caxios from '../../Utils/caxios';
 import MySchedule from './MySchedule';
+import './ScheduleList.css';
 
 
 const ScheduleList = ({ closeModal }) => {
@@ -53,7 +54,7 @@ const ScheduleList = ({ closeModal }) => {
 
 
     return (
-        <div>
+        <div className="accordion-container">
             {/* <MySchedule/> */}
             <div className="accordion" id="accordionExample">
                 <div className="accordion-item">
@@ -130,7 +131,7 @@ const ScheduleList = ({ closeModal }) => {
                 </div>
             </div>
             <div>
-                <button onClick={handleModalOpen}>캘린더 추가</button>
+                <button className="calendar-add-button" onClick={handleModalOpen}>캘린더 추가</button>
 
             </div>
             {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} />)}

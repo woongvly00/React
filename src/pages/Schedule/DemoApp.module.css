@@ -95,3 +95,78 @@ textarea {
   color: #1a3c6c;
   font-weight: 500;
 }
+
+
+
+
+
+
+
+
+
+.demo-app {
+  padding: 24px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.demo-app-sidebar-section {
+  width: 220px;
+  padding: 24px;
+  background-color: #e5f1ff;
+  border-right: 1px solid #c9dcec;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.demo-app-sidebar-section label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 10px;
+  color: #1a3c6c;
+}
+
+.demo-app-sidebar-section input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.demo-app-main {
+  flex: 1;
+  padding: 24px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* 전체 캘린더 배경 */
+.my-calendar .fc {
+  background-color: #f9fcff;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 요일 헤더 */
+.my-calendar .fc-col-header-cell {
+  background-color: #e5f1ff;
+  color: #1a3c6c;
+  font-weight: 600;
+  border: 1px solid #dce9f5;
+}
+
+/* 이벤트 스타일 */
+.my-calendar .fc-event {
+  background-color: #a8cfff;
+  border: none;
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 13px;
+  color: #1a3c6c;
+}
+
+.my-calendar .fc-event:hover {
+  background-color: #91bff2;
+  cursor: pointer;
+}
+
+/* 오늘 날짜 배경 */
+.my-calendar .fc-day-today {
+  background-color: #fffbe6;
+}

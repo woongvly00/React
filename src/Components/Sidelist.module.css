@@ -1,9 +1,18 @@
-.sideList{
-    min-width:300px;
-    padding:20px;
-    background-color: rgb(72, 78, 102);
-    height:100%;
-  }
+.sideList {
+  width: 250px;
+  min-height: 100vh;
+  background-color: #f7fbff;
+  border-right: 1px solid #dce9f5;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.03);
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #1a3c6c;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 
   /* 보드 부분 */
   
