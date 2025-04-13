@@ -23,6 +23,12 @@ const ResvSideList = ({ closeModal }) => {
     return (
         <div className="accordionContainer">
             <div className="accordion" id="accordionExample">
+
+                <div className="accordion-item">
+                <Link className="myReservationLink" to={`/mainpage/maincontent/reserve/myReservation`}>
+                    내 예약 목록
+                </Link>
+                </div>
                 <div className="accordion-item">
                 <h2 className="accordion-header">
                     <button className="accordion-button collapsed" type="button"
@@ -42,11 +48,7 @@ const ResvSideList = ({ closeModal }) => {
                 </div>
                 </div>
 
-                <div className="accordion-item">
-                <Link className="myReservationLink" to={`/mainpage/maincontent/reserve/myReservation`}>
-                    내 예약 목록
-                </Link>
-                </div>
+                
             </div>
         </div>
     )

@@ -55,7 +55,9 @@ const ScheduleList = ({ closeModal }) => {
 
     return (
         <div className="accordion-container">
-            {/* <MySchedule/> */}
+            <div>
+                <button className="calendar-add-button" onClick={handleModalOpen}>캘린더 추가</button>
+            </div>
             <div className="accordion" id="accordionExample">
                 <div className="accordion-item">
                     <h2 className="accordion-header">
@@ -129,10 +131,6 @@ const ScheduleList = ({ closeModal }) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <button className="calendar-add-button" onClick={handleModalOpen}>캘린더 추가</button>
-
             </div>
             {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} />)}
         </div>

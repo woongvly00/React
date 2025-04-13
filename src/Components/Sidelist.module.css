@@ -16,7 +16,7 @@
 
   /* 보드 부분 */
   
-  .sidebar {
+  /* .sidebar {
     flex: 0.31;
     min-width: 150px;
     background: white;
@@ -43,9 +43,9 @@
     border-radius: 8px; 
     cursor: pointer; 
     transition: background-color 0.3s, transform 0.2s; 
-    margin:20px;
+    margin:20px; */
     /* margin-top:50px; */
-  }
+  /* }
 
   .boardsidebar {
     width: 250px;              
@@ -89,7 +89,76 @@
     margin-bottom: 5px;   
     color: #555;          
     cursor: pointer;     
+  } */
+
+
+  .sidebar {
+    width: 220px;
+    background-color: #f9fbfd;
+    padding: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+    height: 100vh;
+    box-sizing: border-box;
+    border-right: 1px solid #dce9f5;
   }
+  
+  .button {
+    background-color: #1a3c6c;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease;
+    margin-bottom: 24px;
+  }
+  
+  .button:hover {
+    background-color: #3a78c2;
+  }
+  
+  .boardsidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 15px;
+    color: #1a3c6c;
+  }
+  
+  .wholegasy {
+    font-weight: bold;
+    font-size: 16px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #dce9f5;
+  }
+  
+  .boardsidebar div {
+    font-weight: 500;
+    color: #1a3c6c;
+    margin-top: 4px;
+  }
+  
+  .boardsidebar li {
+    list-style: none;
+    margin-left: 12px;
+    padding: 4px 0;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .boardsidebar a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.2s ease;
+  }
+  
+  .boardsidebar a:hover {
+    color: #1a3c6c;
+    font-weight: 500;
+  }
+  
   
  
 

@@ -170,3 +170,9 @@ textarea {
 .my-calendar .fc-day-today {
   background-color: #fffbe6;
 }
+
+.my-calendar .fc-daygrid-day-number {
+  color: #333 !important;         /* 글자색 수정 (기존 파란색 제거) */
+  text-decoration: none !important; /* 밑줄 제거 */
+  cursor: default !important;       /* 마우스 포인터도 기본값으로 */
+}

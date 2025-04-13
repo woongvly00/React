@@ -7,6 +7,8 @@ import interactionPlugin from '@fullcalendar/interaction'
 import calenderStyle from './DemoApp.module.css';
 import caxios from '../../Utils/caxios';
 import useScheduleStore from '../../store/useScheduleStore';
+import koLocale from '@fullcalendar/core/locales/ko';
+
 
 const DemoApp = () => {
   const { events, addEvent, setEvents, addEvents, removeEvent } = useScheduleStore();
@@ -305,8 +307,11 @@ const DemoApp = () => {
   return (
     <div className={calenderStyle['demo-app']}>
       <FullCalendar
+        className={calenderStyle["my-calendar"]}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
+        locales={[koLocale]}
+        locale="ko"
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',

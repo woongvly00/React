@@ -6,7 +6,9 @@ import interactionPlugin from '@fullcalendar/interaction'
 import caxios from '../../Utils/caxios';
 import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
-import ResvDetail from './ResvDetail'
+import ResvDetail from './ResvDetail';
+import koLocale from '@fullcalendar/core/locales/ko';
+
 
 
 
@@ -127,7 +129,8 @@ const MeetingRoom = ()=> {
             slotMinTime="08:00:00"
             slotMaxTime="24:00:00"
             slotDuration="00:30:00"
-            
+            locales={[koLocale]}
+            locale="ko"
             headerToolbar={{
                 left: '',
                 center: 'prev today next',

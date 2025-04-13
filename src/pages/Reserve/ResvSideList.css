@@ -1,70 +1,86 @@
 .accordionContainer {
-    padding: 16px;
-    background-color: #f8fbfe;
-    border-radius: 8px;
+    background-color: #f9fbfd 1a3c6c;
+    padding: 10px;
     font-family: 'Noto Sans KR', sans-serif;
     color: #1a3c6c;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    width: 220px;
+    box-sizing: border-box;
   }
   
-  /* 아코디언 버튼 */
+  /* 전체 아코디언 아이템 스타일 */
+  .accordion-item {
+    margin-bottom: 16px;
+    border: none;
+    background-color: transparent;
+  }
+  
+  /* 아코디언 헤더 버튼 */
   .accordion-button {
-    background-color: #e5f1ff;
-    color: #1a3c6c;
+    background-color: #1a3c6c;
+    color: #ffffff;
     font-weight: 600;
-    border-radius: 6px 6px 0 0;
+    /* border: 1px solid #dce9f5; */
+    border-radius: 8px;
     padding: 10px 16px;
+    font-size: 15px;
     transition: background-color 0.2s ease;
+    width: 100%;
+    text-align: left;
   }
   
   .accordion-button:hover {
-    background-color: #d0e7fc;
+    background-color: #f0f6fc;
   }
   
-  /* 아코디언 내부 */
+  .accordion-button:not(.collapsed) {
+    background-color: #e6f0fc;
+    color: #1a3c6c;
+  }
+  
+  .accordion-button:focus {
+    box-shadow: none;
+  }
+  
+  /* 접히는 내용 */
   .accordion-body {
+    padding: 10px 12px;
     background-color: #ffffff;
-    padding: 12px;
     border: 1px solid #dce9f5;
-    border-radius: 0 0 6px 6px;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
   }
   
-  .accordion-item {
-    margin-bottom: 12px;
-    border: none;
-  }
-  
-  /* 각 링크 항목 */
+  /* 아코디언 내부 링크들 */
   .rescLink {
     display: block;
-    padding: 6px 10px;
-    border-radius: 6px;
-    color: #1a3c6c;
+    margin: 6px 0;
     font-size: 14px;
+    color: #333;
     text-decoration: none;
-    transition: background-color 0.2s ease;
+    transition: color 0.2s ease;
   }
   
   .rescLink:hover {
-    background-color: #edf6ff;
+    color: #1a3c6c;
     font-weight: 500;
   }
   
-  /* 내 예약 목록 버튼 스타일 */
+  /* 내 예약 링크 */
   .myReservationLink {
     display: block;
-    padding: 10px;
-    margin-top: 8px;
-    background-color: #a8cfff;
-    color: #1a3c6c;
+    padding: 10px 16px;
     text-align: center;
-    border-radius: 6px;
+    background-color: #1a3c6c;
+    color: #ffffff;
+    border: 1px solid #dce9f5;
+    border-radius: 8px;
+    font-weight: 600;
     text-decoration: none;
-    font-weight: 500;
     transition: background-color 0.2s ease;
+    font-size: 15px;
   }
   
   .myReservationLink:hover {
-    background-color: #91bff2;
+    background-color: #4b71a7;
   }
   
