@@ -2,7 +2,7 @@ import daxios from 'axios';
 // 요청 인터셉터: JWT 토큰 자동 첨부
 daxios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('jwtToken');
+    const token = sessionStorage.getItem('jwtToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

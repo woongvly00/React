@@ -17,7 +17,7 @@ const useWorkStore = create(persist(
   }),
   {
     name: 'work-storage',
-    getStorage: () => localStorage,
+    getStorage: () => sessionStorage,
   }
 ));
 

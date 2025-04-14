@@ -38,6 +38,7 @@ const Index = () => {
 
             .then((resp) => {
                 const token = resp.data;
+                sessionStorage.setItem("jwtToken", token);
                 const decodedToken = jwtDecode(token);
                 const per_function = decodedToken.per_function;
                 const per_secure = decodedToken.per_secure;

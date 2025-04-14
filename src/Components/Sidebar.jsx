@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import './Sidebar.css';
 import daxios from '../axios/axiosConfig';
-import { format } from 'date-fns';
 import useAuthStore from '../store/useAuthStore';
 import useWorkStore from '../store/useWorkStore';
 import MainpageSchedule from '../pages/Schedule/MainpageSchedule';
 
-
 const Sidebar = () => {
-  const { token, userId } = useAuthStore();
+  const { token } = useAuthStore();
+  const [activeActivity, setActiveActivity] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const {
     checkInTime,
     checkOutTime,
     isCheckedIn,
     isCheckedOut,
+    currentActivity,
     setCheckInTime,
     setCheckOutTime,
     setIsCheckedIn,
@@ -22,31 +24,32 @@ const Sidebar = () => {
   } = useWorkStore();
 
   const [todayAttendanceId, setTodayAttendanceId] = useState(null);
-  const [currentActivity] = useState("");
-  const [outingTime, setOutingTime] = useState("");
-  const [workTime, setWorkTime] = useState("");
+  const [todayWorkedTime, setTodayWorkedTime] = useState("00:00:00");
 
-  // ✅ 출근 시간 + attendance_id 받아오기
+  // ✅ 출근/퇴근 상태 복원
   useEffect(() => {
     const fetchCheckInData = async () => {
       try {
         const res1 = await daxios.get("http://10.10.55.66/work/checkInTime", {
           headers: { Authorization: `Bearer ${token}` }
-
         });
+
         const res2 = await daxios.get("http://10.10.55.66/work/attendanceId", {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        const time = res1.data;
+        const checkIn = res1.data?.checkInTime;
+        const checkOut = res1.data?.checkOutTime;
         const id = res2.data;
 
-        if (time) {
-          setCheckInTime(new Date(time));
-          setIsCheckedIn(true);
+        if (checkIn) {
+          setCheckInTime(new Date(checkIn));
+          setIsCheckedIn(!checkOut); // 퇴근 안 했으면 출근 상태 유지
+          setIsCheckedOut(!!checkOut);
         } else {
           setCheckInTime(null);
           setIsCheckedIn(false);
+          setIsCheckedOut(false);
         }
 
         if (id) {
@@ -55,25 +58,60 @@ const Sidebar = () => {
       } catch (error) {
         console.error("출근 정보 가져오기 실패", error);
         setIsCheckedIn(false);
+        setIsCheckedOut(false);
         setTodayAttendanceId(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCheckInData();
-  }, [setCheckInTime, setIsCheckedIn, token]);
+  }, [token]);
 
-  const handleCheckIn = async () => { // 출근근
+  // ✅ 근무 시간 타이머
+  useEffect(() => {
+    let interval;
+
+    if (checkInTime && !isCheckedOut) {
+      interval = setInterval(() => {
+        const now = new Date();
+        const start = new Date(checkInTime);
+        const diff = Math.floor((now - start) / 1000);
+
+        const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
+        const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+        const seconds = String(diff % 60).padStart(2, "0");
+
+        setTodayWorkedTime(`${hours}:${minutes}:${seconds}`);
+      }, 1000);
+    } else if (checkInTime && checkOutTime) {
+      const start = new Date(checkInTime);
+      const end = new Date(checkOutTime);
+      const diff = Math.floor((end - start) / 1000);
+
+      const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+      const seconds = String(diff % 60).padStart(2, "0");
+
+      setTodayWorkedTime(`${hours}:${minutes}:${seconds}`);
+    }
+
+    return () => clearInterval(interval);
+  }, [checkInTime, checkOutTime, isCheckedOut]);
+
+  // ✅ 출근 처리
+  const handleCheckIn = async () => {
     const currentTime = new Date().toISOString();
 
     try {
-      const response = await daxios.post("http://10.10.55.66/work/checkIn", {}, {
+      const res = await daxios.post("http://10.10.55.66/work/checkIn", {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
 
-      console.log('✅ 출근 완료:', response.data);
+      console.log('✅ 출근 완료:', res.data);
       setIsCheckedIn(true);
       setCheckInTime(new Date(currentTime));
       setCurrentActivity("출근");
@@ -82,20 +120,21 @@ const Sidebar = () => {
     }
   };
 
-  const handleCheckOut = async () => {  // 퇴근근
+  // ✅ 퇴근 처리
+  const handleCheckOut = async () => {
     const currentTime = new Date().toISOString();
 
     try {
-      const response = await daxios.post("http://10.10.55.66/work/checkOut", {
+      const res = await daxios.post("http://10.10.55.66/work/checkOut", {
         checkOutTime: currentTime
       }, {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
 
-      console.log('퇴근 완료:', response.data);
+      console.log('✅ 퇴근 완료:', res.data);
       setIsCheckedOut(true);
       setIsCheckedIn(false);
       setCheckOutTime(new Date(currentTime));
@@ -105,15 +144,14 @@ const Sidebar = () => {
     }
   };
 
-  const handleActivityStart = async (type) => { // 중간 데이터터
+  // ✅ 외근 / 업무 시작
+  const handleActivityStart = async (type) => {
     const now = new Date().toISOString();
-
     setCurrentActivity(type);
-    if (type === "외근") setOutingTime(now);
-    if (type === "업무") setWorkTime(now);
+    setActiveActivity(type);
 
     try {
-      const response = await daxios.post("http://10.10.55.66/work/start", {
+      const res = await daxios.post("http://10.10.55.66/work/start", {
         attendance_id: todayAttendanceId,
         activity_type: type,
         start_time: now
@@ -124,7 +162,7 @@ const Sidebar = () => {
         }
       });
 
-      console.log(`${type} 시작`, response.data);
+      console.log(`${type} 시작`, res.data);
     } catch (error) {
       console.error(`${type} 요청 실패`, error);
     }
@@ -138,19 +176,24 @@ const Sidebar = () => {
         <div className="sidebar-item">🏠 퇴근시간: 18:00</div>
         <div className="sidebar-item">📅 일정 없음</div>
 
-        <button onClick={handleCheckIn} disabled={isCheckedIn || isCheckedOut}>출근</button>
-        <button onClick={handleCheckOut} disabled={!isCheckedIn || isCheckedOut}>퇴근</button>
-        <button onClick={() => handleActivityStart("외근")} disabled={!isCheckedIn || isCheckedOut}>외근</button>
-        <button onClick={() => handleActivityStart("업무")} disabled={!isCheckedIn || isCheckedOut}>업무</button>
+        {loading ? (
+          <p>로딩 중...</p>
+        ) : (
+          <>
+            <button onClick={handleCheckIn} disabled={isCheckedIn || isCheckedOut}>출근</button>
+            <button onClick={handleCheckOut} disabled={!isCheckedIn || isCheckedOut}>퇴근</button>
+            <button onClick={() => handleActivityStart("외근")} disabled={!isCheckedIn || isCheckedOut || activeActivity === "외근"}>외근</button>
+            <button onClick={() => handleActivityStart("업무")} disabled={!isCheckedIn || isCheckedOut || activeActivity === "업무"}>업무</button>
+          </>
+        )}
 
         <div className="current-activity">
           {currentActivity && <p>현재 활동: {currentActivity}</p>}
         </div>
         <div className="time-logs">
+          <p>총 근무 시간: {todayWorkedTime}</p>
           {checkInTime && <p>출근 시간: {checkInTime.toLocaleString()}</p>}
           {checkOutTime && <p>퇴근 시간: {checkOutTime.toLocaleString()}</p>}
-          {outingTime && <p>외근 시작: {outingTime}</p>}
-          {workTime && <p>업무 시작: {workTime}</p>}
         </div>
       </div>
 
@@ -160,7 +203,7 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar">
-        <div><MainpageSchedule /></div>
+        <MainpageSchedule />
       </div>
     </div>
   );
