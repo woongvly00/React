@@ -5,44 +5,49 @@ import bstyle from './Board_reference.module.css';
 import { useNavigate } from 'react-router-dom';
 
 const Board_reference = () => {
-    const [group, setGroup] = useState([]);
+    // const [group, setGroup] = useState([]);
     const navigate = useNavigate();
 
     const [sortOption, setSortOption] = useState("option1");
     const [searchQuery, setSearchQuery] = useState("");
-    const [filteredGroup, setFilteredGroup] = useState([]);
+    // const [filteredGroup, setFilteredGroup] = useState([]);
+
+    //네비게이터
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [boardList, setBoardList] = useState([]);
 
     // 데이터 최초 로딩
-    useEffect(() => {
-        axios.get('http://10.5.5.12/board')
-            .then(response => {
-                console.log("응답 성공", response.data);
-                setGroup(response.data);
-            })
-            .catch(error => {
-                console.error("🔥 오류 발생:", error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     axios.get('http://10.5.5.12/board')
+    //         .then(response => {
+    //             console.log("응답 성공", response.data);
+    //             setGroup(response.data);
+    //         })
+    //         .catch(error => {
+    //             console.error("🔥 오류 발생:", error);
+    //         });
+    // }, []);
 
     // 검색어 또는 정렬 옵션 변경 시 필터링 + 정렬
-    useEffect(() => {
-        const query = searchQuery.toLowerCase();
+    // useEffect(() => {
+    //     const query = searchQuery.toLowerCase();
 
-        const sorted = [...group].sort((a, b) => {
-            if (sortOption === "option1") {
-                return new Date(b.post_date) - new Date(a.post_date);
-            } else if (sortOption === "option2") {
-                return b.post_view - a.post_view;
-            }
-            return 0;
-        });
+    //     const sorted = [...group].sort((a, b) => {
+    //         if (sortOption === "option1") {
+    //             return new Date(b.post_date) - new Date(a.post_date);
+    //         } else if (sortOption === "option2") {
+    //             return b.post_view - a.post_view;
+    //         }
+    //         return 0;
+    //     });
 
-        const filtered = sorted.filter(item =>
-            item.post_title.toLowerCase().includes(query)
-        );
+    //     const filtered = sorted.filter(item =>
+    //         item.post_title.toLowerCase().includes(query)
+    //     );
 
-        setFilteredGroup(filtered);
-    }, [searchQuery, sortOption, group]);
+    //     setFilteredGroup(filtered);
+    // }, [searchQuery, sortOption, group]);
 
     // 조회수 증가 후 페이지 이동
     const increaseViewCount = (post_id) => {
@@ -67,6 +72,37 @@ const Board_reference = () => {
         const seconds = String(date.getSeconds()).padStart(2, '0');
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
+
+    //네비게이터 페이지 정보 보내는 부분
+    useEffect(() => {
+        axios.get(`http://10.5.5.12/board/navigator`, {
+            params: { page: currentPage, size: 10 }
+        })
+            .then(res => {
+                setBoardList(res.data.list);
+                setTotalPages(res.data.totalPages);
+            })
+            .catch(err => {
+                console.error("페이지 데이터 로딩 실패:", err);
+            });
+    }, [currentPage]);
+
+    const getFilteredAndSortedList = () => {
+        const query = searchQuery.toLowerCase();
+      
+        const sorted = [...boardList].sort((a, b) => {
+          if (sortOption === "option1") {
+            return new Date(b.post_date) - new Date(a.post_date);
+          } else if (sortOption === "option2") {
+            return b.post_view - a.post_view;
+          }
+          return 0;
+        });
+      
+        return sorted.filter(item =>
+          item.post_title.toLowerCase().includes(query)
+        );
+      };
 
     return (
         <div className={bstyle.SBoardContainer}>
@@ -106,16 +142,16 @@ const Board_reference = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredGroup.map((message, index) => (
+                            {getFilteredAndSortedList().map((message, index) => (
                                 <tr key={index}>
                                     <td>{message.post_id}</td>
                                     <td>
-                                        <Link
-                                            to={`/mainpage/maincontent/titlelink/${message.post_id}`}
+                                        <div
                                             onClick={() => increaseViewCount(message.post_id)}
+                                            style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
                                         >
                                             {message.post_title}
-                                        </Link>
+                                        </div>
                                     </td>
                                     <td>{message.post_writer}</td>
                                     <td>{formatDate(message.post_date)}</td>
@@ -125,6 +161,18 @@ const Board_reference = () => {
                             ))}
                         </tbody>
                     </table>
+                    <div className={bstyle.pagination}>
+                        {/* 여기에 페이지 버튼 넣기 */}
+                        {[...Array(totalPages)].map((_, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setCurrentPage(idx + 1)}
+                                className={currentPage === idx + 1 ? bstyle.active : ""}
+                            >
+                                {idx + 1}
+                            </button>
+                        ))}
+                    </div>
                     <div className={bstyle.writeButton}>
                         <Link to="/mainpage/maincontent/write_button" state={{ name: "board" }}>
                             <button>작성하기</button>

@@ -1,0 +1,57 @@
+.reservTable {
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #1a3c6c;
+  }
+  
+  /* 자원 선택 드롭다운 */
+  .reservTable select {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border: 1px solid #ccd8e3;
+    border-radius: 6px;
+    background-color: #f5faff;
+    color: #1a3c6c;
+    font-size: 14px;
+  }
+  
+  /* 자원 정보 테이블 */
+  .reservTable table {
+    width: 100%;
+    margin-top: 16px;
+    border-collapse: collapse;
+    background-color: #f9fcff;
+  }
+  
+  .reservTable th, .reservTable td {
+    padding: 12px;
+    border: 1px solid #dce9f5;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .reservTable th {
+    background-color: #e5f1ff;
+    font-weight: 600;
+    color: #1a3c6c;
+  }
+  
+  .reservTable td {
+    background-color: #ffffff;
+  }
+  
+  /* 반응형 처리 (선택) */
+  @media (max-width: 768px) {
+    .reservTable table, .reservTable th, .reservTable td {
+      font-size: 12px;
+      padding: 8px;
+    }
+  
+    .reservTable select {
+      width: 100%;
+    }
+  }
+  

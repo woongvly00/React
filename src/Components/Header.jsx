@@ -38,9 +38,8 @@ const Header = () => {
     <header className="header">
       <div className="logo">🌐 GroupWare</div>
       <div className="header-buttons">
-        <button>🔍</button>
-        <button>💬</button>
-        <button>⚙️</button>
+        <button><i class="fa-regular fa-bell"></i></button>
+        <button><i class="fa-regular fa-comment"></i></button>
         <div className="user-menu-container" ref={userMenuRef}>
           <button className="user-icon-button" onClick={toggleUserMenu}>
             <i className="fa-solid fa-circle-user"></i>
@@ -49,8 +48,8 @@ const Header = () => {
             <div className="user-dropdown">
               <ul>
                <Link to= "/mainpage/maincontent/mypage"> <li><i className="fa-solid fa-user"></i> 마이페이지</li></Link>
-               <Link to="/home/header/test"> <li><i className="fa-solid fa-vial"></i> 테스트 페이지</li></Link>
-               <Link to="/home/header/setting"> <li><i className="fa-solid fa-gear"></i> 설정</li></Link> 
+               {/* <Link to="/home/header/test"> <li><i className="fa-solid fa-vial"></i> 테스트 페이지</li></Link>
+               <Link to="/home/header/setting"> <li><i className="fa-solid fa-gear"></i> 설정</li></Link>  */}
                 <li onClick={() => { logout(); navi("/"); setEvents([]);}}>
                   <i className="fa-solid fa-right-from-bracket"></i> 로그아웃
                 </li>

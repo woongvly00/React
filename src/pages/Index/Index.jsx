@@ -35,13 +35,12 @@ const Index = () => {
         e.preventDefault();
 
         axios.post('http://10.5.5.6/auth/login', login)
+
             .then((resp) => {
                 const token = resp.data;
                 const decodedToken = jwtDecode(token);
                 const per_function = decodedToken.per_function;
                 const per_secure = decodedToken.per_secure;
-
-
 
                 // ✅ 상태관리도 병행 (Zustand 등)
                 setAuth(token, login.id, per_function, per_secure);
