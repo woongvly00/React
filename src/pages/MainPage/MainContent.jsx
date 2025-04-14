@@ -21,6 +21,7 @@ import ReserveMain from '../Reserve/ReserveMain';
 import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
 
+
 const MainContent = () => {
 const location = useLocation();
 const hideSidelistPaths = ['/mainpage/maincontent/mypage']; // 더 숨기고 싶은 페이지가 있다면 배열에 추가
@@ -60,7 +61,9 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
           <Route path='department' element={<Board_department />} />
           <Route path='business' element={<Board_business />} />
           <Route path='support' element={<Board_support />} />
+         
 
+          
           <Route path='schedule' element={<ScheduleMain />} />
           <Route path='reserve' element={<ReserveMain />} />
           <Route path='msg' element={<ApprovalMain />} />

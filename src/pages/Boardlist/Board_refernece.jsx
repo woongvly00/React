@@ -17,37 +17,6 @@ const Board_reference = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [boardList, setBoardList] = useState([]);
 
-    // 데이터 최초 로딩
-    // useEffect(() => {
-    //     axios.get('http://10.5.5.12/board')
-    //         .then(response => {
-    //             console.log("응답 성공", response.data);
-    //             setGroup(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error("🔥 오류 발생:", error);
-    //         });
-    // }, []);
-
-    // 검색어 또는 정렬 옵션 변경 시 필터링 + 정렬
-    // useEffect(() => {
-    //     const query = searchQuery.toLowerCase();
-
-    //     const sorted = [...group].sort((a, b) => {
-    //         if (sortOption === "option1") {
-    //             return new Date(b.post_date) - new Date(a.post_date);
-    //         } else if (sortOption === "option2") {
-    //             return b.post_view - a.post_view;
-    //         }
-    //         return 0;
-    //     });
-
-    //     const filtered = sorted.filter(item =>
-    //         item.post_title.toLowerCase().includes(query)
-    //     );
-
-    //     setFilteredGroup(filtered);
-    // }, [searchQuery, sortOption, group]);
 
     // 조회수 증가 후 페이지 이동
     const increaseViewCount = (post_id) => {

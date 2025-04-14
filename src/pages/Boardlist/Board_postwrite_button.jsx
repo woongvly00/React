@@ -1,4 +1,4 @@
-import bstyle from './Board_write_button.module.css';
+import bstyle from './Board_postwrite_button.module.css';
 import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState } from 'draft-js';
@@ -9,7 +9,7 @@ import draftToHtml from 'draftjs-to-html';
 import { convertToRaw } from 'draft-js';
 
 
-const Board_write_button = () => {
+const Board_postwrite_button = () => {
     const navigate = useNavigate();
 
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -160,4 +160,4 @@ const Board_write_button = () => {
         </div>
     );
 };
-export default Board_write_button;
+export default Board_postwrite_button;
