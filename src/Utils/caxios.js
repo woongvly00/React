@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const caxios = axios.create({
-    baseURL:'http://192.168.219.102'
+    baseURL:'http://10.10.55.6'
 });
 
 caxios.interceptors.request.use(
