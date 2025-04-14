@@ -11,4 +11,4 @@ daxios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export default daxios; // 이 axios를 쓰게 될 거야'
+export default daxios; // 이 axios를 쓰게 될 거야'qwe
