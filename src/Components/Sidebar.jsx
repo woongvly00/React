@@ -26,7 +26,7 @@ const Sidebar = () => {
   const [outingTime, setOutingTime] = useState("");
   const [workTime, setWorkTime] = useState("");
 
-  // ✅ 출근 시간 + attendance_id 받아오기
+  // ✅ 출근 시간 + attendance_id 받아오기qwe
   useEffect(() => {
     const fetchCheckInData = async () => {
       try {
