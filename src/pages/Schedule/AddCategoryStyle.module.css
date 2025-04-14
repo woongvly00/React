@@ -1,92 +1,62 @@
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); 
-    display: flex;
-    align-items: center;
-    justify-content: center; 
-    z-index: 9999;
-  }
-  
-
-  .modal-container {
-    background: white;
-    padding:50px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    min-width: 500px;
-    min-height: 300px;
-  }
-  
-
-  .modal-buttons {
-    margin-top: 1rem;
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
-
-
-  .radio-option {
-  display: inline-block;
-  margin-right: 10px;
-  cursor: pointer;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
 }
 
-.custom-radio {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  transition: border 0.3s ease;
+.modal-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 420px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
-.radio-option input:checked + .custom-radio {
-  border: 3px solid #2196F3; /* 선택된 경우 테두리 강조 */
+.closeBtn {
+  text-align: right;
+  margin-bottom: 12px;
 }
 
-.closeBtn{
-    display: flex;
-    justify-content:right;
-    align-items: flex-end;
-}
-
-.form-select {
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccd8e3;
-  border-radius: 6px;
-  background-color: #f5faff;
-  width: 100%;
-  margin: 6px 0 12px 0;
-}
-
-.form-input {
-  padding: 8px;
-  font-size: 14px;
-  width: 100%;
-  border: 1px solid #ccd8e3;
-  border-radius: 6px;
-  background-color: #f5faff;
-  margin: 6px 0 12px 0;
+.modal-buttons {
+  margin-top: 20px;
+  text-align: right;
 }
 
 .form-button {
-  padding: 10px 16px;
   background-color: #a8cfff;
   color: #1a3c6c;
   border: none;
+  padding: 10px 16px;
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .form-button:hover {
   background-color: #91bff2;
+}
+
+.form-select,
+.form-input {
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 14px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccd8e3;
+  border-radius: 6px;
+  background-color: #f5faff;
+  box-sizing: border-box;
+  color: #1a3c6c;
 }
 
 .color-section {
@@ -108,11 +78,19 @@
   gap: 12px;
 }
 
-/* 색상 원형 스타일 */
 .color-circle {
   display: inline-block;
   width: 24px;
   height: 24px;
   border-radius: 50%;
   transition: border 0.2s ease;
+  cursor: pointer;
+}
+
+.form-radio {
+  display: inline-block;
+}
+
+.form-radio-input {
+  display: none;
 }

@@ -1,51 +1,58 @@
 import myResvStyle from './MyReservation.module.css';
 import { useState } from 'react';
+import caxios from '../../Utils/caxios';
 
 
 
 
 const MyReservation = () => {
     const [selected, setSelected] = useState('회의실');
-    // const allReservations =() => {
-    //     caxios.get(`/reserve/reservations`).then((resp) => {
-    //         const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
-    //         const formatResev = resp.data.map((resv) => {
-    //           const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
-    //           const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
+    const [ myReservation, setMyReservation ] = useState([]);
+    const allReservations =() => {
+        caxios.get(`/reserve/reservations`).then((resp) => {
+            console.log("🔥 서버에서 받아온 예약 목록 원본:", resp.data);
           
-    //           return {
-    //             id: resv.resv_id,
-    //             title: resv.resv_title,
-    //             start: startStr,
-    //             end: endStr,
-    //             startTime:resv.resv_stime,
-    //             endTime: resv.resv_eTime,
-    //             allDay: false,
-    //             extendedProps: {
-    //               emp_id: resv.resv_emp,
-    //               resource_id: resv.resource_id
-    //             }
-    //           };
-    //         });
+            const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
+          
+            const formatResev = resp.data.map((resv) => {
+              const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
+              const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
+              const startDate = new Date(startStr);
+              const endDate = new Date(endStr);
+          
+               return {
+                id: resv.resv_id,
+                title: resv.resv_title,
+                date: startStr,
+                end: endStr,
+                startTime: resv.resv_stime,
+                endTime: resv.resv_etime,
+                allDay: false,
+                extendedProps: {
+                  emp_id: resv.resv_emp,
+                  category: resv.resource_id
+                }
+              };
+            });
+          
+            setMyReservation(formatResev);
+          }).catch((error) => {
+            console.error("예약목록 불러오기 실패", error);
+          });
 
-    // }
+    }
 
-    const allReservations =[
-        { title: '회의실 예약 1', date: '2024-04-30', startTime: '10:00', endTime: '11:00', category: '회의실', status: '승인됨' },
-        { title: '차량 예약 A', date: '2024-05-01', startTime: '09:00', endTime: '10:00', category: '차량', status: '진행 중' },
-        { title: '비품 예약 B', date: '2024-05-02', startTime: '14:00', endTime: '15:30', category: '비품', status: '승인됨' },
-        
-      ];
-    const filteredReservations = allReservations.filter(r => r.category === selected);
+    
+    const filteredReservations = myReservation.filter(r => r.category === selected);
 
     return (
         <div>
             <div className={myResvStyle['reserve-page']}>
                 <h2>나의 예약 목록</h2>
                 <div className={myResvStyle['category-tabs']}>
-                    <button className={selected === '회의실' ? myResvStyle.active : ''} onClick={() => setSelected('회의실')}>회의실</button>
-                    <button className={selected === '차량' ? myResvStyle.active : ''} onClick={() => setSelected('차량')}>차량</button>
-                    <button className={selected === '비품' ? myResvStyle.active : ''} onClick={() => setSelected('비품')}>비품</button>
+                    <button className={selected === '110' ? myResvStyle.active : ''} onClick={() => setSelected('110')}>회의실</button>
+                    <button className={selected === '120' ? myResvStyle.active : ''} onClick={() => setSelected('120')}>차량</button>
+                    <button className={selected === '130' ? myResvStyle.active : ''} onClick={() => setSelected('130')}>비품</button>
                 </div>
                 <div className={myResvStyle['card-list']}>
                     {filteredReservations.map((resv, idx) => (
@@ -53,7 +60,6 @@ const MyReservation = () => {
                         <h3>{resv.title}</h3>
                         <p>{resv.date} / {resv.startTime} ~ {resv.endTime}</p>
                         <p className={myResvStyle['category']}>{resv.category}</p>
-                        <p className={myResvStyle['status']}>{resv.status}</p>
                     </div>
                     ))}
                 </div>
