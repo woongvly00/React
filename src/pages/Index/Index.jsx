@@ -21,6 +21,7 @@ const Index = () => {
         axios.post('http://10.10.55.22/auth/login', login)
             .then((resp) => {
                 const token = resp.data;
+                sessionStorage.setItem("jwtToken", token);
                 const decodedToken = jwtDecode(token);
                 const per_function = decodedToken.per_function;
                 const per_secure = decodedToken.per_secure;

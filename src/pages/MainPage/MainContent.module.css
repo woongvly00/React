@@ -51,7 +51,7 @@
 /* 콘텐츠 영역은 flex로 옆에 배치되며 나머지 영역 차지 */
 .mainContents {
   flex: 1;
-  padding: 24px;
+  padding-top: 10px;
   background-color: #f8fbfe;
   min-height: 100vh;
   box-sizing: border-box;

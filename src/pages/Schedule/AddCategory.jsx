@@ -33,19 +33,36 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
   const handleCalInput = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'color') {
-      setSelectedColor(value);
-    }
-    setCalender((prev) => ({ ...prev, [name]: value }));
-    setCalender((prev) => ({...prev, dept_code : userInfo.emp_dept_id, emp_id : userInfo.emp_code_id}));
+    setCalender(prev => ({
+      ...prev,
+      [name]: value,
+      emp_id: userInfo?.emp_code_id || '',
+      dept_code: userInfo?.emp_dept_id || ''
+    }));
   };
+
   const colors = ['#ee5074', '#fa7227', '#ac725e', '#f7d915', '#a3b90a', '#57b92a', '#4fced8', '#5990d5', '#777dbf', '#844285'];
 
 
 
   const handleAddCalender = () => {
+    if (!calender.c_title.trim()) {
+      alert("캘린더 이름을 입력해주세요.");
+      return;
+    }
+    if (!calender.color.trim()) {
+      alert("캘린더 색상을 입력해주세요.");
+      return;
+    }
 
-    caxios.post("/calendar", calender).then((resp)=> {
+    if (calender.public_code === "20" && selectedTargets.length === 0) {
+      alert("공유 대상을 선택해주세요.");
+      return;
+    }
+
+
+    caxios.post("/calendar", calender)
+    .then((resp)=> {
       const c_id = resp.data.c_id;
       console.log(c_id);
       const shareData = selectedTargets.map(t => ({
@@ -55,6 +72,10 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
       }));
 
       return caxios.post("/calendar/calendarShare", shareData);
+    })
+    .then(() => {
+      alert("캘린더가 성공적으로 추가되었습니다.");
+      closeModal(); 
     })
     .catch((error) => {
         if (error.response?.status === 404 || error.response?.status === 500) {
@@ -74,7 +95,6 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
       public_code: '10'
     });
 
-    setIsModalOpen(false);
     };
 
     const [selectedColor, setSelectedColor] = useState('');
@@ -94,8 +114,9 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
   };
 
   const removeTarget = (id) => {
-    setSelectedTargets(prev => prev.filter(t => t.id !== id));
+    setSelectedTargets(prev => prev.filter(t => t.target_id !== id));
   };
+  
 
   const [employees, setEmployees] = useState([]);
   const [ departments, setDepartments ] = useState([]);
@@ -129,7 +150,7 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
               <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
             </div>
 
-            <select className={addCategoryStyle['form-select']} value={calender.public_code} onChange={handleCalInput}>
+            <select className={addCategoryStyle['form-select']}  name="public_code" value={calender.public_code} onChange={handleCalInput}>
               <option value="10">내 캘린더</option>
               <option value="20">공유 캘린더</option>
             </select>
@@ -137,56 +158,79 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
             {calender.public_code == 20 && (
               <div>
                 <div><strong>공유 대상</strong></div>
-                <div>
-                  부서 선택
-                  <select className={addCategoryStyle['form-select']} data-type="dept" onChange={handleAddTarget}>
+                <div className={addCategoryStyle['time-row']}>
+                <div className={addCategoryStyle['time-item']}>
+                  <label>부서 선택</label>
+                  <select
+                    className={addCategoryStyle['form-select']}
+                    data-type="dept"
+                    onChange={handleAddTarget}
+                  >
                     <option value="">부서</option>
                     {departments.map((dept) => (
-                      <option key={dept.dept_id} value={dept.dept_id}>{dept.dept_name}</option>
-                    ))}
-                  </select>
-                  개별 선택
-                  <select className={addCategoryStyle['form-select']} data-type="emp" onChange={handleAddTarget}>
-                    <option value="">개인</option>
-                    {employees.map((emp) => (
-                      <option key={emp.emp_code_id} value={emp.emp_code_id}>
-                        {emp.emp_name}{emp.job_}
+                      <option key={dept.dept_id} value={dept.dept_id}>
+                        {dept.dept_name}
                       </option>
                     ))}
                   </select>
                 </div>
-                <div>
-                  <p>선택된 대상:</p>
-                  {selectedTargets.length > 0 ? (
-                    selectedTargets.map(t => (
-                      <span key={t.id} style={{ marginRight: '8px' }}>
-                        {t.name} <button onClick={() => removeTarget(t.id)}>❌</button>
-                      </span>
-                    ))
-                  ) : (
-                    <p style={{ color: '#888' }}>선택된 대상이 없습니다.</p>
-                  )}
+
+                <div className={addCategoryStyle['time-item']}>
+                  <label>개별 선택</label>
+                  <select
+                    className={addCategoryStyle['form-select']}
+                    data-type="emp"
+                    onChange={handleAddTarget}
+                  >
+                    <option value="">개인</option>
+                    {employees.map((emp) => (
+                      <option key={emp.emp_code_id} value={emp.emp_code_id}>
+                        {emp.emp_name} {emp.job_}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+              </div>
+              <div>
+                {selectedTargets.length > 0 ? (
+                  selectedTargets.map(t => (
+                    <span  key={t.target_id}  className={addCategoryStyle['target-tag']}>
+                      {t.name}
+                      <button
+                        type="button"
+                        className={addCategoryStyle['remove-btn']}
+                        onClick={() => removeTarget(t.target_id)}
+                      >
+                        x
+                      </button>
+                    </span>
+                  ))
+                ) : (
+                  <p  className={addCategoryStyle['color-label']}>선택된 대상이 없습니다.</p>
+                )}
+              </div>
               </div>
             )}
 
             <div>
-              캘린더 이름
+              <p className={addCategoryStyle['color-label']}>캘린더 이름</p>
               <input
                 type="text"
                 className={addCategoryStyle['form-input']}
                 value={calender.c_title}
                 onChange={handleCalInput}
+                name="c_title"
               />
             </div>
 
             <div className={addCategoryStyle['color-section']}>
-              <p className={addCategoryStyle['color-label']}>색상 (캘린더 이름 색상)</p>
+              <p className={addCategoryStyle['color-label']}>캘린더 색상</p>
               <div className={addCategoryStyle['color-options']}>
                 {colors.map((color) => (
                   <label key={color} className={addCategoryStyle['form-radio']}>
                     <input
                       type="radio"
+                      name="color"
                       className={addCategoryStyle['form-radio-input']}
                       value={color}
                       onChange={handleCalInput}

@@ -10,7 +10,7 @@ import useScheduleStore from '../../store/useScheduleStore';
 import koLocale from '@fullcalendar/core/locales/ko';
 
 
-const DemoApp = () => {
+const DemoApp = ({ onRefresh, reloadKey }) => {
   const { events, addEvent, setEvents, addEvents, removeEvent } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
@@ -46,7 +46,7 @@ const DemoApp = () => {
     });
 
     
-}, [])
+}, [reloadKey])
 
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const DemoApp = () => {
       console.error("일정 정보 불러오기 실패", error);
     })
 
-  }, [userInfo.emp_code_id])
+  }, [userInfo.emp_code_id, reloadKey])
 
 
 
@@ -95,7 +95,7 @@ const DemoApp = () => {
       console.error("일정 정보 불러오기 실패", error);
     })
     
-  }, [userInfo.emp_code_id])
+  }, [userInfo.emp_code_id, reloadKey])
 
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const DemoApp = () => {
     console.error("일정 정보 불러오기 실패", error);
   })
   
-}, [userInfo.emp_code_id])
+}, [userInfo.emp_code_id, reloadKey])
 
 
 
@@ -173,7 +173,11 @@ const DemoApp = () => {
     calendarApi.addEvent(newEvent);
 
 
-    caxios.post("/schedule", eventInput).catch((error) => {
+    caxios.post("/schedule", eventInput)
+    .then(() => {
+      if (onRefresh) onRefresh();
+    })
+    .catch((error) => {
       if (error.response?.status === 404 || 500) {
         alert("등록에 실패했습니다.");
       }
@@ -313,7 +317,7 @@ const DemoApp = () => {
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'dayGridMonth,dayGridWeek'
         }}
         editable={true}
         selectable={true}
@@ -400,6 +404,7 @@ const DemoApp = () => {
              일정 내용
              <textarea
              name="content"
+             calssName={calenderStyle.schetextarea}
              value={eventInput.content}
              onChange={handleInput}
              placeholder="내용 입력"
@@ -413,69 +418,82 @@ const DemoApp = () => {
      </div>
       )}
 
-      {isDetailOpen && selectedEvent && (
-          <div className={calenderStyle['detail-overlay']}>
-            <div className={calenderStyle['detail-container']}>
-            <div className={calenderStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close"  onClick={() => {setIsDetailOpen(false); setIsEditing(false);}}></button></div>
-                {
-                  isEditing ? <h2>일정 수정</h2>
-                            : <h2>상세 내용</h2>
-                }
-              
+{isDetailOpen && selectedEvent && (
+  <div className={calenderStyle.detailOverlay}>
+  <div className={calenderStyle.detailContainer}>
+    <div className={calenderStyle.closeBtn}>
+      <button type="button" className="btn-close" aria-label="Close" onClick={() => { setIsDetailOpen(false); setIsEditing(false); }}></button>
+    </div>
 
-              {isEditing ? (<>
-                <input type="hidden" name="id" value={update.id} />
-                <div><strong>제목:</strong><input type="text" name="title" value={update.title} onChange={handleUpdate} placeholder="일정 제목 입력" autoFocus/></div>
-                <div>
-                  시작일<input name="start_date" type="date" value={update.start_date } onChange={handleUpdate} />
-                  종료일<input name="end_date" type="date" value={update.end_date } onChange={handleUpdate} />
-                </div>
-                <div className={calenderStyle['time-row']}>
-                  <div className={calenderStyle['time-item']}>
-                    <label>시작시간</label>
-                    <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
-                      {Array.from({ length: 48 }).map((_, index) => {
-                        const h = String(Math.floor(index / 2)).padStart(2, '0');
-                        const m = index % 2 === 0 ? '00' : '30';
-                        const time = `${h}:${m}`;
-                        return <option key={time} value={time}>{time}</option>;
-                      })}
-                    </select>
-                  </div>
-                  <div className={calenderStyle['time-item']}>
-                    <label>종료시간</label>
-                    <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
-                      {Array.from({ length: 48 }).map((_, index) => {
-                        const h = String(Math.floor(index / 2)).padStart(2, '0');
-                        const m = index % 2 === 0 ? '00' : '30';
-                        const time = `${h}:${m}`;
-                        return <option key={time} value={time}>{time}</option>;
-                      })}
-                    </select>
-                  </div>
-                </div>
+    <h2>{isEditing ? "일정 수정" : "상세 내용"}</h2>
 
-                <div>
-                  <strong>내용:</strong>
-                  <textarea name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" style={{ width: '300px', height: '150px', resize: 'none' }}></textarea></div>
-              
-              </>) : (<>
-                <div><strong>제목:</strong> {selectedEvent.title}</div>
-                <div><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</div>
-                <div><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</div>
-                <div><strong>내용:</strong> {selectedEvent.content}</div>
-              </>)}
-              
-        
-              <div id="editBtns" className={calenderStyle['detail-buttons']}>
-                {
-                  isEditing ? <><button onClick={handleSave}>저장</button><button onClick={() => setIsEditing(false)}>취소</button></>
-                            : <><button onClick={handleUpdate}>수정</button><button onClick={handleDelete}>삭제</button></>
-                }
-              </div>
-            </div>
+    {isEditing ? (
+      <>
+        <input type="hidden" name="id" value={update.id} />
+        <div><strong>제목:</strong><input type="text" name="title" value={update.title} onChange={handleUpdate} /></div>
+        <div className={calenderStyle.timeRow}>
+          <div className={calenderStyle.timeItem}>
+            <label>시작일</label>
+            <input name="start_date" type="date" value={update.start_date} onChange={handleUpdate} />
           </div>
-        )}
+          <div className={calenderStyle.timeItem}>
+            <label>종료일</label>
+            <input name="end_date" type="date" value={update.end_date} onChange={handleUpdate} />
+          </div>
+        </div>
+        <div className={calenderStyle.timeRow}>
+          <div className={calenderStyle.timeItem}>
+            <label>시작시간</label>
+            <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
+              {Array.from({ length: 48 }).map((_, i) => {
+                const h = String(Math.floor(i / 2)).padStart(2, '0');
+                const m = i % 2 === 0 ? '00' : '30';
+                return <option key={i} value={`${h}:${m}`}>{`${h}:${m}`}</option>;
+              })}
+            </select>
+          </div>
+          <div className={calenderStyle.timeItem}>
+            <label>종료시간</label>
+            <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
+              {Array.from({ length: 48 }).map((_, i) => {
+                const h = String(Math.floor(i / 2)).padStart(2, '0');
+                const m = i % 2 === 0 ? '00' : '30';
+                return <option key={i} value={`${h}:${m}`}>{`${h}:${m}`}</option>;
+              })}
+            </select>
+          </div>
+        </div>
+        <div>
+          <strong>내용:</strong>
+          <textarea calssName={calenderStyle.schetextarea}name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" />
+        </div>
+      </>
+    ) : (
+      <>
+        <div><strong>제목:</strong> {selectedEvent.title}</div>
+        <div><strong>기간:</strong> {selectedEvent.start_date} ~ {selectedEvent.end_date}</div>
+        <div><strong>시간:</strong> {selectedEvent.startTime} ~ {selectedEvent.endTime}</div>
+        <div><strong>내용:</strong> {selectedEvent.content}</div>
+      </>
+    )}
+
+    <div className={calenderStyle.detailButtons}>
+      {userInfo.emp_code_id === selectedEvent.emp_id && (isEditing ? (
+        <>
+          <button onClick={handleSave}>저장</button>
+          <button onClick={() => setIsEditing(false)}>취소</button>
+        </>
+      ) : (
+        <>
+          <button onClick={handleUpdate}>수정</button>
+          <button onClick={handleDelete}>삭제</button>
+        </>
+      ))}
+    </div>
+  </div>
+</div>
+)}
+
 
 
     </div>
