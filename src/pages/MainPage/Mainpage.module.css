@@ -1,13 +1,30 @@
+.container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8fbfe;  /* ✨ 전체 페이지 배경색 */
+  font-family: 'Noto Sans KR', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
 
-  
-  .container {
-    width: 100%;
-    display: flex;
-    background: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
-    flex-direction: column;
-  }
+.mainpageContents {
+  flex: 1;
+  box-sizing: border-box;
+}
 
-  .mainpageContents{
-    width: 100%;
-  }
-  
+/* 기본 카드형 섹션 */
+.section-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+}
+
+/* 제목 스타일 */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a3c6c;
+  margin-bottom: 12px;
+}

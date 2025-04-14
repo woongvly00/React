@@ -1,123 +1,92 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 1.5rem;
+  width: 100%;
+  height: 60px;
   background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #dce9f5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: 'Noto Sans KR', sans-serif;
+  box-sizing: border-box;
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a3c6c;
 }
 
 .header-buttons {
   display: flex;
-  align-items: center;
-  gap: 0.8rem;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative; /* 드롭다운을 여기 기준으로 띄움 */
 }
 
 .header-buttons button {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 18px;
   cursor: pointer;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s;
+  color: #1a3c6c;
+  transition: color 0.2s ease;
 }
 
 .header-buttons button:hover {
-  background-color: #f0f0f0;
+  color: #3a78c2;
 }
 
-/* User menu specific styles */
 .user-menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* 드롭다운 오른쪽 정렬 유지 */
   position: relative;
 }
 
 .user-icon-button {
-  font-size: 1.2rem;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #1a3c6c;
+  cursor: pointer;
+  margin-bottom: 4px; /* 아이콘과 드롭다운 사이 간격 */
 }
 
 .user-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 200px;
-  background-color: white;
+  position: absolute; /* 위치 기준: 부모 요소 */
+  top: 100%; /* 아이콘 버튼 바로 아래 */
+  right: 0; /* 오른쪽 정렬 유지 */
+  width: 180px;
+  background-color: #ffffff;
+  border: 1px solid #dce9f5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  overflow: hidden;
-  
-  /* Animation for slide down effect */
-  animation: slideDown 0.3s ease forwards;
-  transform-origin: top center;
+  z-index: 10;
 }
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(8px);
-  }
-}
-
 .user-dropdown ul {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 8px 0;
 }
 
 .user-dropdown li {
-  padding: 12px 16px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #1a3c6c;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .user-dropdown li:hover {
-  background-color: #f5f5f5;
+  background-color: #f0f6fc;
 }
 
-.user-dropdown i {
-  width: 16px;
-  text-align: center;
-}
-
-/* 기존 Link 스타일 재정의 */
-a {
-  color: #565656; /* 기본 링크 색상 변경 */
-  text-decoration: none;
-}
-
-/* 드롭다운 메뉴 링크 스타일 */
 .user-dropdown a {
-  color: #333;
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-dropdown a:hover {
-  color: #547291; /* 호버 시 색상 */
-}
-
-/* 아이콘 스타일 */
-.user-dropdown a i {
-  width: 16px;
-  text-align: center;
+  text-decoration: none;
+  color: inherit;
 }

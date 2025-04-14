@@ -15,7 +15,7 @@ const Index = () => {
         // ✅ Axios 요청 시 자동으로 JWT 헤더 추가
         axios.interceptors.request.use(
             (config) => {
-                const token = localStorage.getItem('jwtToken');
+                const token = sessionStorage.getItem('jwtToken');
                 if (token && !config.url.includes("/auth/login")) {
                     config.headers.Authorization = `Bearer ${token}`;
                   }
@@ -35,14 +35,12 @@ const Index = () => {
         e.preventDefault();
 
         axios.post('http://10.5.5.6/auth/login', login)
+
             .then((resp) => {
                 const token = resp.data;
                 const decodedToken = jwtDecode(token);
                 const per_function = decodedToken.per_function;
                 const per_secure = decodedToken.per_secure;
-
-                // ✅ 로컬스토리지에 저장
-                localStorage.setItem('jwtToken', token);
 
                 // ✅ 상태관리도 병행 (Zustand 등)
                 setAuth(token, login.id, per_function, per_secure);

@@ -1,89 +1,169 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import daxios from '../../axios/axiosConfig';
 import ProgressBar from './ProgressBar';
-import './insapage.module.css';
-import useAuthStore from '../../store/useAuthStore';
+import styles from './insapage.module.css';
 import useWorkStore from '../../store/useWorkStore';
 
 const InsaPage = () => {
-  const { token } = useAuthStore();
-  const { checkInTime, checkOutTime } = useWorkStore();
+  const {
+    checkInTime,
+    checkOutTime,
+    isCheckedOut,
+    currentActivity
+  } = useWorkStore();
 
-  const [summary, setSummary] = useState(null);
+  // 🔹 실시간 오늘 근무 시간
   const [todayWorkedTime, setTodayWorkedTime] = useState("00:00:00");
 
+  // 🔹 근무 요약 데이터 (백엔드에서 한 번에 받음)
+  const [summary, setSummary] = useState({
+    weeklyWorkedDays: 0,
+    weeklyWorkHours: 0,
+    averageCheckIn: "-",
+    averageCheckOut: "-",
+    consecutiveDays: 0,
+    totalAnnual: 0,   //여기가 연찬데;;;
+    usedAnnual: 0,
+    remainingAnnual: 0,
+    expiringThisYear: 0,
+    totalOvertime: 0
+  });
+
+  // 🔹 요약 정보 받아오기 221.150.27.169
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const response = await axios.get("http://10.10.55.66/insa/summary", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setSummary(response.data);
-      } catch (error) {
-        console.error("근태 요약 정보 불러오기 실패", error);
+        const res = await daxios.get("/insa/summary");
+        setSummary(res.data);
+      } catch (err) {
+        console.error("근무 요약 정보 로딩 실패", err);
       }
     };
 
     fetchSummary();
-  }, [token]);
+  }, []);
 
-  // 오늘 근무시간 실시간 계산
+  // 🔹 오늘 근무 시간 실시간 계산
   useEffect(() => {
     let interval;
-    if (checkInTime && !checkOutTime) {
+
+    if (checkInTime && !isCheckedOut) {
       interval = setInterval(() => {
         const now = new Date();
-        const diff = Math.floor((now - new Date(checkInTime)) / 1000);
-        const hours = String(Math.floor(diff / 3600)).padStart(2, '0');
-        const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
-        const seconds = String(diff % 60).padStart(2, '0');
+        const start = new Date(checkInTime);
+        const diff = Math.floor((now - start) / 1000);
+
+        const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
+        const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+        const seconds = String(diff % 60).padStart(2, "0");
         setTodayWorkedTime(`${hours}:${minutes}:${seconds}`);
       }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [checkInTime, checkOutTime]);
+    } else if (checkInTime && checkOutTime) {
+      const start = new Date(checkInTime);
+      const end = new Date(checkOutTime);
+      const diff = Math.floor((end - start) / 1000);
 
-  if (!summary) return <div>로딩 중...</div>;
+      const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+      const seconds = String(diff % 60).padStart(2, "0");
+      setTodayWorkedTime(`${hours}:${minutes}:${seconds}`);
+    }
+
+    return () => clearInterval(interval);
+  }, [checkInTime, checkOutTime, isCheckedOut]);
 
   const progressPercent = (summary.weeklyWorkHours / 52) * 100;
 
   return (
-    <div className="container">
-      <h2>📊 주간 근태 요약</h2>
-
-      <div className="summary-card">
-        <div><strong>출근한 날</strong> {summary.weeklyWorkedDays}일</div>
-        <div><strong>오늘 근무 시간</strong> {todayWorkedTime}</div>
-        <div><strong>현재 상태</strong> {checkOutTime ? '퇴근' : '업무 중'}</div>
-        <div><strong>52시간 중</strong></div>
-        <ProgressBar percent={progressPercent} />
-        <div className="time-compare">{summary.weeklyWorkHours}h / 52h</div>
+    <div className={styles.container}>
+      <div className={styles.pageHeader}>
+        <h2>📊 주간 근태 요약</h2>
+        <div className={styles.statusBadge}>
+          {currentActivity || "대기 중"}
+        </div>
       </div>
 
-      <div className="annual-summary">
-        <h3>🌿 연차 요약</h3>
-        <ul>
-          <li>총 연차: <strong>{summary.totalAnnual}일</strong></li>
-          <li>사용한 연차: <strong>{summary.usedAnnual}일</strong></li>
-          <li>남은 연차: <strong>{summary.remainingAnnual}일</strong></li>
-          <li>올해 소멸 예정: <strong>{summary.expiringThisYear}일</strong></li>
-        </ul>
+      <div className={styles.summaryGrid}>
+        <div className={styles.summaryCard}>
+          <div className={styles.cardHeader}>
+            <h3>📅 근무 현황</h3>
+          </div>
+          <div className={styles.cardBody}>
+            <div className={styles.statRow}>
+              <span>연속 근속일</span>
+              <span className={styles.statValue}>{summary.consecutiveDays}일</span>
+            </div>
+            <div className={styles.statRow}>
+              <span>오늘 근무 시간</span>
+              <span className={styles.statValue}>{todayWorkedTime}</span>
+            </div>
+            <div className={styles.statRow}>
+              <span>주 52시간</span>
+              <span className={styles.statValue}>
+                {summary.weeklyWorkHours}h / 52h
+              </span>
+            </div>
+            <ProgressBar percent={progressPercent} />
+          </div>
+        </div>
+
+        <div className={styles.summaryCard}>
+          <div className={styles.cardHeader}>
+            <h3>🌿 연차 현황</h3>
+          </div>
+          <div className={styles.cardBody}>
+            <div className={styles.leaveGrid}>
+              <div className={styles.leaveItem}>
+                <span className={styles.leaveLabel}>총 연차</span>
+                <span className={styles.leaveValue}>{summary.totalAnnual}일</span>
+              </div>
+              <div className={styles.leaveItem}>
+                <span className={styles.leaveLabel}>사용</span>
+                <span className={styles.leaveValue}>{summary.usedAnnual}일</span>
+              </div>
+              <div className={styles.leaveItem}>
+                <span className={styles.leaveLabel}>잔여</span>
+                <span className={styles.leaveValue}>{summary.remainingAnnual}일</span>
+              </div>
+              <div className={styles.leaveItem}>
+                <span className={styles.leaveLabel}>소멸 예정</span>
+                <span className={styles.leaveValue}>{summary.expiringThisYear}일</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="analysis-section">
-        <h3>📅 근무 패턴 분석 (이번 주)</h3>
-        <ul>
-          <li>🕘 평균 출근 시간: <strong>{summary.averageCheckIn}</strong></li>
-          <li>🕕 평균 퇴근 시간: <strong>{summary.averageCheckOut}</strong></li>
-          <li>📆 연속 근무 일수: <strong>{summary.consecutiveDays}일</strong></li>
-        </ul>
-      </div>
-
-      <div className="overtime-section">
-        <h3>⏱ 누적 초과근무 시간</h3>
-        <p><strong>{summary.totalOvertime}시간</strong> 초과 근무 중</p>
+      <div className={styles.detailsSection}>
+        <div className={styles.detailCard}>
+          <div className={styles.cardHeader}>
+            <h3>📈 근무 패턴 분석 (이번 주)</h3>
+          </div>
+          <div className={styles.cardBody}>
+            <div className={styles.patternGrid}>
+              <div className={styles.patternItem}>
+                <div className={styles.iconWrapper}>🕘</div>
+                <span className={styles.patternLabel}>평균 출근 시간</span>
+                <span className={styles.patternValue}>{summary.averageCheckIn}</span>
+              </div>
+              <div className={styles.patternItem}>
+                <div className={styles.iconWrapper}>🕕</div>
+                <span className={styles.patternLabel}>평균 퇴근 시간</span>
+                <span className={styles.patternValue}>{summary.averageCheckOut}</span>
+              </div>
+              <div className={styles.patternItem}>
+                <div className={styles.iconWrapper}>📆</div>
+                <span className={styles.patternLabel}>연속 근무 일수</span>
+                <span className={styles.patternValue}>{summary.consecutiveDays}일</span>
+              </div>
+              <div className={styles.patternItem}>
+                <div className={styles.iconWrapper}>⏱</div>
+                <span className={styles.patternLabel}>누적 초과근무</span>
+                <span className={styles.patternValue}>{summary.totalOvertime}시간</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

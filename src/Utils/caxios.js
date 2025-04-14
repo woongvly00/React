@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const caxios = axios.create({
-    baseURL:'http://10.10.54.192'
+    baseURL:'http://192.168.219.102'
 });
 
 caxios.interceptors.request.use(
@@ -12,7 +12,8 @@ caxios.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
-    }
+    },
+    (error) => Promise.reject(error)
 )
 
 export default caxios;
