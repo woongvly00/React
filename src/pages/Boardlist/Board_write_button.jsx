@@ -1,5 +1,5 @@
 import bstyle from './Board_write_button.module.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -7,10 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import draftToHtml from 'draftjs-to-html';
 import { convertToRaw } from 'draft-js';
-
+import { useLocation } from 'react-router-dom';
 
 const Board_write_button = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
@@ -21,6 +22,7 @@ const Board_write_button = () => {
 
     const [files, setFiles] = useState([]);
 
+
     const [defaultBoardData, setDefaultBoardData] = useState({
         post_writer: '1004', //  로그인 연동 
         parent_board: 0,
@@ -29,6 +31,37 @@ const Board_write_button = () => {
         post_per: 'a',
         post_tag: '자유 게시판'
     });
+
+    // const location = useLocation();
+    // const boardId = location.state?.boardId || 0;
+    //const boardName = location.state?.boardName || "알 수 없음";
+
+    // useEffect(() => {
+    //     console.log('boardId 확인:', boardId);  // boardId 값 확인
+    //     setDefaultBoardData((prev) => {
+    //         console.log('기존 데이터:', prev); // 이전 상태 확인
+    //         return {
+    //             ...prev,
+    //             parent_board: boardId,  // boardId가 정상적으로 들어가야 합니다
+    //         };
+    //     });
+    // }, [boardId]);
+
+    useEffect(() => {
+        console.log('최종 parent_board 값:', defaultBoardData.parent_board);  // 상태 값 확인
+    }, [defaultBoardData]); // defaultBoardData가 업데이트될 때마다 실행
+
+    useEffect(() => {
+        const boardId = location.state?.boardId || 0;
+        console.log("boardId 넘어오는지 확인:", location.state?.boardId); // boardId가 제대로 넘어오는지 확인
+        setDefaultBoardData((prev) => ({
+            ...prev,
+            parent_board: boardId,
+        }));  console.log("최종 parent_board 값:", defaultBoardData.parent_board); // 최종적으로 parent_board 값 확인
+    }, [location.state]);
+
+    
+
 
     const handleInput = (e) => {
         const { name, value } = e.target;
@@ -73,6 +106,8 @@ const Board_write_button = () => {
           alert('게시글 등록 실패');
         }
       };
+
+
     return (
         <div className={bstyle.SBoardContainer}>
 
@@ -83,7 +118,8 @@ const Board_write_button = () => {
                 <div>📄 게시판</div>
                 <div className={bstyle.approval}>
                     <div className={bstyle.container2}>
-                        <div className={bstyle.standardwrite10}>글쓰기</div>
+                        <div className={bstyle.standardwrite10}>
+                            글쓰기</div>
                         <div className={bstyle.signcancel}>
                             <button onClick={handleBoardwrite}>등록</button>
                             <button onClick={() => navigate(-1)}>취소</button>

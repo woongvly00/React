@@ -58,6 +58,7 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
           <Route path='insa/attend' element={<InsaPage/>}></Route>
           <Route path='insa/record' element={<Annaul/>}></Route>
           
+          <Route path='board/:boardId' element={<Board_business />} />
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />
           <Route path='write_button' element={<Board_write_button />} />
           <Route path='standard' element={<Boardlist />} />
