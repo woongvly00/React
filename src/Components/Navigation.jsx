@@ -56,7 +56,7 @@ const Navigation = () => {
         </div>
         <div className="nav-item" onClick={openMessenger}>
           <i className="fa-solid fa-4x fa-comments"></i>
-          <span>메신저</span>
+          <span translate='no'>메신저</span>
         </div>
         <div className="nav-item" onClick={toReserve}>
         <i className="fa-solid fa-4x fa-clock"  style={{ color: "#1a3c6c" }}/>
