@@ -49,8 +49,9 @@
 
 input[type="text"],
 input[type="date"],
-select,
-textarea {
+select
+/* textarea  */
+{
   width: 100%;
   margin-top: 6px;
   margin-bottom: 14px;
