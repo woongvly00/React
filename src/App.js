@@ -34,11 +34,11 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Index />} />
 
-        {/* <Route element={<RouteFilter />}> */}
+        <Route element={<RouteFilter />}>
           <Route path='/mainpage/*' element={<Mainpage />} />
           <Route path='/messenger/*' element={<MessengerPopupContainer />} />
           <Route path='/home/*' element={<Header />} />
-        {/* </Route> */}
+        </Route>
       </Routes>
     </div>
   );

@@ -7,33 +7,39 @@
   flex-direction: column;
 }
 
-.loaderContainer {
+.loader-container {
+  position: fixed; /* 스크롤과 무관하게 화면에 고정 */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5faff;
-  font-family: 'Noto Sans KR', sans-serif;
-  color: #1a3c6c;
+  justify-content: center; /* 수직 중앙 정렬 */
+  align-items: center;     /* 수평 중앙 정렬 */
+
+  background-color: rgba(255, 255, 255, 0.8); /* 선택 사항: 반투명 배경 */
+  z-index: 9999;
 }
 
 .spinner {
-  width: 48px;
-  height: 48px;
-  border: 5px solid #cfe3ff;
-  border-top: 5px solid #3a78c2;
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ccc;
+  border-top: 5px solid #333;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 16px;
 }
 
 .message {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  color: #333;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
