@@ -9,7 +9,7 @@ function ChattingRoom({openChat}) {
    
 
     const ChatRooms = (userId) => {
-         axios.get("http://10.5.5.2/Employee/selectMyId",{
+         axios.get("http://10.5.5.6/Employee/selectMyId",{
             params:{
                 userId:userId
             }
@@ -18,7 +18,7 @@ function ChattingRoom({openChat}) {
             const myId = resp.data;
             setMyId(resp.data);
 
-            axios.get("http://10.5.5.2/Employee/selectRoom",{
+            axios.get("http://10.5.5.6/Employee/selectRoom",{
                 params:{
                     myId:myId
                 }

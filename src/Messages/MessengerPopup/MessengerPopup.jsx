@@ -27,8 +27,8 @@ function MessengerPopup({ onClose }) {
     const userId = sessionStorage.getItem("userId");
 
     let mine = null;
-
-    axios.get("http://10.5.5.2/Employee/SelectMine", {
+    
+    axios.get("http://10.5.5.6/Employee/SelectMine", {
       params: {
         userId: userId
       }
@@ -50,7 +50,7 @@ function MessengerPopup({ onClose }) {
   const openChatWindow = (target, me, name) => {
 
 
-    axios.get("http://10.5.5.2/Employee/checkRoomExist", {
+    axios.get("http://10.5.5.6/Employee/checkRoomExist", {
       params: {
         targetname: target,
         myname: me
@@ -61,7 +61,7 @@ function MessengerPopup({ onClose }) {
 
       if (exist === false) {
 
-        axios.post("http://10.5.5.2/Employee/madeChatRoom", {
+        axios.post("http://10.5.5.6/Employee/madeChatRoom", {
           targetname: target,
           myname: me
         }).then((resp) => {
@@ -70,7 +70,7 @@ function MessengerPopup({ onClose }) {
           navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}&seq=${seq}`);
         });
       } else {
-        axios.get("http://10.5.5.2/Employee/checkRoomSeqExist", {
+        axios.get("http://10.5.5.6/Employee/checkRoomSeqExist", {
           params: {
             targetId: target,
             myId: me
@@ -128,11 +128,12 @@ function MessengerPopup({ onClose }) {
 
   useEffect(() => {
     if (showPopup) {
-      axios.get("http://10.5.5.2/Employee/SelectEmp")
+      axios.get("http://10.5.5.6/Employee/SelectEmp")
         .then((resp) => {
-         
+          console.log(selected)
+          console.log(myInfo.emp_code_id)
+          
           const filtered = resp.data.filter(emp => emp.emp_code_id !== myInfo.emp_code_id);
-          console.log(filtered);
           setEmployees(filtered);
 
         })
@@ -157,7 +158,16 @@ function MessengerPopup({ onClose }) {
       return;
     }
 
-    axios.post("http://10.5.5.2/Employee/madeGroupChat",{
+    // axios.get("http://10.5.5.2/Employee/existGroupRoom",{
+    //   params:{
+    //     selected:selected,
+    //     myId:myInfo.emp_code_id
+    //   }
+    // }).then((resp)=>{
+
+    // })
+
+    axios.post("http://10.5.5.6/Employee/madeGroupChat",{
      myId:myInfo.emp_code_id,
      selected: selected
     }).then((resp)=>{
@@ -171,7 +181,9 @@ function MessengerPopup({ onClose }) {
       setCurrentChat(selectedNames);
 
       navigate(`/messenger/chatting?chat=${selectedNames}&from=${myInfo.emp_code_id}&seq=${seq}`);
+      setSelected([]);
       setShowPopup(false);
+
 
     })
 

@@ -26,7 +26,9 @@ const Sidebar = () => {
   const [todayAttendanceId, setTodayAttendanceId] = useState(null);
   const [todayWorkedTime, setTodayWorkedTime] = useState("00:00:00");
 
-  // ✅ 출근/퇴근 상태 복원
+
+  // ✅ 출근 시간 + attendance_id 받아오기qwe
+
   useEffect(() => {
     const fetchCheckInData = async () => {
       try {

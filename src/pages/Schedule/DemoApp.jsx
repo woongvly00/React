@@ -34,7 +34,6 @@ const DemoApp = () => {
       const info = resp.data;
       console.log(info);
       setUserInfo(info);
-
       
       setEventInput((prev) => ({
         ...prev,
@@ -307,7 +306,6 @@ const DemoApp = () => {
   return (
     <div className={calenderStyle['demo-app']}>
       <FullCalendar
-        className={calenderStyle["my-calendar"]}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
         locales={[koLocale]}

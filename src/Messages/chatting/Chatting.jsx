@@ -13,19 +13,22 @@ function Chatting() {
     const [messages, setMessages] = useState([]); //메시지 저장
     const [isLoaded, setIsLoaded] = useState(false);
     const [empMap, setEmpMap] = useState({});
+    const [showPopup, setShowPopup] = useState(false);
+    const [employees, setEmployees] = useState([]); // 초대 가능한 직원 목록
+    const [selected, setSelected] = useState([]);   // 선택된 직원들
+    const [myInfo,setMyInfo] = useState(null);
+
 
     const contentRef = useRef(null);
     const location = useLocation();
-    const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
     const targetName = params.get("chat");//대화상대
-    const targetId = params.get("to"); //대화상대 id
     const myId = Number(params.get("from")); //내 id
     const seq = Number(params.get("seq")); //방 번호
-    
+
    
     useEffect(()=>{
-        axios.get("http://10.5.5.2/Employee/SelectEmp")
+        axios.get("http://10.5.5.6/Employee/SelectEmp")
         .then(resp=>{
             const empObj = {};
             resp.data.forEach(emp =>{
@@ -35,19 +38,22 @@ function Chatting() {
         })
     },[]);
 
+    useEffect(() => {
+        const userId = sessionStorage.getItem("userId");
+        let mine = null;
 
-    useEffect(()=>{
-        axios.post("http://10.5.5.2/Employee/readAllMessages",{
-            empId:myId,
-            groupId: seq
-        }).then(()=>{
-            console.log("읽음")
+          axios.get("http://10.5.5.6/Employee/SelectMine",{
+            params: {
+                userId: userId
+            }
+          }).then((userIdResp)=>{
+              mine = userIdResp.data;
+              setMyInfo(mine);
         })
-    })
-
+    },[]);
 
     const showMessages = () => {
-        axios.get("http://10.5.5.2/Employee/showMessages", {
+        axios.get("http://10.5.5.6/Employee/showMessages", {
             params: {
                 seq: seq
             }
@@ -71,8 +77,6 @@ function Chatting() {
 
 
     useEffect(() => {
-
-
         if(!isLoaded) return;
 
         stompClient.onConnect = () => {
@@ -81,20 +85,13 @@ function Chatting() {
             console.log("WebSocket 연결 성공");
 
             stompClient.subscribe(`/topic/messages/${seq}`, (msg) => {
+                const msg_id = JSON.parse(msg.body).msg_id;
                 const receivedMessage = JSON.parse(msg.body);
                 const isMine = receivedMessage.msg_emp_id === myId;
                 const emp_name = empMap[receivedMessage.msg_emp_id];
                 setMessages((prev) => [...prev, { ...receivedMessage, isMine, emp_name }]);
-                
-                if(!isMine) {
-                    axios.post("http://10.5.5.2/Employee/readMessage",{
-                        seq: seq,
-                        empId: myId
-                    }).then(()=>{
-                        console.log("바로 읽음")
-                    })
-                }
-                
+            
+                showMessages();
             });
         };
 
@@ -103,7 +100,7 @@ function Chatting() {
         return () => {
             stompClient.deactivate(); // 컴포넌트가 사라질 때 연결 해제
         };
-    }, [seq,isLoaded]);
+    }, [seq,isLoaded,empMap]);
 
     const sendMessage = () => {
         if (message.trim() !== "") {
@@ -123,6 +120,56 @@ function Chatting() {
             setMessage(""); // 입력 필드 초기화
         }
     };
+
+    const togglePopup = () => {
+        if(showPopup){
+            setSelected([]);
+        }
+        setShowPopup(!showPopup);
+    }
+
+    useEffect(() => {
+        if (showPopup) {
+          axios.get("http://10.5.5.6/Employee/SelectEmp")
+            .then((resp) => {
+              console.log(resp.data);
+              const nameList = targetName ? targetName.split(',').map(name => name.trim()) : [];
+              if (myInfo?.emp_name) {
+                nameList.push(myInfo.emp_name);
+            }
+              const filtered = resp.data.filter(emp => !nameList.includes(emp.emp_name));
+              console.log(filtered);
+              setEmployees(filtered);
+    
+            })
+        }
+      }, [showPopup])
+
+      const handleCheckbox = (e) =>{
+        const id = Number(e.target.value);
+        if (e.target.checked) {
+          setSelected(prev => [...prev, id]);
+        
+        } else {
+          setSelected(prev => prev.filter(item => item !== id));
+         
+        }
+
+    }
+
+      const handleInvite = () =>{
+        if(selected.length === 0){
+          alert("초대할 대상을 선택하세요.")
+          return;
+        }
+
+       
+        
+    }
+
+
+
+    
 
 
     //엔터누르면 전송
@@ -152,10 +199,7 @@ function Chatting() {
                         <div className={msg.isMine ? msgstyle.myMessage : msgstyle.otherMessage}>
                             {!msg.isMine && <div className={msgstyle.sender || empMap[msg.msg_emp_id]}>{msg.emp_name}</div>}
                             <div>{msg.msg_content}</div>
-                            <div className={msgstyle.time}>{dayjs(msg.send_date).format("A hh:mm")}</div>
-                                {/* 읽음표시 */}
-                                <div className={msgstyle.unreadCount}>{msg.unread_count}</div>
-                            
+                            <div className={msgstyle.time}>{dayjs(msg.send_date).format("A hh:mm")}</div>                            
                         </div>
                     </div>
                 ))}
@@ -165,8 +209,39 @@ function Chatting() {
                     onKeyDown={handleKeyDown}></textarea>
             </div>
             <div className={msgstyle.service}>
-                <button className={msgstyle.send} onClick={sendMessage}>전송</button>
+                <button className={msgstyle.add} title="대화상대 초대하기" onClick={togglePopup}>┼</button>
+                <button className={msgstyle.send} title="보내기" onClick={sendMessage}>전송</button>
             </div>
+
+            {showPopup && (
+                    <div className={msgstyle.popupOverlay}>
+                      <div className={msgstyle.popup}>
+                        <h3>대화 상대 초대</h3>
+                        <p>초대할 상대를 선택하세요</p>
+            
+                        <div className={msgstyle.checkboxList}>
+                          {employees.map(emp => (
+                            <label key={emp.emp_code_id} className={msgstyle["checkbox-wrapper"]}>
+                              <input
+                                type="checkbox"
+                                value={emp.emp_code_id}
+                                checked={selected.includes(emp.emp_code_id)}
+                                onChange={handleCheckbox}
+                              />
+                              <span className={msgstyle["custom-checkbox"]}></span>
+                              <span>{emp.emp_name}</span>
+                            </label>
+                          ))}
+                        </div>
+            
+                        <div className={msgstyle.buttonGroup}>
+                          <button className={msgstyle.inviteButton} onClick={handleInvite}>초대</button> 
+                          <button className={msgstyle.closeButton} onClick={togglePopup}>닫기</button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+            
           
         </div>
     )
