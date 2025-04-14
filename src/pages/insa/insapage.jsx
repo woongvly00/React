@@ -12,46 +12,51 @@ const InsaPage = () => {
     currentActivity
   } = useWorkStore();
 
-  // 🔹 실시간 오늘 근무 시간
   const [todayWorkedTime, setTodayWorkedTime] = useState("00:00:00");
 
-  // 🔹 근무 요약 데이터 (백엔드에서 한 번에 받음)
   const [summary, setSummary] = useState({
     weeklyWorkedDays: 0,
     weeklyWorkHours: 0,
     averageCheckIn: "-",
     averageCheckOut: "-",
     consecutiveDays: 0,
-    totalAnnual: 0,   //여기가 연찬데;;;
+    totalAnnual: 0,
     usedAnnual: 0,
     remainingAnnual: 0,
     expiringThisYear: 0,
     totalOvertime: 0
   });
 
-  // 🔹 요약 정보 받아오기 221.150.27.169
+  // ✅ 근무 요약 데이터 받아오기 (토큰 수동 포함)
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await daxios.get("/insa/summary");
+        const token = sessionStorage.getItem('jwtToken');
+        console.log("📦 토큰 확인 (insaPage):", token);
+
+        const res = await daxios.get("http://10.10.55.66/insa/summary", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
         setSummary(res.data);
       } catch (err) {
-        console.error("근무 요약 정보 로딩 실패", err);
+        console.error("❌ 근무 요약 정보 로딩 실패", err);
       }
     };
 
     fetchSummary();
   }, []);
 
-  // 🔹 오늘 근무 시간 실시간 계산
+  // ✅ 오늘 근무 시간 실시간 계산
   useEffect(() => {
     let interval;
 
     if (checkInTime && !isCheckedOut) {
       interval = setInterval(() => {
         const now = new Date();
-        const start = new Date(checkInTime);
-        const diff = Math.floor((now - start) / 1000);
+        const diff = Math.floor((now - new Date(checkInTime)) / 1000);
 
         const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
         const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
@@ -59,9 +64,7 @@ const InsaPage = () => {
         setTodayWorkedTime(`${hours}:${minutes}:${seconds}`);
       }, 1000);
     } else if (checkInTime && checkOutTime) {
-      const start = new Date(checkInTime);
-      const end = new Date(checkOutTime);
-      const diff = Math.floor((end - start) / 1000);
+      const diff = Math.floor((new Date(checkOutTime) - new Date(checkInTime)) / 1000);
 
       const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
       const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
