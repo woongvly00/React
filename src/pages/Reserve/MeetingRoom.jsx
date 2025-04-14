@@ -36,18 +36,21 @@ const MeetingRoom = ()=> {
 
         setReservations([]); 
         caxios.get(`/reserve/reservations`).then((resp) => {
+            console.log("🔥 서버에서 받아온 예약 목록 원본:", resp.data);
+          
             const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
+          
             const formatResev = resp.data.map((resv) => {
               const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
               const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
+              const startDate = new Date(startStr);
+              const endDate = new Date(endStr);
           
-              return {
+               return {
                 id: resv.resv_id,
                 title: resv.resv_title,
                 start: startStr,
                 end: endStr,
-                startTime:resv.resv_stime,
-                endTime: resv.resv_eTime,
                 allDay: false,
                 extendedProps: {
                   emp_id: resv.resv_emp,

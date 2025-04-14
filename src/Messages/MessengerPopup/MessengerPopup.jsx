@@ -27,7 +27,7 @@ function MessengerPopup({ onClose }) {
     const userId = sessionStorage.getItem("userId");
 
     let mine = null;
-
+    
     axios.get("http://10.5.5.2/Employee/SelectMine", {
       params: {
         userId: userId
@@ -130,9 +130,10 @@ function MessengerPopup({ onClose }) {
     if (showPopup) {
       axios.get("http://10.5.5.2/Employee/SelectEmp")
         .then((resp) => {
-         
+          console.log(selected)
+          console.log(myInfo.emp_code_id)
+          
           const filtered = resp.data.filter(emp => emp.emp_code_id !== myInfo.emp_code_id);
-          console.log(filtered);
           setEmployees(filtered);
 
         })
@@ -156,6 +157,12 @@ function MessengerPopup({ onClose }) {
       alert("초대할 대상을 선택하세요.")
       return;
     }
+    if(selected.length === 1){
+      alert("2명 이상 초대가 가능합니다.")
+      return;
+    }
+
+
 
     axios.post("http://10.5.5.2/Employee/madeGroupChat",{
      myId:myInfo.emp_code_id,
@@ -171,7 +178,9 @@ function MessengerPopup({ onClose }) {
       setCurrentChat(selectedNames);
 
       navigate(`/messenger/chatting?chat=${selectedNames}&from=${myInfo.emp_code_id}&seq=${seq}`);
+      setSelected([]);
       setShowPopup(false);
+
 
     })
 

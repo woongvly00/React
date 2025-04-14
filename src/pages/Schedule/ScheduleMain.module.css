@@ -1,14 +1,34 @@
-.ScheContainer{
+.ScheContainer {
     display: flex;
-    flex-direction: row;
-    width:100%;
-}
-
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f9fbfc;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+  
+  .calender {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  
+  .calender h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #1a3c6c;
+    border-left: 4px solid #1a3c6c;
+    padding-left: 12px;
+    font-weight: bold;
+  }
+  
 .sideList{
     min-width:300px;
 }
 
-.calender{
-    min-width:1200px;
-    min-height:900px;
-}

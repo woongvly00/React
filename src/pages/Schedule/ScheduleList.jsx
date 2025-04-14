@@ -32,6 +32,10 @@ const ScheduleList = ({ closeModal }) => {
     
 
     const handleMyCal = () => {
+        if (!userInfo) {
+            alert("사용자 정보가 로딩되지 않았습니다."); // 또는 그냥 return
+            return;
+          }
         caxios.get(`/calendar/myCal/${userInfo.emp_code_id}`).then((resp) => {
             setMyCalendar(resp.data);
     })};
@@ -77,7 +81,7 @@ const ScheduleList = ({ closeModal }) => {
                                 })
                                 .map((calendar, index) => (
                                     <div className="form-check form-switch" key={calendar.c_id}>
-                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked/>
+                                        {/* <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked/> */}
                                         <label className="form-check-label" htmlFor="switchCheckChecked" style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
                                             <strong>{calendar.c_title}</strong>
                                         </label>

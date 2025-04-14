@@ -3,13 +3,12 @@
 }
 
 .head{
-
     height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    
+    cursor:pointer;
     background-color: rgb(136, 179, 207);
 }
 
@@ -82,11 +81,15 @@ textarea{
 
 .service{
     height: 44px;
-    
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
     padding-right: 10px;
+}
+
+.add{
+    border:none;
+    margin-left: 10px;
 }
 
 
@@ -113,6 +116,144 @@ textarea{
     font-weight: bold;
 }
 
-.unreadCount{
-    color: rgb(173, 173, 43);
-}
+
+
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .popup {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-width: 250px;
+  }
+  
+  .checkboxList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .checkboxList label {
+    display: block;
+  }
+  
+  
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  /* 숨겨진 체크박스 */
+  .checkbox-wrapper input[type="checkbox"] {
+    display: none;
+  }
+  
+  /* 체크박스 모양 */
+  .custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #888;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;      
+    display: inline-flex;    
+    align-items: center;     
+    justify-content: center; 
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + .custom-checkbox {
+    background-color: #66B2FF;
+    border-color: #66B2FF;
+  }
+  
+  .checkbox-wrapper input[type="checkbox"]:checked + .custom-checkbox::after {
+    content: "✓";
+    position: absolute;
+    background-color: #66B2FF;
+    border-radius: 50%;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .inviteButton {
+    background-color: #4CAF50; /* 초대 - 녹색 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  .inviteButton:hover {
+    background-color: #45a049;
+  }
+  
+  .closeButton {
+    background-color: #f44336; /* 닫기 - 빨간색 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  .closeButton:hover {
+    background-color: #d32f2f;
+  }
+
+  .headWrapper {
+    position: relative;
+  }
+  
+  .tooltip {
+    position: absolute;
+    top: 65px;
+    background: #fff;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    z-index: 100;
+    text-align: center;
+    min-width: 400px;
+    box-shadow: 0px 0px 8px rgba(0,0,0,0.2);
+  }

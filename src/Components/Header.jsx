@@ -38,8 +38,8 @@ const Header = () => {
     <header className="header">
       <div className="logo">🌐 GroupWare</div>
       <div className="header-buttons">
-        <button><i class="fa-regular fa-bell"></i></button>
-        <button><i class="fa-regular fa-comment"></i></button>
+        <button><i className="fa-regular fa-bell"></i></button>
+        <button><i className="fa-regular fa-comment"></i></button>
         <div className="user-menu-container" ref={userMenuRef}>
           <button className="user-icon-button" onClick={toggleUserMenu}>
             <i className="fa-solid fa-circle-user"></i>

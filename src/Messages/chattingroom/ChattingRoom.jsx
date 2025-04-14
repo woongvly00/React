@@ -23,7 +23,10 @@ function ChattingRoom({openChat}) {
                     myId:myId
                 }
             }).then((room)=>{
-                const sortedRooms = room.data.sort((a, b) =>
+                const uniqueRooms = Array.from(
+                    new Map(room.data.map(item => [item.MSG_GROUP_ID, item])).values()
+                );
+                const sortedRooms = uniqueRooms.sort((a, b) =>
                     new Date(b.LAST_SEND_DATE) - new Date(a.LAST_SEND_DATE)
                 );
                 setRoomEmployees(sortedRooms);
