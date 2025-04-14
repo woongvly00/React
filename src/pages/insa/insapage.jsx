@@ -22,14 +22,14 @@ const InsaPage = () => {
     averageCheckIn: "-",
     averageCheckOut: "-",
     consecutiveDays: 0,
-    totalAnnual: 0,
+    totalAnnual: 0,   //여기가 연찬데;;;
     usedAnnual: 0,
     remainingAnnual: 0,
     expiringThisYear: 0,
     totalOvertime: 0
   });
 
-  // 🔹 요약 정보 받아오기
+  // 🔹 요약 정보 받아오기 221.150.27.169
   useEffect(() => {
     const fetchSummary = async () => {
       try {
