@@ -5,6 +5,7 @@ import Vehicle from '../Reserve/Vehicle';
 import Equipment from '../Reserve/Equipment';
 import MyReservation from '../Reserve/MyReservation';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './fullcalendar.css';
 
 
 const ReserveMain = () => {

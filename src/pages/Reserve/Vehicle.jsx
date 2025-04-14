@@ -130,7 +130,7 @@ const Vehicle = ()=> {
             headerToolbar={{
                 left: '',
                 center: 'prev today next',
-                right: 'dayGridMonth,timeGridWeek'
+                right: ''
             }}
             
             selectable={true}

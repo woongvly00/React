@@ -1,3 +1,4 @@
+import './fullcalendar.css';
 import React, { useEffect,  useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -8,6 +9,7 @@ import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
 import ResvDetail from './ResvDetail';
 import koLocale from '@fullcalendar/core/locales/ko';
+
 
 
 
@@ -98,7 +100,7 @@ const MeetingRoom = ()=> {
                 
             </div>
             <div>
-            <table>
+            <table className={rStyle.infoTable}>
                 <thead>
                     <tr>
                     <th>수용인원</th>
@@ -137,7 +139,7 @@ const MeetingRoom = ()=> {
             headerToolbar={{
                 left: '',
                 center: 'prev today next',
-                right: 'dayGridMonth,timeGridWeek'
+                right: ''
             }}
             
             selectable={true}
