@@ -1,6 +1,10 @@
 import React from 'react';
 import style from './ReserveMain.module.css';
-import MeetingRoom from '../Reserve/MeetingRoom'
+import MeetingRoom from '../Reserve/MeetingRoom';
+import Vehicle from '../Reserve/Vehicle';
+import Equipment from '../Reserve/Equipment';
+import MyReservation from '../Reserve/MyReservation';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 const ReserveMain = () => {
@@ -12,7 +16,13 @@ const ReserveMain = () => {
       <div className={style.subcontainer}>
         <h2>예약하기</h2>
         <div className={style.reservArea}>
-          <MeetingRoom/>
+        <Routes>
+        <Route path='/' element={<MeetingRoom />} />
+        <Route path='110' element={<MeetingRoom />} />
+        <Route path='120' element={<Vehicle />} />
+        <Route path='130' element={<Equipment />} />
+        <Route path='myReservation' element={<MyReservation />} />
+        </Routes>
         </div>
       </div>
     </div>

@@ -6,13 +6,12 @@ import interactionPlugin from '@fullcalendar/interaction'
 import caxios from '../../Utils/caxios';
 import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
-import ResvDetail from './ResvDetail';
 import koLocale from '@fullcalendar/core/locales/ko';
 
 
 
 
-const MeetingRoom = ()=> {
+const Equipment = ()=> {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
@@ -36,18 +35,21 @@ const MeetingRoom = ()=> {
 
         setReservations([]); 
         caxios.get(`/reserve/reservations`).then((resp) => {
+            console.log("🔥 서버에서 받아온 예약 목록 원본:", resp.data);
+          
             const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
+          
             const formatResev = resp.data.map((resv) => {
               const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
               const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
+              const startDate = new Date(startStr);
+              const endDate = new Date(endStr);
           
-              return {
+               return {
                 id: resv.resv_id,
                 title: resv.resv_title,
                 start: startStr,
                 end: endStr,
-                startTime:resv.resv_stime,
-                endTime: resv.resv_eTime,
                 allDay: false,
                 extendedProps: {
                   emp_id: resv.resv_emp,
@@ -63,25 +65,19 @@ const MeetingRoom = ()=> {
       
     }, [])
     
-
-    const [isDetailOpen, setIsDetailOpen] = useState(false);
-    const [ selectedResv , setSeletedResv] = useState(null); 
-    const selectResv = (clickInfo) => {
-        setSeletedResv(clickInfo.event);
-        setIsDetailOpen(true);
-    };
+    
 
     return (
         <div>
         <div className={rStyle.reservTable}>
             <div>
-                회의실 예약 현황 조회
+                비품 예약 현황 조회
                 <br></br>
                 <select onChange={(e) => setTargetResc(e.target.value)}>
                     <option value="">자원선택</option>
                     {resouceList
                     .filter((resource)=>{
-                        if(resource.resc_type_id != 110){
+                        if(resource.resc_type_id != 130){
                             return resource.resc_type;
                         }
                         return true;
@@ -106,16 +102,16 @@ const MeetingRoom = ()=> {
                 </thead>
                 <tbody>
                     {
-                        resouceList
-                        .filter((resource) => resource.resc_id == targetResc)
-                        .map((resource, index) => (
-                            <tr key={index}>
-                                <td>{resource.resc_capacity}</td>
-                                <td>{resource.resc_location}</td>
-                                <td>{resource.resc_status}</td>
-                                <td>{resource.resc_description}</td>
-                            </tr>
-                        ))
+                         resouceList
+                         .filter((resource) => resource.resc_id == targetResc)
+                         .map((resource, index) => (
+                           <tr key={index}>
+                             <td>{resource.resc_capacity}</td>
+                             <td>{resource.resc_location}</td>
+                             <td>{resource.resc_status}</td>
+                             <td>{resource.resc_description}</td>
+                           </tr>
+                         ))
                     }
                 </tbody>
                 </table>
@@ -140,18 +136,18 @@ const MeetingRoom = ()=> {
             selectable={true}
             selectMirror={true}
             select={handleDateSelect}
+            eventDidMount={(info) => {
+                console.log('캘린더에 표시될 이벤트:', info.event.start, info.event.title);
+              }}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
-            eventClick={selectResv}
             />
             </div>
         </div>
         {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
-
-        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} />)}
         
         </div>
     )
 };
 
 
-export default MeetingRoom;
+export default Equipment;

@@ -21,7 +21,12 @@ const App = () => {
   }, []);
 
   if (!isInitialized) {
-    return <div>로딩 중...</div>;
+    return (
+      <div className="loader-container">
+        <div className="spinner"></div>
+        <p className="message">잠시만 기다려주세요...</p>
+      </div>
+    );
   }
 
   return (

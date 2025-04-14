@@ -54,3 +54,65 @@
     justify-content:right;
     align-items: flex-end;
 }
+
+.form-select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccd8e3;
+  border-radius: 6px;
+  background-color: #f5faff;
+  width: 100%;
+  margin: 6px 0 12px 0;
+}
+
+.form-input {
+  padding: 8px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px solid #ccd8e3;
+  border-radius: 6px;
+  background-color: #f5faff;
+  margin: 6px 0 12px 0;
+}
+
+.form-button {
+  padding: 10px 16px;
+  background-color: #a8cfff;
+  color: #1a3c6c;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.form-button:hover {
+  background-color: #91bff2;
+}
+
+.color-section {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.color-label {
+  font-size: 14px;
+  color: #1a3c6c;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.color-options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* 색상 원형 스타일 */
+.color-circle {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition: border 0.2s ease;
+}
