@@ -1,24 +1,47 @@
 .navigation {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    padding: 20px 0;
-    background-color: #f1f5f9;
-    border-radius: 12px;
-  }
-  
-  .nav-btn {
-    padding: 10px 16px;
-    background-color: white;
-    border: 1px solid #aaa;
-    border-radius: 10px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .nav-btn:hover {
-    background-color: #e1ecf4;
-  }
-  
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+  height: 150px;
+  background-color: #f1f6fb;
+  border-bottom: 1px solid #dce9f5;
+  padding: 0 24px;
+  font-family: 'Noto Sans KR', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  gap: 100px;  
+  flex-wrap: nowrap;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 11px;
+  color: #1a3c6c;
+  gap: 4px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #d8e9ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-circle i {
+  font-size: 16px;
+  color: #1a3c6c;
+}
+
+.nav-item:hover {
+  color: #3a78c2;
+}
+
+.nav-item:hover .icon-circle {
+  background-color: #bcd6f6;
+}

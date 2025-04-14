@@ -1,0 +1,61 @@
+.reserve-page {
+    padding: 24px;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #1a3c6c;
+  }
+  
+  .category-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .category-tabs button {
+    background-color: #e2f0ff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #1a3c6c;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  
+  .category-tabs button:hover {
+    background-color: #d0e7fc;
+  }
+  
+  .category-tabs .active {
+    background-color: #a8cfff;
+    font-weight: bold;
+  }
+  
+  .card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .resv-card {
+    background-color: #f5faff;
+    border: 1px solid #ccd8e3;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .resv-card h3 {
+    margin: 0 0 8px 0;
+  }
+  
+  .resv-card .category {
+    font-size: 13px;
+    color: #5c789f;
+  }
+  
+  .resv-card .status {
+    font-size: 13px;
+    font-weight: 500;
+    color: #3a78c2;
+  }
+  

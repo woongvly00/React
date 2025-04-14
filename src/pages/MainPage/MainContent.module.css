@@ -1,4 +1,4 @@
-.maincontainer{
+/* .maincontainer{
   width:100%;
   min-height:900px;
   border:1px solid black;
@@ -26,6 +26,52 @@
   align-items: center;
 }
 
-.icons:hover {
-  
+ */
+
+ .maincontainer {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Noto Sans KR', sans-serif;
 }
+
+/* 사이드바 (고정 아님, 자연스럽게 좌측 정렬) */
+.mainSidebar {
+  background-color: #1a3c6c;
+  width: 64px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  gap: 24px;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.08);
+}
+
+
+/* 콘텐츠 영역은 flex로 옆에 배치되며 나머지 영역 차지 */
+.mainContents {
+  flex: 1;
+  padding: 24px;
+  background-color: #f8fbfe;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* 아이콘 스타일 */
+.mainSidebar i {
+  color: #1a3c6c;
+  transition: color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.mainSidebar i:hover {
+  color: #3a78c2;
+  transform: scale(1.1);
+}
+
+
+.icons {
+  margin-bottom: 16px;
+}
+
