@@ -400,6 +400,7 @@ const DemoApp = () => {
              일정 내용
              <textarea
              name="content"
+             calssName={calenderStyle.schetextarea}
              value={eventInput.content}
              onChange={handleInput}
              placeholder="내용 입력"
@@ -460,7 +461,7 @@ const DemoApp = () => {
         </div>
         <div>
           <strong>내용:</strong>
-          <textarea name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" />
+          <textarea calssName={calenderStyle.schetextarea}name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" />
         </div>
       </>
     ) : (

@@ -59,10 +59,7 @@
   color: #1a3c6c;
 }
 
-.color-section {
-  margin-top: 16px;
-  text-align: center;
-}
+
 
 .color-label {
   font-size: 14px;
@@ -93,4 +90,58 @@
 
 .form-radio-input {
   display: none;
+}
+
+.time-row {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.time-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.time-item label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #1a3c6c;
+  font-weight: 500;
+}
+
+.target-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e6f0ff;
+  border-radius: 16px;
+  padding: 4px 8px;
+  margin: 4px;
+  font-size: 13px;
+  color: #1a3c6c;
+}
+
+.target-none {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 16px;
+  padding: 4px 8px;
+  margin: 4px;
+  font-size: 13px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #1a3c6c;
+  font-size: 14px;
+  margin-left: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.remove-btn:hover {
+  color: #ff4d4f;
 }
