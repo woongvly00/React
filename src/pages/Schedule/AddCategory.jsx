@@ -33,12 +33,14 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
   const handleCalInput = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'color') {
-      setSelectedColor(value);
-    }
-    setCalender((prev) => ({ ...prev, [name]: value }));
-    setCalender((prev) => ({...prev, dept_code : userInfo.emp_dept_id, emp_id : userInfo.emp_code_id}));
+    setCalender(prev => ({
+      ...prev,
+      [name]: value,
+      emp_id: userInfo?.emp_code_id || '',
+      dept_code: userInfo?.emp_dept_id || ''
+    }));
   };
+
   const colors = ['#ee5074', '#fa7227', '#ac725e', '#f7d915', '#a3b90a', '#57b92a', '#4fced8', '#5990d5', '#777dbf', '#844285'];
 
 
@@ -59,7 +61,8 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
     }
 
 
-    caxios.post("/calendar", calender).then((resp)=> {
+    caxios.post("/calendar", calender)
+    .then((resp)=> {
       const c_id = resp.data.c_id;
       console.log(c_id);
       const shareData = selectedTargets.map(t => ({
@@ -69,6 +72,10 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
       }));
 
       return caxios.post("/calendar/calendarShare", shareData);
+    })
+    .then(() => {
+      alert("캘린더가 성공적으로 추가되었습니다.");
+      closeModal(); 
     })
     .catch((error) => {
         if (error.response?.status === 404 || error.response?.status === 500) {
@@ -88,7 +95,6 @@ const AddCategory = ({ closeModal, selectedInfo }) => {
       public_code: '10'
     });
 
-    setIsModalOpen(false);
     };
 
     const [selectedColor, setSelectedColor] = useState('');

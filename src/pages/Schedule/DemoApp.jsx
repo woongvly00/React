@@ -10,7 +10,7 @@ import useScheduleStore from '../../store/useScheduleStore';
 import koLocale from '@fullcalendar/core/locales/ko';
 
 
-const DemoApp = () => {
+const DemoApp = ({ onRefresh, reloadKey }) => {
   const { events, addEvent, setEvents, addEvents, removeEvent } = useScheduleStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
@@ -46,7 +46,7 @@ const DemoApp = () => {
     });
 
     
-}, [])
+}, [reloadKey])
 
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const DemoApp = () => {
       console.error("일정 정보 불러오기 실패", error);
     })
 
-  }, [userInfo.emp_code_id])
+  }, [userInfo.emp_code_id, reloadKey])
 
 
 
@@ -95,7 +95,7 @@ const DemoApp = () => {
       console.error("일정 정보 불러오기 실패", error);
     })
     
-  }, [userInfo.emp_code_id])
+  }, [userInfo.emp_code_id, reloadKey])
 
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const DemoApp = () => {
     console.error("일정 정보 불러오기 실패", error);
   })
   
-}, [userInfo.emp_code_id])
+}, [userInfo.emp_code_id, reloadKey])
 
 
 
@@ -173,7 +173,11 @@ const DemoApp = () => {
     calendarApi.addEvent(newEvent);
 
 
-    caxios.post("/schedule", eventInput).catch((error) => {
+    caxios.post("/schedule", eventInput)
+    .then(() => {
+      if (onRefresh) onRefresh();
+    })
+    .catch((error) => {
       if (error.response?.status === 404 || 500) {
         alert("등록에 실패했습니다.");
       }
@@ -313,7 +317,7 @@ const DemoApp = () => {
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'dayGridMonth,dayGridWeek'
         }}
         editable={true}
         selectable={true}
