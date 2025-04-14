@@ -10,7 +10,7 @@ const ScheduleMain = () => {
   return (
     <div className={style.ScheContainer}>
       <div className={style.calender}>
-      <h2>일정</h2>
+      <h2>캘린더</h2>
         <DemoApp key={reloadKey} onRefresh={() => setReloadKey(prev => prev + 1)}  reloadKey={reloadKey} />
     </div>
     </div>

@@ -81,7 +81,7 @@ const ScheduleList = ({ closeModal }) => {
                                 })
                                 .map((calendar, index) => (
                                     <div className="form-check form-switch" key={calendar.c_id}>
-                                        <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked/>
+                                        {/* <input className="form-check-input" type="checkbox" role="switch" id="switchCheckChecked" defaultChecked/> */}
                                         <label className="form-check-label" htmlFor="switchCheckChecked" style={{ display: 'inline-block', cursor: 'pointer', backgroundColor: `${calendar.color}` }}>
                                             <strong>{calendar.c_title}</strong>
                                         </label>

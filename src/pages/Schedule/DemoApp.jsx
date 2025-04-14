@@ -478,7 +478,7 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
     )}
 
     <div className={calenderStyle.detailButtons}>
-      {isEditing ? (
+      {userInfo.emp_code_id === selectedEvent.emp_id && (isEditing ? (
         <>
           <button onClick={handleSave}>저장</button>
           <button onClick={() => setIsEditing(false)}>취소</button>
@@ -488,7 +488,7 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
           <button onClick={handleUpdate}>수정</button>
           <button onClick={handleDelete}>삭제</button>
         </>
-      )}
+      ))}
     </div>
   </div>
 </div>
