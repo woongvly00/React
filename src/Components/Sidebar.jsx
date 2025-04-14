@@ -6,7 +6,7 @@ import useAuthStore from '../store/useAuthStore';
 import useWorkStore from '../store/useWorkStore';
 
 const Sidebar = () => {
-  const { token, userId } = useAuthStore();
+  const { token } = useAuthStore();
   const {
     checkInTime,
     checkOutTime,
@@ -19,20 +19,25 @@ const Sidebar = () => {
     setCurrentActivity
   } = useWorkStore();
 
+  const [todayAttendanceId, setTodayAttendanceId] = useState(null);
   const [currentActivity] = useState("");
   const [outingTime, setOutingTime] = useState("");
   const [workTime, setWorkTime] = useState("");
 
+  // ✅ 출근 시간 + attendance_id 받아오기
   useEffect(() => {
-    const fetchCheckInTime = async () => {
+    const fetchCheckInData = async () => {
       try {
-        const response = await daxios.get("http://10.10.55.69/work/checkInTime", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
+        const res1 = await daxios.get("http://10.10.55.66/work/checkInTime", {
+          headers: { Authorization: `Bearer ${token}` }
         });
-        const time = response.data;
-        
+        const res2 = await daxios.get("http://10.10.55.66/work/attendanceId", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const time = res1.data;
+        const id = res2.data;
+
         if (time) {
           setCheckInTime(new Date(time));
           setIsCheckedIn(true);
@@ -40,120 +45,85 @@ const Sidebar = () => {
           setCheckInTime(null);
           setIsCheckedIn(false);
         }
+
+        if (id) {
+          setTodayAttendanceId(id);
+        }
       } catch (error) {
-        setCheckInTime(null);
-        setIsCheckedIn(false); // 서버 실패 시 확실하게 리셋
-        console.error("출근 시간 불러오기 실패", error);
+        console.error("출근 정보 가져오기 실패", error);
+        setIsCheckedIn(false);
+        setTodayAttendanceId(null);
       }
     };
-  
-    fetchCheckInTime();
-  }, [setCheckInTime, setIsCheckedIn, token]);
-  
 
-  const handleCheckIn = async () => {
+    fetchCheckInData();
+  }, [setCheckInTime, setIsCheckedIn, token]);
+
+  const handleCheckIn = async () => { // 출근근
     const currentTime = new Date().toISOString();
-  
+
     try {
-      const response = // ✅ 백엔드가 JWT에서 userId를 추출하므로 body에 아무것도 안 넣어도 됨
-      await daxios.post(
-        "http://10.10.55.69/work/checkIn",
-        {}, // 데이터 없음
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-        } );
-  
+      const response = await daxios.post("http://10.10.55.66/work/checkIn", {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
       console.log('✅ 출근 완료:', response.data);
       setIsCheckedIn(true);
       setCheckInTime(new Date(currentTime));
       setCurrentActivity("출근");
     } catch (error) {
-      console.error('❌ 출근 시간 전송 오류', error.response?.data || error.message);
+      console.error('❌ 출근 실패', error);
     }
   };
-  
 
-  const handleCheckOut = async () => {
+  const handleCheckOut = async () => {  // 퇴근근
     const currentTime = new Date().toISOString();
 
     try {
-      const response = await daxios.post(
-        "http://10.10.55.69/work/checkOut",
-        {
-          checkOutTime: currentTime
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+      const response = await daxios.post("http://10.10.55.66/work/checkOut", {
+        checkOutTime: currentTime
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         }
-      );
+      });
 
-      console.log('서버 응답:', response.data);
+      console.log('퇴근 완료:', response.data);
       setIsCheckedOut(true);
       setIsCheckedIn(false);
       setCheckOutTime(new Date(currentTime));
       setCurrentActivity("퇴근");
     } catch (error) {
-      console.log('퇴근 시간 전송 오류', error);
+      console.log('❌ 퇴근 실패', error);
     }
   };
 
-  const handleOuting = async () => {
-    const currentTime = new Date();
-    const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
+  const handleActivityStart = async (type) => { // 중간 데이터터
+    const now = new Date().toISOString();
 
-    setOutingTime(formattedTime);
-    setCurrentActivity("외근");
-    console.log("외근 시간:", formattedTime);
-
-    try {
-      const response = await daxios.post("http://10.10.55.69/work/outing",
-        {
-          outingTime: formattedTime,
-          emp_loginId: userId
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      console.log('서버 응답:', response.data);
-    } catch (error) {
-      console.log('외근 시간 전송 오류', error);
-    }
-  };
-
-  const handleWork = async () => {
-    const currentTime = new Date();
-    const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
-
-    setWorkTime(formattedTime);
-    setCurrentActivity("업무");
-    console.log("업무 시간:", formattedTime);
+    setCurrentActivity(type);
+    if (type === "외근") setOutingTime(now);
+    if (type === "업무") setWorkTime(now);
 
     try {
-      const response = await daxios.post("http://10.10.55.69/work/work",
-        {
-          workTime: formattedTime,
-          emp_loginId: userId
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+      const response = await daxios.post("http://10.10.55.66/work/start", {
+        attendance_id: todayAttendanceId,
+        activity_type: type,
+        start_time: now
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      );
-      console.log('서버 응답:', response.data);
+      });
+
+      console.log(`${type} 시작`, response.data);
     } catch (error) {
-      console.log('업무 시간 전송 오류', error);
+      console.error(`${type} 요청 실패`, error);
     }
   };
 
@@ -164,19 +134,20 @@ const Sidebar = () => {
         <div className="sidebar-item">🕒 출근시간: 09:00</div>
         <div className="sidebar-item">🏠 퇴근시간: 18:00</div>
         <div className="sidebar-item">📅 일정 없음</div>
+
         <button onClick={handleCheckIn} disabled={isCheckedIn || isCheckedOut}>출근</button>
         <button onClick={handleCheckOut} disabled={!isCheckedIn || isCheckedOut}>퇴근</button>
-        <button onClick={handleOuting} disabled={!isCheckedIn || isCheckedOut}>외근</button>
-        <button onClick={handleWork} disabled={!isCheckedIn || isCheckedOut}>업무</button>
+        <button onClick={() => handleActivityStart("외근")} disabled={!isCheckedIn || isCheckedOut}>외근</button>
+        <button onClick={() => handleActivityStart("업무")} disabled={!isCheckedIn || isCheckedOut}>업무</button>
 
         <div className="current-activity">
           {currentActivity && <p>현재 활동: {currentActivity}</p>}
         </div>
         <div className="time-logs">
-          {checkInTime && <p>출근 시간: {new Date(checkInTime).toLocaleString()}</p>}
-          {checkOutTime && <p>퇴근 시간: {new Date(checkOutTime).toLocaleString()}</p>}
-          {outingTime && <p>외근 시간: {new Date(outingTime).toLocaleString()}</p>}
-          {workTime && <p>업무 시간: {new Date(workTime).toLocaleString()}</p>}
+          {checkInTime && <p>출근 시간: {checkInTime.toLocaleString()}</p>}
+          {checkOutTime && <p>퇴근 시간: {checkOutTime.toLocaleString()}</p>}
+          {outingTime && <p>외근 시작: {outingTime}</p>}
+          {workTime && <p>업무 시작: {workTime}</p>}
         </div>
       </div>
 
