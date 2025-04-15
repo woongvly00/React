@@ -83,3 +83,8 @@
 .empty{
   padding :15px;
 } 
+
+.deleteBtn{
+  display: flex;
+  justify-content: right;
+}

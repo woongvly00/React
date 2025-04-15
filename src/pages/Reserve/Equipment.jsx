@@ -7,7 +7,7 @@ import caxios from '../../Utils/caxios';
 import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
 import koLocale from '@fullcalendar/core/locales/ko';
-
+import ResvDetail from './ResvDetail';
 
 
 
@@ -65,7 +65,14 @@ const Equipment = ()=> {
       
     }, [])
     
-    
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+        const [ selectedResv , setSeletedResv] = useState(null); 
+        const selectResv = (clickInfo) => {
+            
+            setSeletedResv(clickInfo.event);
+            console.log(selectedResv);
+            setIsDetailOpen(true);
+        };
 
     return (
         <div>
@@ -146,8 +153,9 @@ const Equipment = ()=> {
             weekends={showWeekends}
             height='auto'
             selectable={true}
-            selectMirror={true}
+            selectMirror={false}
             select={handleDateSelect}
+            eventClick={selectResv}
             eventDidMount={(info) => {
                 console.log('캘린더에 표시될 이벤트:', info.event.start, info.event.title);
               }}
@@ -156,7 +164,8 @@ const Equipment = ()=> {
             </div>
         </div>
         {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
-        
+
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} />)}
         </div>
     )
 };
