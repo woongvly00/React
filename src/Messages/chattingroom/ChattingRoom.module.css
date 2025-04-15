@@ -39,7 +39,7 @@
   
   .lastmsg {
     font-size: 14px;
-    color: #666;
+    color: #222;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -76,7 +76,7 @@ function GroupChatting({ openChat }) {
 
         firstData();
 
-            const interval = setInterval(firstData,1000);
+            const interval = setInterval(firstData,2500);
             
             return () => clearInterval(interval);
 
