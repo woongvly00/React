@@ -22,6 +22,7 @@ import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
 import InsaPage from '../insa/insapage';
 import Annaul from '../insa/Annaul';
+import Deptment from '../insa/Deptment';
 
 
 const MainContent = () => {
@@ -57,6 +58,7 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
           <Route path='insa' element={<InsaPage />} />
           <Route path='insa/attend' element={<InsaPage/>}></Route>
           <Route path='insa/record' element={<Annaul/>}></Route>
+          <Route path='insa/deptment' element={<Deptment/>}></Route>
           
           <Route path='board/:boardId' element={<Board_business />} />
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />

@@ -23,8 +23,17 @@ const MeetingRoom = ({ userInfo })=> {
     const [ reservations, setReservations ] = useState([]);
 
     const handleDateSelect = (selectInfo) => {
-        setSelectedInfo(selectInfo);
-        setIsModalOpen(true);
+        const selectedResource = resouceList.find(
+            (resource) => resource.resc_id == targetResc
+          );
+        
+          if (selectedResource?.resc_status !== 'active') {
+            alert("해당 자원은 현재 사용 불가 상태입니다.");
+            return;
+          }
+        
+          setSelectedInfo(selectInfo);
+          setIsModalOpen(true);
       };
 
     useEffect(() => {
@@ -72,6 +81,13 @@ const MeetingRoom = ({ userInfo })=> {
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [ selectedResv , setSelectedResv] = useState(null); 
     const selectResv = (clickInfo) => {
+        const selectedResource = resouceList.find(
+            (resource) => resource.resc_id == targetResc
+          );
+          if (selectedResource?.resc_status !== 'active') {
+            alert("해당 자원은 현재 사용 불가 상태입니다.");
+            return; 
+          }
         setSelectedResv(clickInfo.event);
         console.log(clickInfo);
         setIsDetailOpen(true);
@@ -168,8 +184,7 @@ const MeetingRoom = ({ userInfo })=> {
         </div>
         {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo}/>)}
 
-        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)}  userInfo={userInfo}/>)}
-        
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} userInfo={userInfo} /> )}
         </div>
     )
 };
