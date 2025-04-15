@@ -118,15 +118,17 @@ function Chatting() {
     }, [seq, isLoaded, empMap]);
 
     const sendMessage = () => {
+        if(message.length >2000) {
+            alert("메시지는 2000자 이하로 입력해주세요.")
+            return;
+        }
+
         if (message.trim() !== "") {
-
-
             const msgData = {
                 msg_content: message,
                 msg_group_id: seq,
                 msg_emp_id: myId
             }
-
 
             stompClient.publish({
                 destination: `/app/send/${seq}`,
@@ -190,7 +192,7 @@ function Chatting() {
 
             const selectedNames = [...selected,...empId,myId]
             .map(id => empMap[id]);
-            
+
              navigate(`/messenger/chatting?chat=${selectedNames}&from=${myId}&seq=${seq}`)
             setSelected([]);
             setShowPopup(false);
