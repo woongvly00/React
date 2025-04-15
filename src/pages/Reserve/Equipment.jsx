@@ -12,7 +12,7 @@ import koLocale from '@fullcalendar/core/locales/ko';
 
 
 const Equipment = ()=> {
-
+    const [showWeekends, setShowWeekends] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
     const [ resouceList, setResourceList ] = useState([]);
@@ -127,12 +127,24 @@ const Equipment = ()=> {
             slotDuration="00:30:00"
             locales={[koLocale]}
             locale="ko"
-            headerToolbar={{
-                left: '',
-                center: 'prev today next',
-                right: ''
+            titleFormat={{
+                month: 'long',
+                day: 'numeric', 
+                weekday: 'short' 
             }}
-            
+            customButtons={{
+                toggleWeekend: {
+                  text: showWeekends ? '주말 숨기기' : '주말 보이기',
+                  click: () => setShowWeekends(prev => !prev)
+                }
+            }}
+            headerToolbar={{
+                left: 'prev next',
+                center: 'title',
+                right: 'toggleWeekend'
+            }}
+            weekends={showWeekends}
+            height='auto'
             selectable={true}
             selectMirror={true}
             select={handleDateSelect}

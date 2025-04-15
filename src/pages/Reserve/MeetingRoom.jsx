@@ -54,6 +54,7 @@ const MeetingRoom = ()=> {
                 start: startStr,
                 end: endStr,
                 allDay: false,
+                overlap: false,
                 extendedProps: {
                   emp_id: resv.resv_emp,
                   resource_id: resv.resource_id
@@ -68,11 +69,13 @@ const MeetingRoom = ()=> {
       
     }, [])
     
-
+    const [showWeekends, setShowWeekends] = useState(true);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [ selectedResv , setSeletedResv] = useState(null); 
     const selectResv = (clickInfo) => {
+        
         setSeletedResv(clickInfo.event);
+        console.log(selectedResv);
         setIsDetailOpen(true);
     };
 
@@ -125,23 +128,36 @@ const MeetingRoom = ()=> {
                 </tbody>
                 </table>
             </div>
+            
         <div>
             <FullCalendar
             key={targetResc} 
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             allDaySlot={false} 
-            initialView='timeGridWeek'
+            initialView='timeGridDay'
             slotMinTime="08:00:00"
-            slotMaxTime="24:00:00"
+            slotMaxTime="21:00:00"
             slotDuration="00:30:00"
             locales={[koLocale]}
             locale="ko"
-            headerToolbar={{
-                left: '',
-                center: 'prev today next',
-                right: ''
+            titleFormat={{
+                month: 'long', // 예: 4월
+                day: 'numeric', // 예: 14
+                weekday: 'short' // 예: 월
             }}
-            
+            customButtons={{
+                toggleWeekend: {
+                  text: showWeekends ? '주말 숨기기' : '주말 보이기',
+                  click: () => setShowWeekends(prev => !prev)
+                }
+            }}
+            headerToolbar={{
+                left: 'prev next',
+                center: 'title',
+                right: 'toggleWeekend'
+            }}
+            weekends={showWeekends}
+            height='auto'
             selectable={true}
             selectMirror={true}
             select={handleDateSelect}
