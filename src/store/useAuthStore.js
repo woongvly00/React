@@ -16,9 +16,6 @@ const useAuthStore = create((set) => ({
         sessionStorage.setItem("isAuth", true);
         sessionStorage.setItem("per_function", per_function);
         sessionStorage.setItem("per_secure", per_secure);
-
-        // ✅ 여기도 추가해줄 수 있음 (백업용)
-        localStorage.setItem("jwtToken", token);
     },
 
     logout: () => {
@@ -30,7 +27,6 @@ const useAuthStore = create((set) => ({
         sessionStorage.removeItem("per_function");
         sessionStorage.removeItem("per_secure");
 
-        localStorage.removeItem("jwtToken");
     },
 
     initialize: () => {
