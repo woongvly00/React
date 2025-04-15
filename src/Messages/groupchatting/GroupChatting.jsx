@@ -101,10 +101,9 @@ function GroupChatting({ openChat }) {
     }, []);
 
     const handleDelete = () => {
-        axios.delete(`http://10.5.5.2/Employee/deleteRoom`, {
-            params: {
+        axios.put(`http://10.5.5.2/Employee/quitRoom`, {
+                myId:myIdRef.current,
                 msgGroupId: contextMenu.roomId
-            }
         })
             .then(() => {
                 // 삭제 후 UI에서 해당 방 제거
@@ -164,7 +163,7 @@ function GroupChatting({ openChat }) {
                     className={style.contextMenu}
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                 >
-                    <li onClick={handleDelete}>삭제</li>
+                    <li onClick={handleDelete}>방 나가기</li>
                 </ul>
             )}
 
