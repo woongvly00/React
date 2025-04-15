@@ -18,7 +18,7 @@ function EmployeePage({openChat}) {
       
         let mine = null;
 
-          axios.get("http://10.5.5.6/Employee/SelectMine",{
+          axios.get("http://10.5.5.2/Employee/SelectMine",{
             params: {
                 userId: userId
             }
@@ -27,7 +27,7 @@ function EmployeePage({openChat}) {
           
               setMyInfo(mine);
 
-             return axios.get("http://10.5.5.6/Employee/SelectEmp");
+             return axios.get("http://10.5.5.2/Employee/SelectEmp");
         }).then((resp) => {
              console.log(resp.data);
              const filtered = resp.data.filter(emp => emp.emp_code_id !== mine.emp_code_id); // 나 자신 제외

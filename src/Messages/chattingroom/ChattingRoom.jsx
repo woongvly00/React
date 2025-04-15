@@ -9,7 +9,7 @@ function ChattingRoom({openChat}) {
    
 
     const ChatRooms = (userId) => {
-         axios.get("http://10.5.5.6/Employee/selectMyId",{
+         axios.get("http://10.5.5.2/Employee/selectMyId",{
             params:{
                 userId:userId
             }
@@ -18,12 +18,15 @@ function ChattingRoom({openChat}) {
             const myId = resp.data;
             setMyId(resp.data);
 
-            axios.get("http://10.5.5.6/Employee/selectRoom",{
+            axios.get("http://10.5.5.2/Employee/selectRoom",{
                 params:{
                     myId:myId
                 }
             }).then((room)=>{
-                const sortedRooms = room.data.sort((a, b) =>
+                const uniqueRooms = Array.from(
+                    new Map(room.data.map(item => [item.MSG_GROUP_ID, item])).values()
+                );
+                const sortedRooms = uniqueRooms.sort((a, b) =>
                     new Date(b.LAST_SEND_DATE) - new Date(a.LAST_SEND_DATE)
                 );
                 setRoomEmployees(sortedRooms);

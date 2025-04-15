@@ -1,3 +1,4 @@
+import './fullcalendar.css';
 import React, { useEffect,  useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -8,6 +9,7 @@ import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
 import ResvDetail from './ResvDetail';
 import koLocale from '@fullcalendar/core/locales/ko';
+
 
 
 
@@ -36,18 +38,21 @@ const MeetingRoom = ()=> {
 
         setReservations([]); 
         caxios.get(`/reserve/reservations`).then((resp) => {
+            console.log("🔥 서버에서 받아온 예약 목록 원본:", resp.data);
+          
             const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
+          
             const formatResev = resp.data.map((resv) => {
               const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
               const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
+              const startDate = new Date(startStr);
+              const endDate = new Date(endStr);
           
-              return {
+               return {
                 id: resv.resv_id,
                 title: resv.resv_title,
                 start: startStr,
                 end: endStr,
-                startTime:resv.resv_stime,
-                endTime: resv.resv_eTime,
                 allDay: false,
                 extendedProps: {
                   emp_id: resv.resv_emp,
@@ -95,7 +100,7 @@ const MeetingRoom = ()=> {
                 
             </div>
             <div>
-            <table>
+            <table className={rStyle.infoTable}>
                 <thead>
                     <tr>
                     <th>수용인원</th>
@@ -134,7 +139,7 @@ const MeetingRoom = ()=> {
             headerToolbar={{
                 left: '',
                 center: 'prev today next',
-                right: 'dayGridMonth,timeGridWeek'
+                right: ''
             }}
             
             selectable={true}
