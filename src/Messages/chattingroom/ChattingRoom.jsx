@@ -7,7 +7,7 @@ import axios from 'axios';
 function ChattingRoom({ openChat }) {
     const [roomEmployees, setRoomEmployees] = useState([]);
     const [myId, setMyId] = useState(null);
-    const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, roomId: null });
+   
 
 
     const ChatRooms = (userId) => {
@@ -36,36 +36,7 @@ function ChattingRoom({ openChat }) {
             })
     }
 
-    const handleDelete = () => {
 
-        axios.delete("http://10.5.5.2/Employee/deleteRoom",{
-            params:{
-                msgGroupId:contextMenu.roomId
-            }
-        }).then()
-
-
-        setRoomEmployees(prev =>
-            prev.filter(room => room.MSG_GROUP_ID !== contextMenu.roomId)
-        );
-        setContextMenu({ visible: false, x: 0, y: 0, roomId: null });
-    };
-
-    const handleContextMenu = (e, roomId) => {
-        e.preventDefault();
-        setContextMenu({
-            visible: true,
-            x: e.pageX,
-            y: e.pageY,
-            roomId: roomId,
-        });
-    };
-
-    useEffect(() => {
-        const handleClick = () => setContextMenu({ visible: false, x: 0, y: 0, roomId: null });
-        document.addEventListener("click", handleClick);
-        return () => document.removeEventListener("click", handleClick);
-    }, []);
 
 
     useEffect(() => {
@@ -73,10 +44,6 @@ function ChattingRoom({ openChat }) {
         ChatRooms(userId);
     }, [])
 
-    useEffect(() => {
-       console.log("room은: ",roomEmployees);
-
-    }, [roomEmployees])
 
 
     useEffect(() => {
@@ -95,7 +62,7 @@ function ChattingRoom({ openChat }) {
         <div className={style.main}>
 
                 {roomEmployees.map((room, index) => (
-                        <div key={index} className={style.another} onContextMenu={(e)=>handleContextMenu(e,room.MSG_GROUP_ID)}>
+                        <div key={index} className={style.another} >
                             <div className={style.imgbox}>
                                 <div className={style.anotherimg}>
                                     {/* <img src=""></img> 프로필 이미지 넣는곳*/}
@@ -113,15 +80,6 @@ function ChattingRoom({ openChat }) {
                         </div>
 
                 ))}
-
-                {contextMenu.visible && (
-                <ul
-                    className={style.contextMenu}
-                    style={{ top: contextMenu.y, left: contextMenu.x }}
-                >
-                    <li onClick={handleDelete}>삭제</li>
-                </ul>
-            )}
 
         </div>
     )
