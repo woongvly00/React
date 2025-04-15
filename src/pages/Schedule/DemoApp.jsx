@@ -9,6 +9,7 @@ import useScheduleStore from '../../store/useScheduleStore';
 import koLocale from '@fullcalendar/core/locales/ko';
 
 
+
 const DemoApp = ({ onRefresh, reloadKey }) => {
   const [showWeekends, setShowWeekends] = useState(true);
   const { events, addEvent, setEvents, addEvents, removeEvent } = useScheduleStore();
@@ -223,10 +224,6 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
   };
 
 
-
-  const handleWeekendsToggle = () => {
-    setWeekendsVisible(!weekendsVisible);
-  };
 
   const handleDelete = () => {
     removeEvent(selectedEvent.id)

@@ -35,7 +35,6 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
   return (
     <div className={style.maincontainer}>
       <div className={style.mainSidebar}>
-      {/* <button className={style.toggleBtn} onClick={toggleSidelist}>{isSidelistOpen ? '◀' : '▶'}</button> */}
         <div className={style.icons}><Link to="/mainpage"><i className="fa-solid fa-2x fa-house"  style={{ color: "#ecf0f1" }}/></Link></div>
         <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/approval"}}><i className="fa-solid fa-2x fa-inbox"  style={{ color: "#ecf0f1" }}/></Link></div>
         <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/insa"}}><i className="fa-solid fa-2x fa-user" style={{ color: "#ecf0f1" }}/></Link></div>
