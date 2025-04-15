@@ -33,6 +33,12 @@
     --fc-now-indicator-color: #020f20;
     
   }
+  a,
+a:link,
+a:visited {
+  color: black;         /* 텍스트 색상 */
+  text-decoration: none; /* 밑줄 제거 */
+}
 
   @media (max-width: 1200px) {
     /* 상단 툴바 */

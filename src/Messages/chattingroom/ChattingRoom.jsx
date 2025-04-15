@@ -48,7 +48,7 @@ function ChattingRoom({openChat}) {
         const userId = sessionStorage.getItem("userId");
         const interval = setInterval(()=>{
             ChatRooms(userId);
-        },1000);
+        },2500);
 
         return () => clearInterval(interval);
     },[])
