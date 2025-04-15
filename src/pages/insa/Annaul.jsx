@@ -51,7 +51,7 @@ const Annal = () => {
 
   // 📦 인사 데이터 로딩 (출장, 휴가, 출근X 인원)
   useEffect(() => {
-    axios.get("/insa/admin-summary")
+    axios.get("http://10.10.55.66/insa/admin-summary")
       .then(res => {
         setSummaryData(res.data);
       })
