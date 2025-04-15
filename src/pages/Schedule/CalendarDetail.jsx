@@ -75,7 +75,20 @@ const CalendarDetail = ({ closeModal, selectedInfo }) => {
         };
         
     
-    
+    const handleDeleteCalendar = () => {
+        const confirmDelete = window.confirm("캘린더를 삭제하시겠습니까?");
+        if (!confirmDelete) return;
+
+        caxios.delete(`/calendar/${calender.c_id}`, calender)
+        .then((resp)=> {
+            alert('캘린더가 성공적으로 삭제되었습니다.');
+            closeModal();
+        })
+        .catch((error) => {
+            console.error('캘린더 삭제 실패', error);
+            alert('캘린더 삭제에 실패했습니다.');
+        });
+    };
        
     
       
@@ -130,6 +143,7 @@ const CalendarDetail = ({ closeModal, selectedInfo }) => {
         </div>
 
         <div className={addCategoryStyle['modal-buttons']}>
+        <button className={addCategoryStyle['form-button']} onClick={handleDeleteCalendar}>삭제</button>
           <button className={addCategoryStyle['form-button']} onClick={handleUpdateCalendar}>수정</button>
         </div>
       </div>
