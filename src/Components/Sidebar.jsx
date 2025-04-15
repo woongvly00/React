@@ -27,7 +27,7 @@ const Sidebar = () => {
   const [todayWorkedTime, setTodayWorkedTime] = useState("00:00:00");
 
 
-  // ✅ checkInTime 이거 App.js로 빼기
+  // ✅ checkInTime 이거 App.js로 빼기ㄷ
 
   useEffect(() => {
     const fetchCheckInData = async () => {
