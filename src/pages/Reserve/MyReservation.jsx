@@ -29,8 +29,6 @@ const MyReservation = () => {
         caxios.get(`/reserve/myResv/${userInfo.emp_code_id}`).then((resp) => {
             console.log("🔥 서버에서 받아온 예약 목록 원본:", resp.data);
           
-            const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
-          
             const formatResev = resp.data.map((resv) => {
                return {
                 id: resv.resv_id,
@@ -64,13 +62,17 @@ const MyReservation = () => {
                     <button className={selected === 130 ? myResvStyle.active : ''} onClick={() => setSelected(130)}>비품</button>
                 </div>
                 <div className={myResvStyle['card-list']}>
-                    {filteredReservations.map((resv, idx) => (
+                {filteredReservations.length === 0 ? (
+                    <h4 className={myResvStyle['empty-msg']}>예약된 내역이 없습니다.</h4>
+                ) : (
+                    filteredReservations.map((resv, idx) => (
                     <div key={idx} className={myResvStyle['resv-card']}>
                         <h3>{resv.title}</h3>
                         <p>{resv.date} / {resv.startTime} ~ {resv.endTime}</p>
                         <p className={myResvStyle['category']}>{resv.resc_name}</p>
                     </div>
-                    ))}
+                    ))
+                )}
                 </div>
             </div>
         </div>

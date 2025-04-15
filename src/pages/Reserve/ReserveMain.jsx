@@ -6,16 +6,20 @@ import Equipment from '../Reserve/Equipment';
 import MyReservation from '../Reserve/MyReservation';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './fullcalendar.css';
+import { useLocation } from 'react-router-dom';
 
 
 const ReserveMain = () => {
-
+  const location = useLocation();
 
   return (
 
     <div className={style.reservContainer}>
       <div className={style.subcontainer}>
-        <h2>예약하기</h2>
+        {
+          location.pathname !== '/mainpage/maincontent/reserve/myReservation' && (<h2>예약하기</h2>)
+        }
+        
         <div className={style.reservArea}>
         <Routes>
         <Route path='/' element={<MeetingRoom />} />
