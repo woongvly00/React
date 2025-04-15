@@ -23,6 +23,7 @@ import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
 import InsaPage from '../insa/insapage';
 import Annaul from '../insa/Annaul';
+import Deptment from '../insa/Deptment';
 
 
 const MainContent = () => {
@@ -35,7 +36,6 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
   return (
     <div className={style.maincontainer}>
       <div className={style.mainSidebar}>
-      {/* <button className={style.toggleBtn} onClick={toggleSidelist}>{isSidelistOpen ? '◀' : '▶'}</button> */}
         <div className={style.icons}><Link to="/mainpage"><i className="fa-solid fa-2x fa-house"  style={{ color: "#ecf0f1" }}/></Link></div>
         <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/approval"}}><i className="fa-solid fa-2x fa-inbox"  style={{ color: "#ecf0f1" }}/></Link></div>
         <div className={style.icons}><Link to={{ pathname: "/mainpage/maincontent/insa"}}><i className="fa-solid fa-2x fa-user" style={{ color: "#ecf0f1" }}/></Link></div>
@@ -58,6 +58,7 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
           <Route path='insa' element={<InsaPage />} />
           <Route path='insa/attend' element={<InsaPage/>}></Route>
           <Route path='insa/record' element={<Annaul/>}></Route>
+          <Route path='insa/deptment' element={<Deptment/>}></Route>
           
           <Route path='board/:boardId' element={<Board_business />} />
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />

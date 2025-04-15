@@ -7,12 +7,12 @@ import caxios from '../../Utils/caxios';
 import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
 import koLocale from '@fullcalendar/core/locales/ko';
+import ResvDetail from './ResvDetail';
 
 
 
-
-const Equipment = ()=> {
-
+const Equipment = ({ userInfo })=> {
+    const [showWeekends, setShowWeekends] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
     const [ resouceList, setResourceList ] = useState([]);
@@ -20,8 +20,17 @@ const Equipment = ()=> {
     const [ reservations, setReservations ] = useState([]);
 
     const handleDateSelect = (selectInfo) => {
-        setSelectedInfo(selectInfo);
-        setIsModalOpen(true);
+        const selectedResource = resouceList.find(
+            (resource) => resource.resc_id == targetResc
+          );
+        
+          if (selectedResource?.resc_status !== 'active') {
+            alert("해당 자원은 현재 사용 불가 상태입니다.");
+            return;
+          }
+        
+          setSelectedInfo(selectInfo);
+          setIsModalOpen(true);
       };
 
     useEffect(() => {
@@ -42,8 +51,6 @@ const Equipment = ()=> {
             const formatResev = resp.data.map((resv) => {
               const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
               const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
-              const startDate = new Date(startStr);
-              const endDate = new Date(endStr);
           
                return {
                 id: resv.resv_id,
@@ -57,7 +64,7 @@ const Equipment = ()=> {
                 }
               };
             });
-          
+            setTargetResc(1003);
             setReservations(formatResev);
           }).catch((error) => {
             console.error("예약목록 불러오기 실패", error);
@@ -65,7 +72,22 @@ const Equipment = ()=> {
       
     }, [])
     
-    
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+    const [ selectedResv , setSeletedResv] = useState(null); 
+    const selectResv = (clickInfo) => {
+
+        console.log("선택한 자원 상태 확인 : " + selectedResource.resc_status)
+        const selectedResource = resouceList.find(
+            (resource) => resource.resc_id == targetResc
+          );
+          if (selectedResource?.resc_status !== 'active') {
+            alert("해당 자원은 현재 사용 불가 상태입니다.");
+            return; 
+          }
+          setSeletedResv(clickInfo.event);
+        console.log(clickInfo);
+        setIsDetailOpen(true);
+    };
 
     return (
         <div>
@@ -74,7 +96,6 @@ const Equipment = ()=> {
                 비품 예약 현황 조회
                 <br></br>
                 <select onChange={(e) => setTargetResc(e.target.value)}>
-                    <option value="">자원선택</option>
                     {resouceList
                     .filter((resource)=>{
                         if(resource.resc_type_id != 130){
@@ -127,24 +148,37 @@ const Equipment = ()=> {
             slotDuration="00:30:00"
             locales={[koLocale]}
             locale="ko"
-            headerToolbar={{
-                left: '',
-                center: 'prev today next',
-                right: 'dayGridMonth,timeGridWeek'
+            titleFormat={{
+                month: 'long',
+                day: 'numeric', 
+                weekday: 'short' 
             }}
-            
+            customButtons={{
+                toggleWeekend: {
+                  text: showWeekends ? '주말 숨기기' : '주말 보이기',
+                  click: () => setShowWeekends(prev => !prev)
+                }
+            }}
+            headerToolbar={{
+                left: 'prev next',
+                center: 'title',
+                right: 'toggleWeekend'
+            }}
+            weekends={showWeekends}
+            height='auto'
             selectable={true}
-            selectMirror={true}
+            selectOverlap={false}
+            selectMirror={false}
+            eventOverlap={false}
             select={handleDateSelect}
-            eventDidMount={(info) => {
-                console.log('캘린더에 표시될 이벤트:', info.event.start, info.event.title);
-              }}
+            eventClick={selectResv}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
             />
             </div>
         </div>
-        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
-        
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo}/>)}
+
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)}   userInfo={userInfo}/>)}
         </div>
     )
 };
