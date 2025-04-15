@@ -39,8 +39,8 @@ const MainpageSchedule = () => {
         <h3>오늘의 일정</h3>
         <ul>
           {todayEvents.map((event, index) => (
-            <li key={index}>
-              <strong>{event.title}</strong><br/>
+            <li style={{color: "black"}} key={index}>
+              <strong style={{color: "black"}}>{event.title}</strong><br/>
             </li>
           ))}
         </ul>

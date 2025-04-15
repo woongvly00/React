@@ -37,7 +37,7 @@ const ResvSideList = ({ closeModal }) => {
                     자원 예약
                     </button>
                 </h2>
-                <div id="collapseOne" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id="collapseOne" className="accordion-collapse collapse">
                     <div className="accordion-body">
                     {rescList.map((resc, index) => (
                         <Link className="rescLink" to={`/mainpage/maincontent/reserve/${resc.resc_type_id}`} key={index}>
