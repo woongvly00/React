@@ -63,13 +63,5 @@ a:visited {
         margin:0px !important;
     }
   
-    /* month 그리드, 달력 */
-    .fc-scroller-harness-liquid {
-    height: 500px !important;
-    min-height: 30rem !important;
-    }
-
-    .fc .fc-scroller {
-        overflow: visible !important;
-      }
+    
   }

@@ -14,8 +14,8 @@ import koLocale from '@fullcalendar/core/locales/ko';
 
 
 
-const MeetingRoom = ()=> {
-
+const MeetingRoom = ({ userInfo })=> {
+ 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
     const [ resouceList, setResourceList ] = useState([]);
@@ -45,8 +45,6 @@ const MeetingRoom = ()=> {
             const formatResev = resp.data.map((resv) => {
               const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
               const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
-              const startDate = new Date(startStr);
-              const endDate = new Date(endStr);
           
                return {
                 id: resv.resv_id,
@@ -62,6 +60,7 @@ const MeetingRoom = ()=> {
               };
             });
           
+            setTargetResc(1001);
             setReservations(formatResev);
           }).catch((error) => {
             console.error("예약목록 불러오기 실패", error);
@@ -71,11 +70,10 @@ const MeetingRoom = ()=> {
     
     const [showWeekends, setShowWeekends] = useState(true);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
-    const [ selectedResv , setSeletedResv] = useState(null); 
+    const [ selectedResv , setSelectedResv] = useState(null); 
     const selectResv = (clickInfo) => {
-        
-        setSeletedResv(clickInfo.event);
-        console.log(selectedResv);
+        setSelectedResv(clickInfo.event);
+        console.log(clickInfo);
         setIsDetailOpen(true);
     };
 
@@ -85,8 +83,7 @@ const MeetingRoom = ()=> {
             <div>
                 회의실 예약 현황 조회
                 <br></br>
-                <select onChange={(e) => setTargetResc(e.target.value)}>
-                    <option value="">자원선택</option>
+                <select value={targetResc} onChange={(e) => setTargetResc(e.target.value)}>
                     {resouceList
                     .filter((resource)=>{
                         if(resource.resc_type_id != 110){
@@ -96,7 +93,7 @@ const MeetingRoom = ()=> {
                     })
                     .map((resc, index) => (
                         <option key={index} value={resc.resc_id}>
-                        {resc.resc_name}
+                            {resc.resc_name}
                         </option>
                     ))}
                 </select>
@@ -138,12 +135,13 @@ const MeetingRoom = ()=> {
             slotMinTime="08:00:00"
             slotMaxTime="21:00:00"
             slotDuration="00:30:00"
+            snapDuration="00:30:00"
             locales={[koLocale]}
             locale="ko"
             titleFormat={{
-                month: 'long', // 예: 4월
-                day: 'numeric', // 예: 14
-                weekday: 'short' // 예: 월
+                month: 'long',
+                day: 'numeric', 
+                weekday: 'short' 
             }}
             customButtons={{
                 toggleWeekend: {
@@ -154,21 +152,23 @@ const MeetingRoom = ()=> {
             headerToolbar={{
                 left: 'prev next',
                 center: 'title',
-                right: 'toggleWeekend'
+                right: 'toggleWeekend dayGridWeek,timeGridDay'
             }}
             weekends={showWeekends}
             height='auto'
             selectable={true}
-            selectMirror={true}
+            selectOverlap={false}
+            selectMirror={false}
+            eventOverlap={false}
             select={handleDateSelect}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
             eventClick={selectResv}
             />
             </div>
         </div>
-        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo}/>)}
 
-        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} />)}
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)}  userInfo={userInfo}/>)}
         
         </div>
     )

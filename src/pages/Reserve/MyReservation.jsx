@@ -5,25 +5,10 @@ import caxios from '../../Utils/caxios';
 
 
 
-const MyReservation = () => {
+const MyReservation = ({ userInfo }) => {
 
     const [selected, setSelected] = useState(110);
     const [ myReservation, setMyReservation ] = useState([]);
-    const [userInfo,setUserInfo] = useState(null);
-    useEffect(()=>{
-        caxios.get("/mypage/info").then((resp)=>{
-          const info = resp.data;
-          setUserInfo(info);
-          
-          console.log("인포 값 확인 : " + info.emp_code_id);
-    
-        }).catch((error) => {
-            console.error("실패", error);
-        });
-    
-        
-    }, [])
-
     useEffect (() => {
         if (!userInfo) return;
         caxios.get(`/reserve/myResv/${userInfo.emp_code_id}`).then((resp) => {
@@ -49,12 +34,25 @@ const MyReservation = () => {
 
     }, [userInfo])
 
+    const handleDelete = (resvId) => {
+        const confirmDelete = window.confirm("해당 예약을 삭제하시겠습니까?");
+        if (!confirmDelete) return;
+
+        caxios.delete(`/reserve/${resvId}`)
+        .then(resp => {})
+        .catch((error) => {
+          console.error("일정 삭제 실패", error);
+        });
+
+    }
+
     
     const filteredReservations = myReservation.filter(r => r.category === selected);
 
     return (
         <div>
             <div className={myResvStyle['reserve-page']}>
+                
                 <h2>나의 예약 목록</h2>
                 <div className={myResvStyle['category-tabs']}>
                     <button className={selected === 110 ? myResvStyle.active : ''} onClick={() => setSelected(110)}>회의실</button>
@@ -67,6 +65,9 @@ const MyReservation = () => {
                 ) : (
                     filteredReservations.map((resv, idx) => (
                     <div key={idx} className={myResvStyle['resv-card']}>
+                        <div className={myResvStyle.deleteBtn}>
+                            <button type="button" className="btn-close" aria-label="Close" onClick={() => handleDelete(resv.id)}></button>
+                        </div>
                         <h3>{resv.title}</h3>
                         <p>{resv.date} / {resv.startTime} ~ {resv.endTime}</p>
                         <p className={myResvStyle['category']}>{resv.resc_name}</p>
