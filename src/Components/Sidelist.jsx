@@ -31,7 +31,7 @@ const Sidelist = () => {
   const BoardSidelist = () => (
     <div className={sideliststyle.sideList}>
             <aside className={sideliststyle.sidebar}>
-            <div><Link to="/mainpage/maincontent/write_button"><button className={sideliststyle.button}>글쓰기</button></Link></div>
+            {/* <div><Link to="/mainpage/maincontent/write_button"><button className={sideliststyle.button}>글쓰기</button></Link></div> */}
               <div className={sideliststyle.boardsidebar}>
                 <div className={sideliststyle.wholegasy}>게시판 전체보기</div>
                 <div><Link to="/mainpage/maincontent/standard">공지사항</Link></div>

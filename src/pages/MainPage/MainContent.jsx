@@ -1,6 +1,7 @@
 
 // ✅ MainContent.jsx
 import React from 'react';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import ApprovalMain from '../Approval/ApprovalMain';
 import ApprovalDetail from '../Approval/ApprovalDetail';
