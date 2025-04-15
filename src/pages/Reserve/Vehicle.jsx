@@ -7,7 +7,7 @@ import caxios from '../../Utils/caxios';
 import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
 import koLocale from '@fullcalendar/core/locales/ko';
-
+import ResvDetail from './ResvDetail';
 
 
 
@@ -66,6 +66,14 @@ const Vehicle = ()=> {
     }, [])
     
     const [showWeekends, setShowWeekends] = useState(true);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+        const [ selectedResv , setSeletedResv] = useState(null); 
+        const selectResv = (clickInfo) => {
+            
+            setSeletedResv(clickInfo.event);
+            console.log(selectedResv);
+            setIsDetailOpen(true);
+        };
 
     return (
         <div>
@@ -146,14 +154,15 @@ const Vehicle = ()=> {
             weekends={showWeekends}
             height='auto'
             selectable={true}
-            selectMirror={true}
+            selectMirror={false}
             select={handleDateSelect}
+            eventClick={selectResv}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
             />
             </div>
         </div>
         {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
-        
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} />)}
         </div>
     )
 };
