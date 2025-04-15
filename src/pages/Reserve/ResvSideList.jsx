@@ -28,7 +28,7 @@ useEffect (() =>{
             <div className="accordion" id="accordionExample">
 
                 <div className="accordion-item">
-                <Link className="myReservationLink" to={`/mainpage/maincontent/reserve/myReservation`}>
+                <Link className="myReservationLink" style={{color: 'white'}} to={`/mainpage/maincontent/reserve/myReservation`}>
                     내 예약 목록
                 </Link>
                 </div>

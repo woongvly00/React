@@ -11,7 +11,7 @@ import ResvDetail from './ResvDetail';
 
 
 
-const Vehicle = ()=> {
+const Vehicle = ({ userInfo })=> {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
@@ -57,7 +57,7 @@ const Vehicle = ()=> {
                 }
               };
             });
-          
+            setTargetResc(1005);
             setReservations(formatResev);
           }).catch((error) => {
             console.error("예약목록 불러오기 실패", error);
@@ -82,7 +82,6 @@ const Vehicle = ()=> {
                 차량 예약 현황 조회
                 <br></br>
                 <select onChange={(e) => setTargetResc(e.target.value)}>
-                    <option value="">자원선택</option>
                     {resouceList
                     .filter((resource)=>{
                         if(resource.resc_type_id != 120){
@@ -161,8 +160,8 @@ const Vehicle = ()=> {
             />
             </div>
         </div>
-        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
-        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} />)}
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo}/>)}
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)}   userInfo={userInfo}/>)}
         </div>
     )
 };

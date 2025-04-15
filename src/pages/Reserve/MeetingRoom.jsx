@@ -15,7 +15,7 @@ import koLocale from '@fullcalendar/core/locales/ko';
 
 
 const MeetingRoom = ({ userInfo })=> {
-
+ 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
     const [ resouceList, setResourceList ] = useState([]);
@@ -45,8 +45,6 @@ const MeetingRoom = ({ userInfo })=> {
             const formatResev = resp.data.map((resv) => {
               const startStr = `${fixDate(resv.resv_date)}T${resv.resv_stime}`;
               const endStr = `${fixDate(resv.resv_date)}T${resv.resv_etime}`;
-              const startDate = new Date(startStr);
-              const endDate = new Date(endStr);
           
                return {
                 id: resv.resv_id,
@@ -62,6 +60,7 @@ const MeetingRoom = ({ userInfo })=> {
               };
             });
           
+            setTargetResc(1001);
             setReservations(formatResev);
           }).catch((error) => {
             console.error("예약목록 불러오기 실패", error);
@@ -73,7 +72,6 @@ const MeetingRoom = ({ userInfo })=> {
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [ selectedResv , setSelectedResv] = useState(null); 
     const selectResv = (clickInfo) => {
-        
         setSelectedResv(clickInfo.event);
         console.log(clickInfo);
         setIsDetailOpen(true);
@@ -86,7 +84,6 @@ const MeetingRoom = ({ userInfo })=> {
                 회의실 예약 현황 조회
                 <br></br>
                 <select value={targetResc} onChange={(e) => setTargetResc(e.target.value)}>
-                    <option value="">자원선택</option>
                     {resouceList
                     .filter((resource)=>{
                         if(resource.resc_type_id != 110){
@@ -155,12 +152,14 @@ const MeetingRoom = ({ userInfo })=> {
             headerToolbar={{
                 left: 'prev next',
                 center: 'title',
-                right: 'toggleWeekend'
+                right: 'toggleWeekend dayGridWeek,timeGridDay'
             }}
             weekends={showWeekends}
             height='auto'
             selectable={true}
+            selectOverlap={false}
             selectMirror={false}
+            eventOverlap={false}
             select={handleDateSelect}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
             eventClick={selectResv}

@@ -60,8 +60,16 @@ const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo }) => {
       resv_title: resvInput.resv_title
     };
     console.log("저장 전 예약 내용:", reservation);
-    caxios.post("/reserve/addReserve", reservation).catch((error) =>{
-      console.error("예약 실패:", error);
+    caxios.post("/reserve/addReserve", reservation)
+    .then(resp => {
+      alert("예약이 완료되었습니다.");
+    })
+    .catch((error) =>{
+      if (error.response?.status === 409) {
+        alert("⚠️ 이미 예약된 시간입니다. 다른 시간대를 선택해 주세요.");
+      } else {
+        alert("예약 중 오류가 발생했습니다.");
+      }
     })
     closeModal();
 
@@ -71,7 +79,6 @@ const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo }) => {
 
     return (
         <div className={resvStyle['modal-overlay']}>
-
           <div className={resvStyle['modal-container']}>
             <div className={resvStyle.closeBtn}>
               <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
