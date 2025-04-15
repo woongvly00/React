@@ -4,7 +4,7 @@ import addCategoryStyle from './AddCategoryStyle.module.css';
 import caxios from '../../Utils/caxios';
 
 
-const CalendarDetail = ({ closeModal, selectedInfo }) => {
+const CalendarDetail = ({ closeModal, selectedInfo, onRefresh }) => {
 
     const [userInfo,setUserInfo] = useState(null);
     const [selectedColor, setSelectedColor] = useState('');
@@ -66,6 +66,7 @@ const CalendarDetail = ({ closeModal, selectedInfo }) => {
         caxios.put("/calendar/update", calender)
         .then((resp)=> {
             alert('캘린더가 성공적으로 수정되었습니다.');
+            onRefresh();
             closeModal();
         })
         .catch((error) => {
@@ -82,6 +83,7 @@ const CalendarDetail = ({ closeModal, selectedInfo }) => {
         caxios.delete(`/calendar/${calender.c_id}`, calender)
         .then((resp)=> {
             alert('캘린더가 성공적으로 삭제되었습니다.');
+            onRefresh();
             closeModal();
         })
         .catch((error) => {
@@ -101,10 +103,11 @@ const CalendarDetail = ({ closeModal, selectedInfo }) => {
     return (
         <div className={addCategoryStyle['modal-overlay']}>
       <div className={addCategoryStyle['modal-container']}>
+        
         <div className={addCategoryStyle.closeBtn}>
           <button type="button" className="btn-close" aria-label="Close" onClick={closeModal}></button>
         </div>
-
+        <h3>캘린더 수정 및 삭제</h3>
         <select className={addCategoryStyle['form-select']} name="public_code" value={selectedInfo.public_code} onChange={handleCalInput} disabled>
           <option value="10">내 캘린더</option>
           <option value="20">공유 캘린더</option>

@@ -5,7 +5,7 @@ import addCategoryStyle from './AddCategoryStyle.module.css';
 
 
 
-const AddCategory = ({ closeModal, selectedInfo, isEdit = false }) => {
+const AddCategory = ({ closeModal,  onRefresh }) => {
 
 
   const [userInfo,setUserInfo] = useState(null);
@@ -19,37 +19,7 @@ const AddCategory = ({ closeModal, selectedInfo, isEdit = false }) => {
           
       }, [])
 
-
-      useEffect(() => {
-        if (isEdit && selectedInfo) {
-          setCalender({
-            ...selectedInfo,
-            emp_id: selectedInfo.emp_id || '',
-            dept_code: selectedInfo.dept_code || '',
-          });
-        }
-      }, [isEdit, selectedInfo]);
-
-    
-      const handleSaveCalendar = () => {
-        if (!calender.c_title.trim()) return alert("이름 입력!");
-      
-        const apiUrl = isEdit ? `/calendar/${calender.c_id}` : "/calendar";
-        const apiCall = isEdit
-          ? caxios.put(apiUrl, calender)
-          : caxios.post(apiUrl, calender);
-      
-        apiCall
-          .then(() => {
-            alert(isEdit ? "캘린더가 수정되었습니다." : "캘린더가 추가되었습니다.");
-            closeModal();
-          })
-          .catch((error) => {
-            console.error("실패:", error);
-            alert("저장 중 오류가 발생했습니다.");
-          });
-      };
-      
+   
 
   const [calender, setCalender] = useState({
     c_id: '',
@@ -121,6 +91,7 @@ const AddCategory = ({ closeModal, selectedInfo, isEdit = false }) => {
     })
     .then(() => {
       alert("캘린더가 성공적으로 추가되었습니다.");
+      if (onRefresh) onRefresh();
       closeModal(); 
     })
     .catch((error) => {
@@ -155,7 +126,8 @@ const AddCategory = ({ closeModal, selectedInfo, isEdit = false }) => {
   if (alreadyExists) return;
 
     const label = e.target.options[e.target.selectedIndex].text;
-    setSelectedTargets(prev => [...prev, { target_id: Number(value), target_type:label, name:label }]);
+    setSelectedTargets(prev => [...prev, { target_id: Number(value), target_type: type, name: label }]);
+
 
     e.target.selectedIndex = 0;
   };
@@ -254,7 +226,7 @@ const AddCategory = ({ closeModal, selectedInfo, isEdit = false }) => {
                     <option value="">개인</option>
                     {employees.map((emp) => (
                       <option key={emp.emp_code_id} value={emp.emp_code_id}>
-                        {emp.emp_name} {emp.job_}
+                        {emp.emp_name} : {emp.job_name}
                       </option>
                     ))}
                   </select>

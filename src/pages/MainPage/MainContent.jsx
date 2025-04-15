@@ -1,6 +1,6 @@
 
 // ✅ MainContent.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import ApprovalMain from '../Approval/ApprovalMain';
@@ -30,7 +30,7 @@ const MainContent = () => {
 const location = useLocation();
 const hideSidelistPaths = ['/mainpage/maincontent/mypage']; // 더 숨기고 싶은 페이지가 있다면 배열에 추가
 const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
-
+const [reloadKey, setReloadKey] = useState(0);
 
 
   return (
@@ -73,7 +73,7 @@ const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
          
 
           
-          <Route path='schedule' element={<ScheduleMain />} />
+          <Route path='schedule' element={<ScheduleMain reloadKey={reloadKey} onRefresh={() => setReloadKey(prev => prev + 1)} />} />
           <Route path='reserve/*' element={<ReserveMain />} />
           <Route path='msg' element={<ApprovalMain />} />
           <Route path='mypage' element={<Mypage />} />

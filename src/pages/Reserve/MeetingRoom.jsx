@@ -21,6 +21,7 @@ const MeetingRoom = ({ userInfo })=> {
     const [ resouceList, setResourceList ] = useState([]);
     const [ targetResc, setTargetResc ] = useState(0);
     const [ reservations, setReservations ] = useState([]);
+    const [reloadKey, setReloadKey] = useState(0);
 
     const handleDateSelect = (selectInfo) => {
         const selectedResource = resouceList.find(
@@ -75,7 +76,7 @@ const MeetingRoom = ({ userInfo })=> {
             console.error("예약목록 불러오기 실패", error);
           });
       
-    }, [])
+    }, [reloadKey])
     
     const [showWeekends, setShowWeekends] = useState(true);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -182,7 +183,7 @@ const MeetingRoom = ({ userInfo })=> {
             />
             </div>
         </div>
-        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo}/>)}
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo} onSuccess={() => setReloadKey(prev => prev + 1)}/>)}
 
         {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} userInfo={userInfo} /> )}
         </div>
