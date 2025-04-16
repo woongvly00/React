@@ -1,4 +1,5 @@
-// ✅ FormWriteNext.jsx (트리형 참조부서 선택 포함)
+// ✅ FormWriteNext.jsx (최종 수정본 with 본문 치환 보장 + 중복 결재자 방지)
+
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import daxios from "../../axios/axiosConfig";
@@ -19,6 +20,7 @@ const applyTemplateData = (template, data) => {
 const FormWriteNext = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+
   const [userInfo, setUserInfo] = useState({ empCodeId: null, empName: "" });
   const [refDeptIds, setRefDeptIds] = useState([]);
   const [formData, setFormData] = useState({
@@ -43,18 +45,16 @@ const FormWriteNext = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      if (!state || !state.formId) return;
+      if (!state?.formId) return;
       try {
-
         const codeRes = await daxios.get("http://221.150.27.169:8888/api/employee/code");
         const code = codeRes.data;
-
         const userRes = await daxios.get(`http://221.150.27.169:8888/api/employee/${code}`);
 
+        setUserInfo(userRes.data);
         setFormData((prev) => ({ ...prev, ...state, comId: code }));
 
         const res = await daxios.get(`http://221.150.27.169:8888/api/forms/${state.formId}`);
-
         const template = res.data.formContent;
         setTemplateHtml(template);
 
@@ -66,33 +66,39 @@ const FormWriteNext = () => {
         });
         setFormData((prev) => ({ ...prev, edmsContent: updatedContent }));
       } catch (err) {
-        console.error("❌ FormWriteNext 초기화 실패", err);
+        console.error("❌ Form 초기화 실패", err);
       }
     };
     loadData();
   }, [state]);
 
   useEffect(() => {
-    if (templateHtml) {
-      const replaced = applyTemplateData(templateHtml, {
-        제목: formData.제목,
-        시작일: formData.시작일,
-        종료일: formData.종료일,
-        신청자: userInfo.empName,
-        "level1.name": formData.level1?.empName || "",
-        "level1.position": formData.level1?.jobName || "",
-        "level2.name": formData.level2?.empName || "",
-        "level2.position": formData.level2?.jobName || "",
-        "level3.name": formData.level3?.empName || "",
-        "level3.position": formData.level3?.jobName || "",
-        "level4.name": formData.level4?.empName || "",
-        "level4.position": formData.level4?.jobName || "",
-        "finalLevel.name": formData.finalLevel?.empName || "",
-        "finalLevel.position": formData.finalLevel?.jobName || "",
-      });
+    if (!templateHtml) return;
+    const replaced = applyTemplateData(templateHtml, {
+      제목: formData.제목,
+      시작일: formData.시작일,
+      종료일: formData.종료일,
+      신청자: userInfo.empName,
+      "level1.name": formData.level1?.empName || "",
+      "level2.name": formData.level2?.empName || "",
+      "level3.name": formData.level3?.empName || "",
+      "level4.name": formData.level4?.empName || "",
+      "finalLevel.name": formData.finalLevel?.empName || "",
+      "level1.position": formData.level1?.jobName || "",
+      "level2.position": formData.level2?.jobName || "",
+      "level3.position": formData.level3?.jobName || "",
+      "level4.position": formData.level4?.jobName || "",
+      "finalLevel.position": formData.finalLevel?.jobName || "",
+      "level1.status": "",
+      "level2.status": "",
+      "level3.status": "",
+      "level4.status": "",
+      "finalLevel.status": "",
+    });
+    if (formData.edmsContent !== replaced) {
       setFormData((prev) => ({ ...prev, edmsContent: replaced }));
     }
-  }, [formData.제목, formData.시작일, formData.종료일, formData.level1, formData.level2, formData.level3, formData.level4, formData.finalLevel, templateHtml, userInfo.empName]);
+  }, [formData, templateHtml, userInfo.empName]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -105,20 +111,34 @@ const FormWriteNext = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.finalLevel) {
-      if (formData.level4) {
-        const confirmAuto = window.confirm("⚠️ 최종결재자가 지정되지 않았습니다. level4를 최종결재자로 자동 지정할까요?");
-        if (confirmAuto) {
-          formData.finalLevel = formData.level4;
-        } else {
-          alert("❌ 최종결재자를 지정하거나 자동지정을 허용해야 제출할 수 있습니다.");
-          return;
-        }
-      } else {
-        alert("❌ 최종결재자를 반드시 선택해야 합니다.");
-        return;
-      }
+
+    if (!formData.finalLevel?.emp_code_id) {
+      alert("❌ 최종결재자를 반드시 선택해야 합니다.");
+      return;
     }
+
+    // 최종 치환 보장
+    const finalContent = applyTemplateData(templateHtml, {
+      제목: formData.제목,
+      시작일: formData.시작일,
+      종료일: formData.종료일,
+      신청자: userInfo.empName,
+      "level1.name": formData.level1?.empName || "",
+      "level2.name": formData.level2?.empName || "",
+      "level3.name": formData.level3?.empName || "",
+      "level4.name": formData.level4?.empName || "",
+      "finalLevel.name": formData.finalLevel?.empName || "",
+      "level1.position": formData.level1?.jobName || "",
+      "level2.position": formData.level2?.jobName || "",
+      "level3.position": formData.level3?.jobName || "",
+      "level4.position": formData.level4?.jobName || "",
+      "finalLevel.position": formData.finalLevel?.jobName || "",
+      "level1.status": "",
+      "level2.status": "",
+      "level3.status": "",
+      "level4.status": "",
+      "finalLevel.status": "",
+    });
 
     try {
       const payload = {
@@ -128,39 +148,36 @@ const FormWriteNext = () => {
         comId: Number(formData.comId),
         stateCode: Number(formData.stateCode),
         refDept: refDeptIds.join(","),
-        level1: formData.level1?.empCodeId || null,
-        level2: formData.level2?.empCodeId || null,
-        level3: formData.level3?.empCodeId || null,
-        level4: formData.level4?.empCodeId || null,
-        finalLevel: formData.finalLevel?.empCodeId || null,
+        level1: formData.level1?.emp_code_id || null,
+        level2: formData.level2?.emp_code_id || null,
+        level3: formData.level3?.emp_code_id || null,
+        level4: formData.level4?.emp_code_id || null,
+        finalLevel: formData.finalLevel?.emp_code_id || null,
         edmsTitle: formData.제목 || "제목 없음",
-        edmsContent: formData.edmsContent,
+        edmsContent: finalContent,
         startDate: formData.시작일 || null,
         endDate: formData.종료일 || null,
       };
 
       console.log("📤 제출할 formData:", JSON.stringify(payload, null, 2));
-
-      await daxios.post("http://221.150.27.169:8888/api/edms/register", payload);
+      await daxios.post("http://10.10.55.22/api/edms/register", payload);
 
       alert("✅ 제출 완료");
-      navigate("/mainpage");
+      navigate("/mainpage/maincontent/approval/requested", {
+        state: { refresh: true },
+      });
     } catch (err) {
       console.error("❌ 제출 실패", err);
       alert("❌ 제출 실패: 콘솔 확인");
     }
   };
 
-  const isVacationOrBusiness = () => {
-    return (
-      templateHtml.includes("{{시작일}}") || templateHtml.includes("{{종료일}}")
-    );
-  };
+  const isVacationOrBusiness = () =>
+    templateHtml.includes("{{\uC2DC\uC791\uC77C}}") || templateHtml.includes("{{\uC885\uB8CC\uC77C}}")
 
   return (
     <div style={{ padding: "2rem" }}>
       <h2>전자결재 작성</h2>
-
       <label>제목</label>
       <input name="제목" value={formData.제목} onChange={handleInputChange} required />
 
@@ -182,18 +199,32 @@ const FormWriteNext = () => {
           height: 400,
           menubar: true,
           plugins: "lists link image table code preview",
-          toolbar: "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | code preview",
+          toolbar:
+            "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | code preview",
         }}
       />
 
       <label>참조 부서</label>
       <RefDeptTreeSelector selected={refDeptIds} onChange={setRefDeptIds} />
 
-      <button type="button" onClick={() => setIsModalOpen(true)}>결재자 선택</button>
+      <button type="button" onClick={() => setIsModalOpen(true)}>
+        결재자 선택
+      </button>
       <ApproverModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSelect={(approvers) => {
+          console.log("📥 모달에서 받은:", approvers);
+          const selectedIds = Object.values(approvers)
+            .filter(Boolean)
+            .map((emp) => emp.emp_code_id);
+
+          const hasDuplicates = new Set(selectedIds).size !== selectedIds.length;
+          if (hasDuplicates) {
+            alert("❌ 동일한 결재자를 여러 단계에 지정할 수 없습니다.");
+            return;
+          }
+
           setFormData((prev) => ({
             ...prev,
             level1: approvers.level1,
@@ -205,7 +236,9 @@ const FormWriteNext = () => {
         }}
       />
 
-      <button onClick={handleSubmit} style={{ marginTop: "1rem" }}>제출</button>
+      <button onClick={handleSubmit} style={{ marginTop: "1rem" }}>
+        제출
+      </button>
     </div>
   );
 };
