@@ -9,14 +9,14 @@ const Mypage = () => {
     const [formData, setFormData] = useState({});   
     const [userInfo, setUserInfo] = useState(null);
     const { userId, isInitialized } = useAuthStore();
-    const [profileImage, setProfileImage] = useState("/default-profile.png"); // 기본 이미지로 초기화
+    const [profileImage, setProfileImage] = useState("/Default2.png"); // 기본 이미지로 초기화w
     const [profileFile, setProfileFile] = useState(null);
     const [imageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
         if (!isInitialized || !userId) return;
-
         authAxios.get("http://10.5.5.6/mypage/info")
+
 
             .then(res => {
                 setUserInfo(res.data);
@@ -80,7 +80,7 @@ const Mypage = () => {
             formDataToSend.append("profile", profileFile);
         }
 
-        axios.put("http://10.10.55.66/mypage/update", formDataToSend, {
+        axios.put("http://10.10.55.69/mypage/update", formDataToSend, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
@@ -97,7 +97,7 @@ const Mypage = () => {
     };
     
     const handleImageError = () => {
-        setProfileImage("/default-profile.png");
+        setProfileImage("/Default2.png");
     };
 
     if (!userInfo) {
@@ -119,11 +119,12 @@ const Mypage = () => {
                 <div className={style.profileSection}>
                     <div className={style.imageContainer}>
                         <img 
-                            src={profileImage} 
+                            src={`http://10.10.55.69/files/upload/profile${profileImage}`} 
                             alt="프로필" 
                             className={style.profileImage}
                             onError={handleImageError}
                             onLoad={() => setImageLoaded(true)}
+                            style={{width:'100%',height:'100%'}}
                         />
                     </div>
                     

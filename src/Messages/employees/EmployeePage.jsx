@@ -100,7 +100,7 @@ function EmployeePage({openChat}) {
                                 </div>
                             </div>
                             <div className={style.namebox} onDoubleClick={()=>openChat(emp.emp_code_id,myInfo?.emp_code_id,emp.emp_name)}>
-                                <div className={style.anothername}>{emp.emp_name}</div> {/* 사원명 출력 */}
+                                <div className={style.anothername} translate="no">{emp.emp_name}</div> {/* 사원명 출력 */}
                             </div>
                         </div>
                     ))}
