@@ -84,13 +84,13 @@ const Sidelist = () => {
 
   const ScheduleSidelist = () => (
     <div className={sideliststyle.sideList}>
-      <ScheduleList />
+      <ScheduleList  reloadKey={reloadKey} onRefresh={handleGlobalRefresh} />
     </div>
   );
 
   const ReserveSidelist = () => (
     <div className={sideliststyle.sideList}>
-      <ResvSideList />
+      <ResvSideList  reloadKey={reloadKey} onRefresh={handleGlobalRefresh} />
     </div>
   );
 
