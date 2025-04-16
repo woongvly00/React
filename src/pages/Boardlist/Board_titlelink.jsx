@@ -172,7 +172,7 @@ const [defaultBoardData, setDefaultBoardData] = useState({
         axios.post(`http://10.5.5.12/reply/insert`, {
             board_id: parseInt(boardId),
             reply_coontent: newReply,
-            reply_writer: "emp_name"
+            reply_writer: defaultBoardData.emp_name
         }).then(() => {
             axios.get(`http://10.5.5.12/reply`, {
                 params: { board_id: boardId }
@@ -196,7 +196,7 @@ const [defaultBoardData, setDefaultBoardData] = useState({
         axios.put(`http://10.5.5.12/reply/update`, {
             reply_id: editingReplyId,
             reply_coontent: editedContent,
-            reply_writer: "잇츠미"
+            reply_writer: defaultBoardData.emp_name
         }).then(() => {
             setReplies(prev =>
                 prev.map(reply =>

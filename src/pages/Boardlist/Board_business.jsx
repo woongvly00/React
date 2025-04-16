@@ -22,19 +22,26 @@ const Board_business = () => {
     const [boardList, setBoardList] = useState([]);
 
 
-
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
+    
+        if (!token) {
+            console.warn("❌ JWT 토큰이 없습니다. 로그인 필요.");
+            return;
+        }
+    
         axios.get("http://10.5.5.12/mypage/info", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
         .then((resp) => {
+            console.log("🧾 로그인 사용자 정보 로딩 완료:", resp.data); 
             setUserInfo(resp.data);
+            console.log("👤 현재 로그인 사용자 이름:", resp.data.emp_name);
         })
         .catch((error) => {
-            console.error("실패", error);
+            console.error("❌ 사용자 정보 불러오기 실패:", error);
         });
     }, []);
 
@@ -49,7 +56,8 @@ const Board_business = () => {
             params: {
                 page: currentPage,
                 size: 10,
-                parent_board: numericBoardId
+                parent_board: numericBoardId, 
+                emp_info: userInfo
             }
         })
         .then(res => {

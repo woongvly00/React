@@ -43,6 +43,7 @@ const Board_write_button = () => {
     // 로그인 토큰을 디코딩하고, 사용자 이름(emp_name)을 가져와 defaultBoardData 업데이트
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
+    
         let userId = 'anonymous';
         if (token) {
             try {
