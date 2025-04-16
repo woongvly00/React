@@ -78,16 +78,16 @@ const MainContent = () => {
 
 
           {/* 게시판 */}
-          <Route path='board/:boardId' element={<Board_business />} />
-          <Route path='titlelink/:boardId' element={<Board_titlelink />} />
-          <Route path='write_button' element={<Board_write_button />} />
-          <Route path='standard' element={<Boardlist />} />
-          <Route path='reference' element={<Board_reference />} />
-          <Route path='free' element={<Board_free />} />
-          <Route path='club' element={<Board_club />} />
-          <Route path='department' element={<Board_department />} />
-          <Route path='business' element={<Board_business />} />
-          <Route path='support' element={<Board_support />} />
+          <Route path='board/' element={<Boardlist/>} />
+          <Route path='board/titlelink/:boardId' element={<Board_titlelink />} />
+          <Route path='board/write_button' element={<Board_write_button />} />
+          <Route path='board/standard' element={<Boardlist />} />
+          <Route path='board/reference' element={<Board_reference />} />
+          <Route path='board/free' element={<Board_free />} />
+          <Route path='board/club' element={<Board_club />} />
+          <Route path='board/department' element={<Board_department />} />
+          <Route path='board/business' element={<Board_business />} />
+          <Route path='board/support' element={<Board_support />} />
 
           {/* 스케줄 & 예약 */}
           <Route path='schedule' element={<ScheduleMain reloadKey={reloadKey} onRefresh={handleGlobalRefresh}  />} />
