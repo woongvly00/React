@@ -18,7 +18,7 @@ const Index = () => {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        axios.post('http://10.10.55.22/auth/login', login)
+        axios.post('http://221.150.27.169:8888/auth/login', login)
             .then((resp) => {
                 const token = resp.data;
                 sessionStorage.setItem("jwtToken", token);
