@@ -4,7 +4,7 @@ import sideliststyle from './Sidelist.module.css';
 import ScheduleList from '../pages/Schedule/ScheduleList';
 import ResvSideList from '../pages/Reserve/ResvSideList';
 
-const Sidelist = () => {
+const Sidelist = ({ onRefresh}) => {
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -84,13 +84,13 @@ const Sidelist = () => {
 
   const ScheduleSidelist = () => (
     <div className={sideliststyle.sideList}>
-      <ScheduleList  reloadKey={reloadKey} onRefresh={handleGlobalRefresh} />
+      <ScheduleList  onRefresh={onRefresh} />
     </div>
   );
 
   const ReserveSidelist = () => (
     <div className={sideliststyle.sideList}>
-      <ResvSideList  reloadKey={reloadKey} onRefresh={handleGlobalRefresh} />
+      <ResvSideList onRefresh={onRefresh} />
     </div>
   );
 

@@ -1,8 +1,9 @@
 import bstyle from './Board_business.module.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import daxios from '../../axios/axiosConfig';
 import { useNavigate, useLocation } from 'react-router-dom';
+import caxios from '../../Utils/caxios';
 
 
 const Board_business = () => {
@@ -22,19 +23,11 @@ const Board_business = () => {
     const [boardList, setBoardList] = useState([]);
 
 
-    useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
     
-        if (!token) {
-            console.warn("❌ JWT 토큰이 없습니다. 로그인 필요.");
-            return;
-        }
-    
-        axios.get("http://10.5.5.12/mypage/info", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+
+        useEffect(()=>{
+            
+        caxios.get("/mypage/info")
         .then((resp) => {
             console.log("🧾 로그인 사용자 정보 로딩 완료:", resp.data); 
             setUserInfo(resp.data);
@@ -52,7 +45,7 @@ const Board_business = () => {
             currentPage
         });
 
-        axios.get(`http://10.5.5.12/board/navigator`, {
+        caxios.get(`/board/navigator`, {
             params: {
                 page: currentPage,
                 size: 10,
@@ -114,7 +107,7 @@ const Board_business = () => {
     };
 
     const increaseViewCount = (post_id) => {
-        axios.get(`http://10.5.5.12/board/increaseViewCount/${post_id}`)
+        daxios.get(`http://10.5.5.12/board/increaseViewCount/${post_id}`)
         .then(() => {
             navigate(`/mainpage/maincontent/titlelink/${post_id}`);
         })
@@ -215,7 +208,6 @@ const Board_business = () => {
             </div>
         </div>
     );
-    
 };
 
 export default Board_business;
