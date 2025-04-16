@@ -153,12 +153,17 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
       alert("캘린더를 선택해주세요.");
       return;
     }
+
+    const startTime = eventInput.startTime || "09:00";
+    const endTime = eventInput.endTime || "18:00";
+    const endDate = eventInput.end_date || eventInput.start_date;
+
     const newEvent = {
       id: Date.now().toString(),
       c_id: eventInput.c_id,
       title: eventInput.title,
-      start: `${eventInput.start_date}T${eventInput.startTime}`,
-      end: `${eventInput.end_date}T${eventInput.endTime}`,
+      start: `${eventInput.start_date}T${startTime}`,
+      end: `${endDate}T${endTime}`,
       allDay: false,
       color:`${eventInput.color}`,
       extendedProps: {
@@ -176,13 +181,21 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
     calendarApi.addEvent(newEvent);
 
 
-    caxios.post("/schedule", eventInput)
+    const postData = {
+      ...eventInput,
+      startTime,
+      endTime,
+      end_date: endDate
+    };
+
+    caxios.post("/schedule", postData)
     .then(() => {
       if (onRefresh) onRefresh();
     })
     .catch((error) => {
       if (error.response?.status === 404 || 500) {
         alert("등록에 실패했습니다.");
+        if (onRefresh) onRefresh();
       }
     });
 
