@@ -74,7 +74,7 @@ function ChattingRoom({ openChat }) {
                         <div key={index} className={style.another} >
                             <div className={style.imgbox}>
                                 <div className={style.anotherimg}>
-                                     <img src={`http://10.10.55.66${room.profileImg}`} style={{width:'100%',height:'100%', borderRadius:'50%',objectFit:'cover'}}></img>
+                                     <img src={`http://10.10.55.69${room.profileImg}`} style={{width:'100%',height:'100%', borderRadius:'50%',objectFit:'cover'}}></img>
                                 </div>
                             </div>
                             <div className={style.namebox} onDoubleClick={() => openChat(room.EMP_CODE_ID, myId, room.EMP_NAME)}>
