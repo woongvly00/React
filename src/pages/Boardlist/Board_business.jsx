@@ -53,12 +53,26 @@ const Board_business = () => {
             }
         })
         .then(res => {
-            console.log("📦 게시글 데이터:", res.data);
-            setBoardList(res.data.list);
-            setTotalPages(res.data.totalPages);
+            console.log("🟡 응답 데이터 전체:", res.data);
+            const data = res.data;
+    
+            if (!data.list || !Array.isArray(data.list)) {
+                console.warn("📛 게시글 목록이 없습니다.");
+                setBoardList([]);
+                setTotalPages(1);
+                return;
+            }
+    
+            console.log("📦 게시글 데이터:", data);
+            setBoardList(data.list);
+    
+            const safePages = Math.max(Math.ceil(data.totalPages), 1);
+            setTotalPages(safePages);
         })
         .catch(err => {
-            console.error("페이지 데이터 로딩 실패:", err);
+            console.error("❌ 게시글 목록 API 호출 실패:", err);
+            setBoardList([]);
+            setTotalPages(1);
         });
     };
 
@@ -79,10 +93,16 @@ const Board_business = () => {
             }
             return 0;
         });
-
-        return sorted.filter(item =>
-            item.post_title.toLowerCase().includes(query)
+    
+        const filtered = sorted.filter(item =>
+            item.post_title?.toLowerCase().includes(query)
         );
+    
+        // ✅ 여기에 추가!
+        console.log("📦 필터링 후 게시글 수:", filtered.length);
+        console.log("📝 현재 검색어:", query);
+    
+        return filtered;
     };
 
     const increaseViewCount = (post_id) => {
