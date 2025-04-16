@@ -28,11 +28,20 @@ function ChattingRoom({ openChat }) {
                     const sortedRooms = room.data.sort((a, b) =>
                         new Date(b.LAST_SEND_DATE) - new Date(a.LAST_SEND_DATE)
                     );
-                    setRoomEmployees(sortedRooms);
 
+                    Promise.all(
+                        sortedRooms.map((room) =>
+                            axios.get("http://10.5.5.2/Employee/ProfileImg",{
+                                params: {empId: room.EMP_CODE_ID}
+                            }).then((imgResp)=>{
+                                room.profileImg = imgResp.data;
+                                return room;
+                            })
+                        )
+                    ).then((roomsWithImages) => {
+                        setRoomEmployees(roomsWithImages);
+                    })
                 })
-
-
             })
     }
 
@@ -65,7 +74,7 @@ function ChattingRoom({ openChat }) {
                         <div key={index} className={style.another} >
                             <div className={style.imgbox}>
                                 <div className={style.anotherimg}>
-                                    {/* <img src=""></img> 프로필 이미지 넣는곳*/}
+                                     <img src={`http://10.10.55.66${room.profileImg}`} style={{width:'100%',height:'100%', borderRadius:'50%',objectFit:'cover'}}></img>
                                 </div>
                             </div>
                             <div className={style.namebox} onDoubleClick={() => openChat(room.EMP_CODE_ID, myId, room.EMP_NAME)}>

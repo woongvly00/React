@@ -18,6 +18,7 @@ const Mypage = () => {
         authAxios.get("http://10.10.55.66/mypage/info")
             .then(res => {
                 setUserInfo(res.data);
+                console.log(res);
                 setFormData({
                     emp_code_id: res.data.emp_code_id,
                     emp_email: res.data.emp_email,
