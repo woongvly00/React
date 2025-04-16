@@ -100,6 +100,18 @@ const MeetingRoom = ({ userInfo })=> {
         setIsDetailOpen(true);
     };
 
+    const renderEventContent = (eventInfo) => {
+        const isMine = eventInfo.event.extendedProps.emp_id === userInfo.emp_code_id;
+        const bgColor = isMine ? '#4f7fd8' : '#d5e8fa'; 
+      
+        return (
+          <div style={{ backgroundColor: bgColor, borderRadius: '4px', padding: '2px', color: '1a3c6c' }}>
+            <b>{eventInfo.timeText}</b> <br />
+            <span>{eventInfo.event.title}</span>
+          </div>
+        );
+      };
+
     return (
         <div>
         <div className={rStyle.reservTable}>
@@ -186,6 +198,7 @@ const MeetingRoom = ({ userInfo })=> {
             select={handleDateSelect}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
             eventClick={selectResv}
+            eventContent={renderEventContent}
             />
             </div>
         </div>
