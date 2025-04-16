@@ -24,7 +24,7 @@ import style from './MainContent.module.css';
 import InsaPage from '../insa/insapage';
 import Annaul from '../insa/Annaul';
 import Deptment from '../insa/Deptment';
-
+import ApplyForm from '../insa/ApplyForm ';
 
 const MainContent = () => {
 const location = useLocation();
@@ -59,6 +59,8 @@ const [reloadKey, setReloadKey] = useState(0);
           <Route path='insa/attend' element={<InsaPage/>}></Route>
           <Route path='insa/record' element={<Annaul/>}></Route>
           <Route path='insa/deptment' element={<Deptment/>}></Route>
+          <Route path='insa/ApplyForm' element={<ApplyForm/>}></Route>
+
           
           <Route path='board/:boardId' element={<Board_business />} />
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />
