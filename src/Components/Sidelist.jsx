@@ -8,26 +8,7 @@ const Sidelist = ({ onRefresh }) => {
   const location = useLocation();
   const pathname = location.pathname;
 
-  const boardPaths = [
-    '/board',
-    '/write_button',
-    '/standard',
-    '/reference',
-    '/free',
-    '/club',
-    '/department',
-    '/business',
-    '/support'
-  ];
-
-  const hrPaths =[
-    '/attend',
-    '/record',
-    '/insa',
-    '/admin_insa',
-    '/deptment',
-    '/ApplyForm'
-  ];
+ 
 
 
   console.log("🧠 Sidelist 렌더 중 - 현재 경로:", pathname);

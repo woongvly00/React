@@ -3,13 +3,11 @@
 import React, { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
-
 import ApprovalMain from '../Approval/ApprovalMain';
 import ApprovalDetail from '../Approval/ApprovalDetail';
 import FormWrite from '../Approval/ApprovalWrite';
 import FormWriteNext from '../Approval/FormWriteNext';
 import ApprovalListPage from '../Approval/ApprovalListPage'; // ✅ 리스트 페이지 import
-
 import ScheduleMain from '../Schedule/ScheduleMain';
 import Boardlist from '../Boardlist/Board_standard';
 import Board_reference from '../Boardlist/Board_refernece';
@@ -20,16 +18,13 @@ import Board_business from '../Boardlist/Board_business';
 import Board_support from '../Boardlist/Board_support';
 import Board_write_button from '../Boardlist/Board_write_button';
 import Board_titlelink from '../Boardlist/Board_titlelink';
-
 import Mypage from '../Mypage/Mypage';
 import ReserveMain from '../Reserve/ReserveMain';
 import Sidelist from '../../Components/Sidelist';
 import style from './MainContent.module.css';
-
 import InsaPage from '../insa/insapage';
 import Annaul from '../insa/Annaul';
 import Deptment from '../insa/Deptment';
-
 import ApplyForm from '../insa/ApplyForm ';
 
 const MainContent = () => {
