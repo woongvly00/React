@@ -30,6 +30,8 @@ import InsaPage from '../insa/insapage';
 import Annaul from '../insa/Annaul';
 import Deptment from '../insa/Deptment';
 
+import ApplyForm from '../insa/ApplyForm ';
+
 const MainContent = () => {
   const location = useLocation();
   const hideSidelistPaths = ['/mainpage/maincontent/mypage'];
@@ -65,11 +67,12 @@ const MainContent = () => {
 
           {/* 인사 */}
           <Route path='insa' element={<InsaPage />} />
-          <Route path='insa/attend' element={<InsaPage />} />
-          <Route path='insa/record' element={<Annaul />} />
-          <Route path='insa/deptment' element={<Deptment />} />
 
-          {/* 게시판 */}
+          <Route path='insa/attend' element={<InsaPage/>}></Route>
+          <Route path='insa/record' element={<Annaul/>}></Route>
+          <Route path='insa/deptment' element={<Deptment/>}></Route>
+          <Route path='insa/ApplyForm' element={<ApplyForm/>}></Route>
+
           <Route path='board/:boardId' element={<Board_business />} />
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />
           <Route path='write_button' element={<Board_write_button />} />

@@ -7,7 +7,7 @@ import MainpageSchedule from '../pages/Schedule/MainpageSchedule';
 
 const Sidebar = () => {
   const { token } = useAuthStore();
-  const [activeActivity, setActiveActivity] = useState(null);
+  // const [activeActivity, setActiveActivity] = useState(null); 이거구나!!! 왜 상태변화가 저장안되나했네
   const [loading, setLoading] = useState(true);
 
   const {
@@ -16,6 +16,8 @@ const Sidebar = () => {
     isCheckedIn,
     isCheckedOut,
     currentActivity,
+    activeActivity, // 업무나 외근도 상태변화 유지
+    setActiveActivity,  //
     setCheckInTime,
     setCheckOutTime,
     setIsCheckedIn,
@@ -32,16 +34,12 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchCheckInData = async () => {
       try {
-        const res1 = await daxios.get("http://10.10.55.66/work/checkInTime", {
+        const res1 = await daxios.get("http://10.10.55.69/work/checkInTime", {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-
         const checkIn = res1.data?.checkInTime;
         const checkOut = res1.data?.checkOutTime;
-
-        console.log(checkIn);
-        console.log(checkOut);
 
 
         if (checkIn) {
@@ -101,9 +99,9 @@ const Sidebar = () => {
   // ✅ 출근 처리
   const handleCheckIn = async () => {
     const currentTime = new Date().toISOString();
-
+    console.log(token+"(토큰오냐?)");
     try {
-      const res = await daxios.post("http://10.10.55.66/work/checkIn", {}, {
+      const res = await daxios.post("http://10.10.55.69/work/checkIn", {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -124,7 +122,7 @@ const Sidebar = () => {
     const currentTime = new Date().toISOString();
 
     try {
-      const res = await daxios.post("http://10.10.55.66/work/checkOut", {
+      const res = await daxios.post("http://10.10.55.69/work/checkOut", {
         checkOutTime: currentTime
       }, {
         headers: {
@@ -150,7 +148,7 @@ const Sidebar = () => {
     setActiveActivity(type);
 
     try {
-      const res = await daxios.post("http://10.10.55.66/work/start", {
+      const res = await daxios.post("http://10.10.55.69/work/start", {
         attendance_id: todayAttendanceId,
         activity_type: type,
         start_time: now

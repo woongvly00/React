@@ -8,6 +8,28 @@ const Sidelist = () => {
   const location = useLocation();
   const pathname = location.pathname;
 
+  const boardPaths = [
+    '/board',
+    '/write_button',
+    '/standard',
+    '/reference',
+    '/free',
+    '/club',
+    '/department',
+    '/business',
+    '/support'
+  ];
+
+  const hrPaths =[
+    '/attend',
+    '/record',
+    '/insa',
+    '/admin_insa',
+    '/deptment',
+    '/ApplyForm'
+  ];
+
+
   console.log("🧠 Sidelist 렌더 중 - 현재 경로:", pathname);
 
   // Helper: 정확한 경로 파악
@@ -80,8 +102,10 @@ const Sidelist = () => {
           <ul>
             <li><Link to="/mainpage/maincontent/insa/attend">개인 근태관리</Link></li>
             <li><Link to="/mainpage/maincontent/insa/record">휴가 / 출장 기록관리</Link></li>
-            <li><Link to="/mainpage/maincontent/admin_insa/admin">휴가/관리자</Link></li>
-            <li><Link to="/mainpage/maincontent/insa/deptment">부서 출/퇴근 조회</Link></li>
+            <li><Link to="/mainpage/maincontent/admin_insa/admin">휴가/</Link></li>
+            <li><Link to="/mainpage/maincontent/insa/deptment">부서별 출 / 퇴근 및 근무기록 조회/</Link></li>
+            <li><Link to="/mainpage/maincontent/insa/ApplyForm">휴가 / 출장 / 초과근무 등 신청/</Link></li>
+
           </ul>
         </div>
       </aside>

@@ -16,6 +16,7 @@ const ApprovalMain = () => {
           daxios.get("http://221.150.27.169:8888/api/edms/waiting"),
           daxios.get("http://221.150.27.169:8888/api/edms/mydrafts"),
 
+
         ]);
 
         console.log("✅ 대기 문서 응답:", waitingRes);
