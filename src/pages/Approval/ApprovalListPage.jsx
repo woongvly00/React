@@ -36,6 +36,7 @@ const ApprovalListPage = () => {
       console.log(`📡 API 요청 시작 → /api/edms/${apiSuffix}`);
       const res = await daxios.get(`http://221.150.27.169:8888/api/edms/${apiSuffix}`);
       console.log("✅ API 응답 수신:", res.data);
+      const res = await daxios.get(`http://10.5.5.6/api/edms/${apiSuffix}`);
       setDocs(res.data);
       setError(null);
     } catch (err) {

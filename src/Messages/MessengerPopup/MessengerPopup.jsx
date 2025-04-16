@@ -111,6 +111,8 @@ function MessengerPopup({ onClose }) {
       navigate("/messenger/chattingroom");
     } else if (fromPage === "/messenger/employee") {
       navigate("/messenger/employee");
+    } else if (fromPage === "/messenger/groupchatting") {
+      navigate("/messenger/groupchatting");
     } else {
       navigate("/messenger");
     }
@@ -130,9 +132,6 @@ function MessengerPopup({ onClose }) {
     if (showPopup) {
       axios.get("http://10.5.5.2/Employee/SelectEmp")
         .then((resp) => {
-          console.log(selected)
-          console.log(myInfo.emp_code_id)
-          
           const filtered = resp.data.filter(emp => emp.emp_code_id !== myInfo.emp_code_id);
           setEmployees(filtered);
 
@@ -177,7 +176,10 @@ function MessengerPopup({ onClose }) {
 
       setCurrentChat(selectedNames);
 
-      navigate(`/messenger/chatting?chat=${selectedNames}&from=${myInfo.emp_code_id}&seq=${seq}`);
+      navigate(`/messenger/chatting?chat=${selectedNames}&from=${myInfo.emp_code_id}&seq=${seq}`,{
+        state: { fromPage: location.pathname }
+      });
+      
       setSelected([]);
       setShowPopup(false);
 

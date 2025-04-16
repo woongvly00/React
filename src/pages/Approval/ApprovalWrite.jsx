@@ -18,9 +18,15 @@ const ApprovalWrite = () => {
     const fetchInitialData = async () => {
       try {
         const [formRes, categoryRes, empRes] = await Promise.all([
+<<<<<<< HEAD
           daxios.get("http://221.150.27.169:8888/api/forms"),
           daxios.get("http://221.150.27.169:8888/api/category"),
           daxios.get("http://221.150.27.169:8888/api/employee/code"),
+=======
+          daxios.get("http://10.5.5.6/api/forms"),
+          daxios.get("http://10.5.5.6/api/category"),
+          daxios.get("http://10.5.5.6/api/employee/code"),
+>>>>>>> 334b04d4c4d08f22c84d4d03717a7629f8e8c253
         ]);
         setForms(formRes.data);
         setCategories(categoryRes.data);
@@ -38,6 +44,7 @@ const ApprovalWrite = () => {
       if (!selectedFormId || categories.length === 0) return;
       try {
         const res = await daxios.get(`http://221.150.27.169:8888/api/forms/${selectedFormId}`);
+
         const form = res.data;
         setPreviewContent(form.formContent || "");
 

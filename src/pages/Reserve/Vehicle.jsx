@@ -7,11 +7,11 @@ import caxios from '../../Utils/caxios';
 import rStyle from './MettingRoom.module.css';
 import InputResev from './InputResv';
 import koLocale from '@fullcalendar/core/locales/ko';
+import ResvDetail from './ResvDetail';
 
 
 
-
-const Vehicle = ()=> {
+const Vehicle = ({ userInfo })=> {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
@@ -20,8 +20,17 @@ const Vehicle = ()=> {
     const [ reservations, setReservations ] = useState([]);
 
     const handleDateSelect = (selectInfo) => {
-        setSelectedInfo(selectInfo);
-        setIsModalOpen(true);
+        const selectedResource = resouceList.find(
+            (resource) => resource.resc_id == targetResc
+          );
+        
+          if (selectedResource?.resc_status !== 'active') {
+            alert("해당 자원은 현재 사용 불가 상태입니다.");
+            return;
+          }
+        
+          setSelectedInfo(selectInfo);
+          setIsModalOpen(true);
       };
 
     useEffect(() => {
@@ -57,7 +66,7 @@ const Vehicle = ()=> {
                 }
               };
             });
-          
+            setTargetResc(1005);
             setReservations(formatResev);
           }).catch((error) => {
             console.error("예약목록 불러오기 실패", error);
@@ -65,7 +74,21 @@ const Vehicle = ()=> {
       
     }, [])
     
-    
+    const [showWeekends, setShowWeekends] = useState(true);
+    const [isDetailOpen, setIsDetailOpen] = useState(false);
+        const [ selectedResv , setSeletedResv] = useState(null); 
+        const selectResv = (clickInfo) => {
+            const selectedResource = resouceList.find(
+                (resource) => resource.resc_id == targetResc
+              );
+              if (selectedResource?.resc_status !== 'active') {
+                alert("해당 자원은 현재 사용 불가 상태입니다.");
+                return; 
+              }
+              setSeletedResv(clickInfo.event);
+            console.log(clickInfo);
+            setIsDetailOpen(true);
+        };
 
     return (
         <div>
@@ -74,7 +97,6 @@ const Vehicle = ()=> {
                 차량 예약 현황 조회
                 <br></br>
                 <select onChange={(e) => setTargetResc(e.target.value)}>
-                    <option value="">자원선택</option>
                     {resouceList
                     .filter((resource)=>{
                         if(resource.resc_type_id != 120){
@@ -127,21 +149,34 @@ const Vehicle = ()=> {
             slotDuration="00:30:00"
             locales={[koLocale]}
             locale="ko"
-            headerToolbar={{
-                left: '',
-                center: 'prev today next',
-                right: ''
+            titleFormat={{
+                month: 'long',
+                day: 'numeric', 
+                weekday: 'short' 
             }}
-            
+            customButtons={{
+                toggleWeekend: {
+                  text: showWeekends ? '주말 숨기기' : '주말 보이기',
+                  click: () => setShowWeekends(prev => !prev)
+                }
+            }}
+            headerToolbar={{
+                left: 'prev next',
+                center: 'title',
+                right: 'toggleWeekend'
+            }}
+            weekends={showWeekends}
+            height='auto'
             selectable={true}
-            selectMirror={true}
+            selectMirror={false}
             select={handleDateSelect}
+            eventClick={selectResv}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
             />
             </div>
         </div>
-        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}/>)}
-        
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo}/>)}
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)}   userInfo={userInfo}/>)}
         </div>
     )
 };
