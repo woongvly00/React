@@ -147,10 +147,7 @@ const Board_write_button = () => {
                             <button onClick={handleBoardwrite}>등록</button>
                             <button onClick={() => navigate(-1)}>취소</button>
                         </div>
-                        <div className={bstyle.gasyselect}>
-                            <div className={bstyle.gasywrite}>게시판</div>
                         
-                        </div>
                         <div className={bstyle.titlewrtie}>
                             <div className={bstyle.title4}>작성자</div>
                             <div className={bstyle.text4}>
