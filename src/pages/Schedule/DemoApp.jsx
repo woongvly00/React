@@ -283,8 +283,9 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
 
   const handleSave = () => {
     console.log(update);
-    caxios.put(`/schedule/${update.id}`, update).then(resp => {
-      
+    caxios.put(`/schedule/${update.id}`, update)
+    .then(resp => {
+      if (onRefresh) onRefresh();
       
     })
     .catch((error) => {
@@ -348,91 +349,112 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
         eventClick={handleEventClick}
       />
       {isModalOpen && (
-         <div className={calenderStyle['modal-overlay']}>
-          
-         <div className={calenderStyle['modal-container']}>
-          <div className={calenderStyle.closeBtn}><button type="button" className="btn-close" aria-label="Close" onClick={() => setIsModalOpen(false)}></button></div>
-         <h2>일정 추가</h2>
-         <div>
-             일정 종류
-             <select name="c_id" value={eventInput.c_id} onChange={handleInput}>
-                 <option value="">캘린더 선택</option>
-
-                 {
-                   calList
-                   .filter((calendar) => {
+        <div className={calenderStyle.detailOverlay}>
+        <div className={calenderStyle.detailContainer}>
+          <div className={calenderStyle.closeBtn}>
+            <button type="button" className="btn-close" aria-label="Close" onClick={() => setIsModalOpen(false)}></button>
+          </div>
+      
+          <h2>일정 추가</h2>
+      
+          <div className={calenderStyle.timeRow}>
+            <div className={calenderStyle.timeItem}>
+              <label>일정 종류</label>
+              <select name="c_id" value={eventInput.c_id} onChange={handleInput}>
+                <option value="">캘린더 선택</option>
+                {calList
+                  .filter((calendar) => {
                     return (
                       (calendar.public_code === 30 && userInfo.emp_job_id >= 1011) ||
-                
                       (calendar.public_code === 10 && userInfo.emp_code_id == calendar.emp_id) ||
-                
                       (calendar.public_code === 20 &&
                         userInfo.emp_job_id >= 1002 &&
                         (userInfo.emp_dept_id == calendar.target_id || userInfo.emp_code_id == calendar.target_id))
                     );
                   })
-                   .map((calender, index) => (
+                  .map((calender, index) => (
                     <option key={index} value={calender.c_id}>
                       {calender.c_title}
                     </option>
-                  ))
-                 }
-             </select>
-         </div>
-         <div>
-             일정 제목
-             <input
-             type="text"
-             name="title"
-             value={eventInput.title}
-             onChange={handleInput}
-             placeholder="일정 제목 입력"
-             autoFocus
-             />
-         </div>
-         <div>
-             시작일
-             <input name="start_date" type="date" value={eventInput.start_date} onChange={handleInput} />
-             종료일
-             <input name="end_date" type="date" value={eventInput.end_date} onChange={handleInput} />
-             
-         </div>
-         <div>
-             시작시간
-             <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
-             {Array.from({ length: 48 }).map((_, index) => {
+                  ))}
+              </select>
+            </div>
+          </div>
+      
+          <div className={calenderStyle.timeRow}>
+            <div className={calenderStyle.timeItem}>
+              <label>일정 제목</label>
+              <input
+                type="text"
+                name="title"
+                value={eventInput.title}
+                onChange={handleInput}
+                placeholder="일정 제목 입력"
+                autoFocus
+              />
+            </div>
+          </div>
+      
+          <div className={calenderStyle.timeRow}>
+            <div className={calenderStyle.timeItem}>
+              <label>시작일</label>
+              <input name="start_date" type="date" value={eventInput.start_date} onChange={handleInput} />
+            </div>
+            <div className={calenderStyle.timeItem}>
+              <label>종료일</label>
+              <input name="end_date" type="date" value={eventInput.end_date} onChange={handleInput} />
+            </div>
+          </div>
+      
+          <div className={calenderStyle.timeRow}>
+            <div className={calenderStyle.timeItem}>
+              <label>시작시간</label>
+              <select name="startTime" value={eventInput.startTime} onChange={handleInput}>
+                {Array.from({ length: 48 }).map((_, index) => {
+                  const h = String(Math.floor(index / 2)).padStart(2, '0');
+                  const m = index % 2 === 0 ? '00' : '30';
+                  const time = `${h}:${m}`;
+                  return <option key={time} value={time}>{time}</option>;
+              })}
+              </select>
+            </div>
+            <div className={calenderStyle.timeItem}>
+              <label>종료시간</label>
+              <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
+              {Array.from({ length: 48 }).map((_, index) => {
                  const h = String(Math.floor(index / 2)).padStart(2, '0');
                  const m = index % 2 === 0 ? '00' : '30';
                  const time = `${h}:${m}`;
                  return <option key={time} value={time}>{time}</option>;
              })}
-             </select>
-             종료시간
-             <select name="endTime" value={eventInput.endTime} onChange={handleInput}>
-             {Array.from({ length: 48 }).map((_, index) => {
-                 const h = String(Math.floor(index / 2)).padStart(2, '0');
-                 const m = index % 2 === 0 ? '00' : '30';
-                 const time = `${h}:${m}`;
-                 return <option key={time} value={time}>{time}</option>;
-             })}
-             </select>
-         </div>
-         <div>
-             일정 내용
-             <textarea
-             name="content"
-             className={calenderStyle.schetextarea}
-             value={eventInput.content}
-             onChange={handleInput}
-             placeholder="내용 입력"
-             style={{ width: '300px', height: '150px', resize: 'none' }}
-             />
-         </div>
-         <div className={calenderStyle['modal-buttons']}>
-             <button onClick={handleAddEvent}>저장</button>
-         </div>
-         </div>
-     </div>
+              </select>
+            </div>
+          </div>
+      
+          <div className={calenderStyle.timeRow}>
+            <div className={calenderStyle.timeItem}>
+              <label>일정 내용</label>
+              <textarea
+                name="content"
+                className={calenderStyle.schetextarea}
+                value={eventInput.content}
+                onChange={handleInput}
+                placeholder="내용 입력"
+                style={{ width: '300px', height: '150px', resize: 'none' }}
+              />
+            </div>
+          </div>
+      
+          <div className={calenderStyle.detailButtons}>
+            <button onClick={handleAddEvent}>저장</button>
+          </div>
+        </div>
+      </div>
+      
+
+
+
+        
       )}
 
 {isDetailOpen && selectedEvent && (
@@ -480,10 +502,20 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
             </select>
           </div>
         </div>
-        <div>
-          <strong>내용:</strong>
-          <textarea calssName={calenderStyle.schetextarea}name="content" value={update.content} onChange={handleUpdate} placeholder="내용 입력" />
-        </div>
+        <div className={calenderStyle.timeRow}>
+            <div className={calenderStyle.timeItem}>
+              <label>일정 내용</label>
+              <textarea
+                name="content"
+                className={calenderStyle.schetextarea}
+                value={update.content}
+                onChange={handleUpdate}
+                placeholder="내용 입력"
+                style={{ width: '100%', height: '150px', resize: 'none' }}
+              />
+            </div>
+          </div>
+        
       </>
     ) : (
       <>

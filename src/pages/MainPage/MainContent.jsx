@@ -37,6 +37,9 @@ const MainContent = () => {
   const hideSidelistPaths = ['/mainpage/maincontent/mypage'];
   const isSidelistVisible = !hideSidelistPaths.includes(location.pathname);
   const [reloadKey, setReloadKey] = useState(0);
+  const handleGlobalRefresh = () => {
+    setReloadKey(prev => prev + 1);
+  };
 
   return (
     <div className={style.maincontainer}>
@@ -49,7 +52,7 @@ const MainContent = () => {
         <div className={style.icons}><Link to="/mainpage/maincontent/reserve"><i className="fa-solid fa-2x fa-clock" style={{ color: "#ecf0f1" }} /></Link></div>
       </div>
 
-      {isSidelistVisible && <Sidelist />}
+      {isSidelistVisible && <Sidelist onRefresh={handleGlobalRefresh}  />}
 
       <div className={style.mainContents}>
         <Routes>
@@ -87,8 +90,8 @@ const MainContent = () => {
           <Route path='support' element={<Board_support />} />
 
           {/* 스케줄 & 예약 */}
-          <Route path='schedule' element={<ScheduleMain reloadKey={reloadKey} onRefresh={() => setReloadKey(prev => prev + 1)} />} />
-          <Route path='reserve/*' element={<ReserveMain />} />
+          <Route path='schedule' element={<ScheduleMain reloadKey={reloadKey} onRefresh={handleGlobalRefresh}  />} />
+          <Route path='reserve/*' element={<ReserveMain  reloadKey={reloadKey} onRefresh={handleGlobalRefresh}  />} />
 
           {/* 마이페이지 */}
           <Route path='mypage' element={<Mypage />} />
