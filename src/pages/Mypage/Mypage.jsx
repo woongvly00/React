@@ -15,9 +15,12 @@ const Mypage = () => {
 
     useEffect(() => {
         if (!isInitialized || !userId) return;
+
         authAxios.get("http://10.5.5.6/mypage/info")
+
             .then(res => {
                 setUserInfo(res.data);
+                console.log(res);
                 setFormData({
                     emp_code_id: res.data.emp_code_id,
                     emp_email: res.data.emp_email,
@@ -30,6 +33,7 @@ const Mypage = () => {
                 const path = res.data.profsileDTO?.profile_path;
                 if (path) {
                     setProfileImage(`http://10.5.5.6${path}`);
+
                 }
             })
             .catch(err => {
