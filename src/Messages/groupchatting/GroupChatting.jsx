@@ -136,7 +136,7 @@ function GroupChatting({ openChat }) {
                     onContextMenu={(e) => handleContextMenu(e, room.msg_group_id)}>
                     <div className={style.imgbox}>
                         <div className={style.anotherimg}>
-                            {/* <img src=""></img> 프로필 이미지 넣는곳*/}
+                             <img src={`http://10.10.55.69/files/upload/profile/groupdefault.png`} style={{width:'100%',height:'100%', borderRadius:'50%',objectFit:'cover'}}></img> 
                         </div>
                     </div>
                     <div className={style.namebox} >

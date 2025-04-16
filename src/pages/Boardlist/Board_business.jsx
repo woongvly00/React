@@ -22,19 +22,26 @@ const Board_business = () => {
     const [boardList, setBoardList] = useState([]);
 
 
-
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
+    
+        if (!token) {
+            console.warn("❌ JWT 토큰이 없습니다. 로그인 필요.");
+            return;
+        }
+    
         axios.get("http://10.5.5.12/mypage/info", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
         .then((resp) => {
+            console.log("🧾 로그인 사용자 정보 로딩 완료:", resp.data); 
             setUserInfo(resp.data);
+            console.log("👤 현재 로그인 사용자 이름:", resp.data.emp_name);
         })
         .catch((error) => {
-            console.error("실패", error);
+            console.error("❌ 사용자 정보 불러오기 실패:", error);
         });
     }, []);
 
@@ -49,16 +56,31 @@ const Board_business = () => {
             params: {
                 page: currentPage,
                 size: 10,
-                parent_board: numericBoardId
+                parent_board: numericBoardId, 
+                emp_info: userInfo
             }
         })
         .then(res => {
-            console.log("📦 게시글 데이터:", res.data);
-            setBoardList(res.data.list);
-            setTotalPages(res.data.totalPages);
+            console.log("🟡 응답 데이터 전체:", res.data);
+            const data = res.data;
+    
+            if (!data.list || !Array.isArray(data.list)) {
+                console.warn("📛 게시글 목록이 없습니다.");
+                setBoardList([]);
+                setTotalPages(1);
+                return;
+            }
+    
+            console.log("📦 게시글 데이터:", data);
+            setBoardList(data.list);
+    
+            const safePages = Math.max(Math.ceil(data.totalPages), 1);
+            setTotalPages(safePages);
         })
         .catch(err => {
-            console.error("페이지 데이터 로딩 실패:", err);
+            console.error("❌ 게시글 목록 API 호출 실패:", err);
+            setBoardList([]);
+            setTotalPages(1);
         });
     };
 
@@ -79,10 +101,16 @@ const Board_business = () => {
             }
             return 0;
         });
-
-        return sorted.filter(item =>
-            item.post_title.toLowerCase().includes(query)
+    
+        const filtered = sorted.filter(item =>
+            item.post_title?.toLowerCase().includes(query)
         );
+    
+        // ✅ 여기에 추가!
+        console.log("📦 필터링 후 게시글 수:", filtered.length);
+        console.log("📝 현재 검색어:", query);
+    
+        return filtered;
     };
 
     const increaseViewCount = (post_id) => {
