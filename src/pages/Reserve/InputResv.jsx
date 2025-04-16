@@ -14,7 +14,7 @@ const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo, onSuccess 
   }, [resourceId, closeModal]);
 
     useEffect(() => {
-      console.log("넘어온 리소스:", resourceId);
+      console.log("전달된 자원 ID:", resourceId);
     }, [resourceId]);
   
     useEffect(() => {

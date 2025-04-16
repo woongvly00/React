@@ -71,7 +71,7 @@ const Vehicle = ({ userInfo })=> {
                 }
               };
             });
-            setTargetResc(1005);
+            
             setReservations(formatResev);
           }).catch((error) => {
             console.error("예약목록 불러오기 실패", error);
