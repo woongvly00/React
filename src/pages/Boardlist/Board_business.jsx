@@ -131,7 +131,7 @@ const Board_business = () => {
     return (
         <div className={bstyle.SBoardContainer}>
             <div className={bstyle.subcontainer}>
-                <h2>📄 게시판</h2>
+                <h2>게시판</h2>
                 <div className={bstyle.approval}>
                     <table className={bstyle.container}>
                         <thead>
@@ -143,7 +143,7 @@ const Board_business = () => {
                                     <div className={bstyle.boardgasyfound}>
                                         <input
                                             type="text"
-                                            placeholder="🔍게시글 입력"
+                                            placeholder="게시글 입력"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                         />
@@ -160,7 +160,7 @@ const Board_business = () => {
                                 </td>
                             </tr>
                             <tr className={bstyle.list}>
-                                <th>번호</th>
+                                
                                 <th>제목</th>
                                 <th>작성자</th>
                                 <th>작성일</th>
