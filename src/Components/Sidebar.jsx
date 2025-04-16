@@ -7,7 +7,7 @@ import MainpageSchedule from '../pages/Schedule/MainpageSchedule';
 
 const Sidebar = () => {
   const { token } = useAuthStore();
-  const [activeActivity, setActiveActivity] = useState(null);
+  // const [activeActivity, setActiveActivity] = useState(null); 이거구나!!! 왜 상태변화가 저장안되나했네
   const [loading, setLoading] = useState(true);
 
   const {
@@ -16,6 +16,8 @@ const Sidebar = () => {
     isCheckedIn,
     isCheckedOut,
     currentActivity,
+    activeActivity, // 업무나 외근도 상태변화 유지
+    setActiveActivity,  //
     setCheckInTime,
     setCheckOutTime,
     setIsCheckedIn,
@@ -36,12 +38,8 @@ const Sidebar = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-
         const checkIn = res1.data?.checkInTime;
         const checkOut = res1.data?.checkOutTime;
-
-        console.log(checkIn);
-        console.log(checkOut);
 
 
         if (checkIn) {

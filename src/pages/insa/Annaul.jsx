@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import daxios from '../../axios/axiosConfig';
-import styles from './insapage.module.css';
+import styles from './Annal.module.css';
 import useWorkStore from '../../store/useWorkStore';
 
 const Annal = () => {
@@ -64,16 +64,13 @@ const Annal = () => {
     <div className={styles.container}>
       <div className={styles.pageHeader}>
         <h2>📊 휴가 / 출장 기록 관리</h2>
-        <div className={styles.statusBadge}>
-          {currentActivity || "대기 중"}
-        </div>
       </div>
 
       <div className={styles.summaryGrid}>
         {/* 📅 개인 출장 */}
         <div className={styles.summaryCard}>
           <div className={styles.cardHeader}>
-            <h3>📅 개인 출장</h3>
+            <h3>📅이 달 개인 출장</h3>
           </div>
           <ul>
             {summaryData.personalBusinessTrips.length > 0 ? (
