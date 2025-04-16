@@ -73,6 +73,8 @@ const MainContent = () => {
           <Route path='insa/deptment' element={<Deptment/>}></Route>
           <Route path='insa/ApplyForm' element={<ApplyForm/>}></Route>
 
+
+          {/* 게시판 */}
           <Route path='board/:boardId' element={<Board_business />} />
           <Route path='titlelink/:boardId' element={<Board_titlelink />} />
           <Route path='write_button' element={<Board_write_button />} />
