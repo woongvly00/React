@@ -5,7 +5,7 @@ import './ScheduleList.css';
 import CalendarDetail from './CalendarDetail';
 
 
-const ScheduleList = ({ closeModal }) => {
+const ScheduleList = ({ closeModal, onRefresh }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [ isCalDetailOpen, setIsCalDetailOpen] = useState(false);
@@ -82,6 +82,13 @@ const ScheduleList = ({ closeModal }) => {
         }
     };
 
+    const handleRefreshAll = () => {
+        handleMyCal();
+        handlePublicCal();
+        handleComCal();
+        if (onRefresh) onRefresh();
+      };
+
 
 
     return (
@@ -157,8 +164,8 @@ const ScheduleList = ({ closeModal }) => {
                     </div>
                 </div>
             </div>
-            {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} />)}
-            { isCalDetailOpen && ( <CalendarDetail closeModal={() => setIsCalDetailOpen(false)} selectedInfo={selectedInfo}/>)}
+            {isModalOpen && (<AddCategory closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} onRefresh={handleRefreshAll}/>)}
+            { isCalDetailOpen && ( <CalendarDetail closeModal={() => setIsCalDetailOpen(false)} selectedInfo={selectedInfo}  onRefresh={handleRefreshAll}/>)}
 
            
         </div>

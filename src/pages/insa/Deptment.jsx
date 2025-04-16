@@ -12,7 +12,7 @@ const DeptAttendance = () => {
 
   // 📌 부서 목록 불러오기
   useEffect(() => {
-        daxios.get("http://10.10.55.66/insa/departments")
+        daxios.get("http://10.10.55.69/insa/departments")
       .then(res => {
         setDepartments(res.data);
       })
@@ -34,7 +34,7 @@ const DeptAttendance = () => {
   useEffect(() => {
     if (!selectedDept || !hasMore) return;
 
-    daxios.get(`http://10.10.55.66/insa/by-department`, {
+    daxios.get(`http://10.10.55.69/insa/by-department`, {
       params: {
         deptId: selectedDept,
         page: page,

@@ -24,7 +24,7 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
     endTime: '',
     content: '',
     color: '',
-    c_id: 1,
+    c_id: '',
     emp_id: 0
   });
 
@@ -126,8 +126,6 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
 
 
 
-  const [weekendsVisible, setWeekendsVisible] = useState(true);
-
   
 
 
@@ -151,12 +149,21 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
     const calendarApi = selectedInfo.view.calendar;
     calendarApi.unselect();
 
+    if (!eventInput.c_id) {
+      alert("캘린더를 선택해주세요.");
+      return;
+    }
+
+    const startTime = eventInput.startTime || "09:00";
+    const endTime = eventInput.endTime || "18:00";
+    const endDate = eventInput.end_date || eventInput.start_date;
+
     const newEvent = {
       id: Date.now().toString(),
       c_id: eventInput.c_id,
       title: eventInput.title,
-      start: `${eventInput.start_date}T${eventInput.startTime}`,
-      end: `${eventInput.end_date}T${eventInput.endTime}`,
+      start: `${eventInput.start_date}T${startTime}`,
+      end: `${endDate}T${endTime}`,
       allDay: false,
       color:`${eventInput.color}`,
       extendedProps: {
@@ -174,13 +181,21 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
     calendarApi.addEvent(newEvent);
 
 
-    caxios.post("/schedule", eventInput)
+    const postData = {
+      ...eventInput,
+      startTime,
+      endTime,
+      end_date: endDate
+    };
+
+    caxios.post("/schedule", postData)
     .then(() => {
       if (onRefresh) onRefresh();
     })
     .catch((error) => {
       if (error.response?.status === 404 || 500) {
         alert("등록에 실패했습니다.");
+        if (onRefresh) onRefresh();
       }
     });
 
@@ -344,11 +359,10 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
                  <option value="">캘린더 선택</option>
 
                  {
-                  // 일정 추가 시 캘린터 선택지에 직급에 따라 필터링 거는 중 (회사캘린더의 경우 부서장 이상만 일정 추가 가능)
                    calList
                    .filter((calendar) => {
                     return (
-                      (calendar.public_code === 30 && userInfo.job_id >= 1011) ||
+                      (calendar.public_code === 30 && userInfo.emp_job_id >= 1011) ||
                 
                       (calendar.public_code === 10 && userInfo.emp_code_id == calendar.emp_id) ||
                 
@@ -407,7 +421,7 @@ const DemoApp = ({ onRefresh, reloadKey }) => {
              일정 내용
              <textarea
              name="content"
-             calssName={calenderStyle.schetextarea}
+             className={calenderStyle.schetextarea}
              value={eventInput.content}
              onChange={handleInput}
              placeholder="내용 입력"

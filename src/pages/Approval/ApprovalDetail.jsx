@@ -72,7 +72,8 @@ const ApprovalDetail = () => {
 
   const handleReject = async () => {
     try {
-      await daxios.post(`http://10.5.5.6/api/edms/${id}/reject`, rejectReason, {
+      await daxios.post(`http://221.150.27.169:8888/api/edms/${id}/reject`, rejectReason, {
+
         headers: { "Content-Type": "text/plain" },
       });
       alert("반려 완료");

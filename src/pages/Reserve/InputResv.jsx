@@ -5,7 +5,7 @@ import caxios from '../../Utils/caxios';
 
 
 
-const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo }) => {
+const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo, onSuccess }) => {
   useEffect(() => {
     if (!resourceId || Number(resourceId) === 0) {
       alert("자원을 먼저 선택해주세요.");
@@ -14,7 +14,7 @@ const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo }) => {
   }, [resourceId, closeModal]);
 
     useEffect(() => {
-      console.log("넘어온 리소스:", resourceId);
+      console.log("전달된 자원 ID:", resourceId);
     }, [resourceId]);
   
     useEffect(() => {
@@ -61,8 +61,9 @@ const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo }) => {
     };
     console.log("저장 전 예약 내용:", reservation);
     caxios.post("/reserve/addReserve", reservation)
-    .then(resp => {
+    .then(() => {
       alert("예약이 완료되었습니다.");
+      if (onSuccess) onSuccess();
     })
     .catch((error) =>{
       if (error.response?.status === 409) {
