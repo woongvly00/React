@@ -63,7 +63,7 @@ const InputResev = ({ closeModal, selectedInfo, resourceId, userInfo, onSuccess 
     caxios.post("/reserve/addReserve", reservation)
     .then(() => {
       alert("예약이 완료되었습니다.");
-      onSuccess();
+      if (onSuccess) onSuccess();
     })
     .catch((error) =>{
       if (error.response?.status === 409) {
