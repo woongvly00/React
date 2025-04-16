@@ -28,7 +28,7 @@ const MeetingRoom = ({ userInfo })=> {
             (resource) => resource.resc_id == targetResc
           );
         
-          if (selectedResource?.resc_status !== 'active') {
+          if (selectedResource?.resc_status !== '예약가능') {
             alert("해당 자원은 현재 사용 불가 상태입니다.");
             return;
           }
@@ -39,8 +39,14 @@ const MeetingRoom = ({ userInfo })=> {
 
     useEffect(() => {
         
-        caxios.get(`/reserve/resources`).then((resp)=>{
-            setResourceList(resp.data);
+        caxios.get(`/reserve/resources`)
+        .then((resp)=>{
+            const resources = resp.data;
+            setResourceList(resources);
+            const firstEquipment = resources.find(r => r.resc_type_id === 110);
+            if (firstEquipment) {
+                setTargetResc(firstEquipment.resc_id); // 자동으로 첫 번째 비품 자원 선택
+            }
         }).catch((error) => {
             console.error("자원 정보 불러오기 실패", error);
         })
@@ -85,7 +91,7 @@ const MeetingRoom = ({ userInfo })=> {
         const selectedResource = resouceList.find(
             (resource) => resource.resc_id == targetResc
           );
-          if (selectedResource?.resc_status !== 'active') {
+          if (selectedResource?.resc_status !== '예약가능') {
             alert("해당 자원은 현재 사용 불가 상태입니다.");
             return; 
           }
