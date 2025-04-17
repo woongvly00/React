@@ -27,7 +27,7 @@ const Index = () => {
                 const per_secure = decodedToken.per_secure;
 
 
-                // ✅ 상태관리 저장
+                // ✅ 상태관리 저장e
                 setAuth(token, login.id, per_function, per_secure);
 
                 navi('/mainpage');
