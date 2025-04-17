@@ -9,6 +9,8 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
     
     const { removeEvent } = useScheduleStore();
     const [ empName, setEmpName ] = useState('');
+    const [ resvId, setResvId ] = useState(0);
+    const [ resvDetail, setResvDetail ] = useState({});
     console.log("selected정보 : " , selectedResv)
     useEffect(() => {
       caxios.get(`/reserve/getEmpName/${selectedResv.extendedProps.emp_id}`)
@@ -16,16 +18,21 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
         setEmpName(resp.data);
       })
 
-      // caxios.get(`/reserve/getDetail/${}`)
+      setResvId(selectedResv.id);
+
+      caxios.get(`/reserve/getDetail/${resvId}`)
+      .then(resp => {
+        setResvDetail(resp.data);
+      })
+
     }, [selectedResv])
 
     if (!selectedResv) return null;
-    const startDateStr = selectedResv?.start ? new Date(selectedResv.start).toISOString().substring(0, 10) : '';
-    const startTimeStr = selectedResv?.start ? new Date(selectedResv.start).toISOString().substring(11, 16) : '';
-    const endTimeStr = selectedResv?.end ? new Date(selectedResv.end).toISOString().substring(11, 16) : '';
+    const startDateStr = resvDetail?.resv_date ? new Date(resvDetail.resv_date).toISOString().substring(0, 10) : '';
+    const startTimeStr = resvDetail?.resv_stime ? new Date(resvDetail.resv_stime).toISOString().substring(11, 16) : '';
+    const endTimeStr = resvDetail?.resv_etime ? new Date(resvDetail.resv_etime).toISOString().substring(11, 16) : '';
 
     const handleDelete = () => {
-        console.log(selectedResv.id);
         removeEvent(selectedResv.id);
 
         caxios.delete(`/reserve/${selectedResv.id}`)
@@ -53,7 +60,7 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
                     <div><strong>예약자:</strong>{empName}</div>
                     <div><strong>날짜:</strong> {startDateStr}</div>
                     <div><strong>시간:</strong> {startTimeStr} ~ {endTimeStr}</div>
-                    <div><strong>사용 목적:</strong> {selectedResv.title}</div>
+                    <div><strong>사용 목적:</strong> {resvDetail.resv_title}</div>
                     </>
                 }
               
