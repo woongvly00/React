@@ -34,7 +34,7 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchCheckInData = async () => {
       try {
-        const res1 = await daxios.get("http://10.10.55.69/work/checkInTime", {
+        const res1 = await daxios.get("http://10.5.5.6/work/checkInTime", {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -101,7 +101,7 @@ const Sidebar = () => {
     const currentTime = new Date().toISOString();
     console.log(token+"(토큰오냐?)");
     try {
-      const res = await daxios.post("http://10.10.55.69/work/checkIn", {}, {
+      const res = await daxios.post("http://10.5.5.6/work/checkIn", {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -112,6 +112,7 @@ const Sidebar = () => {
       setIsCheckedIn(true);
       setCheckInTime(new Date(currentTime));
       setCurrentActivity("출근");
+      setActiveActivity("");
     } catch (error) {
       console.error('❌ 출근 실패', error);
     }
@@ -122,7 +123,7 @@ const Sidebar = () => {
     const currentTime = new Date().toISOString();
 
     try {
-      const res = await daxios.post("http://10.10.55.69/work/checkOut", {
+      const res = await daxios.post("http://10.5.5.6/work/checkOut", {
         checkOutTime: currentTime
       }, {
         headers: {
@@ -148,7 +149,7 @@ const Sidebar = () => {
     setActiveActivity(type);
 
     try {
-      const res = await daxios.post("http://10.10.55.69/work/start", {
+      const res = await daxios.post("http://10.5.5.6/work/start", {
         attendance_id: todayAttendanceId,
         activity_type: type,
         start_time: now
