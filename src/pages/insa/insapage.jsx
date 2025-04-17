@@ -27,7 +27,7 @@ const InsaPage = () => {
     totalOvertime: 0
   });
 
-  // ✅ 수정: 시간 값 fallback 처리 함수
+  // ✅ 수정: 시간 값 fallback 처리 함수e
   const safeTime = (time) => {
     if (typeof time !== "string") return "00:00";
     const trimmed = time.trim();
@@ -41,7 +41,7 @@ const InsaPage = () => {
         const token = sessionStorage.getItem('jwtToken');
         console.log("📦 토큰 확인 (insaPage):", token);
 
-        const res = await daxios.get("http://10.10.55.66/insa/summary", {
+        const res = await daxios.get("http://10.5.5.6/insa/summary", {
           headers: {
             Authorization: `Bearer ${token}`
           }
