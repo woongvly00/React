@@ -15,7 +15,7 @@ import koLocale from '@fullcalendar/core/locales/ko';
 
 
 const MeetingRoom = ({ userInfo })=> {
- 
+    const [showWeekends, setShowWeekends] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInfo, setSelectedInfo] = useState(null);
     const [ resouceList, setResourceList ] = useState([]);
@@ -84,7 +84,7 @@ const MeetingRoom = ({ userInfo })=> {
       
     }, [reloadKey])
     
-    const [showWeekends, setShowWeekends] = useState(true);
+    
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [ selectedResv , setSelectedResv] = useState(null); 
     const selectResv = (clickInfo) => {
@@ -99,6 +99,18 @@ const MeetingRoom = ({ userInfo })=> {
         console.log(clickInfo);
         setIsDetailOpen(true);
     };
+
+    const renderEventContent = (eventInfo) => {
+        const isMine = eventInfo.event.extendedProps.emp_id === userInfo.emp_code_id;
+        const bgColor = isMine ? '#4f7fd8' : '#d5e8fa'; 
+      
+        return (
+          <div style={{ backgroundColor: bgColor, borderRadius: '4px', padding: '2px', color: '1a3c6c' }}>
+            <b>{eventInfo.timeText}</b> <br />
+            <span>{eventInfo.event.title}</span>
+          </div>
+        );
+      };
 
     return (
         <div>
@@ -186,12 +198,13 @@ const MeetingRoom = ({ userInfo })=> {
             select={handleDateSelect}
             events={reservations.filter(resv => resv.extendedProps.resource_id == Number(targetResc))}
             eventClick={selectResv}
+            eventContent={renderEventContent}
             />
             </div>
         </div>
-        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo} onSuccess={() => setReloadKey(prev => prev + 1)}/>)}
+        {isModalOpen && (<InputResev closeModal={() => setIsModalOpen(false)} selectedInfo={selectedInfo} resourceId={targetResc}  userInfo={userInfo} onSuccess={() => setReloadKey(prev => prev + 1)} onDeleteSuccess={() => setReloadKey(prev => prev + 1)}/>)}
 
-        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} userInfo={userInfo} /> )}
+        {isDetailOpen && (<ResvDetail selectedResv={selectedResv} closeDetail={() => setIsDetailOpen(false)} userInfo={userInfo} onSuccess={() => setReloadKey(prev => prev + 1)} onDeleteSuccess={() => setReloadKey(prev => prev + 1)} /> )}
         </div>
     )
 };

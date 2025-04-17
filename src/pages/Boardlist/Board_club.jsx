@@ -29,7 +29,7 @@ const Board_club =()=>{
 
      // 📌 게시판 목록 불러오기
      const getBoardList = () => {
-        axios.get(`http://10.5.5.12/board/navigator`, {
+        axios.post(`http://10.5.5.12/board/navigator`, {
             params: {
                 page: currentPage,
                 size: 5,
@@ -89,7 +89,7 @@ const Board_club =()=>{
     return (
         <div className={bstyle.SBoardContainer}>
             <div className={bstyle.subcontainer}>
-                <h2>📄 게시판</h2>
+                <h2>게시판</h2>
                 <div className={bstyle.approval}>
                     <div className={bstyle.navi}>
                         <div>동아리 게시판</div>
@@ -98,7 +98,7 @@ const Board_club =()=>{
                         <div className={bstyle.navibelowleft}>
                             <input
                                 type="text"
-                                placeholder="🔍게시글 입력"
+                                placeholder="게시글 입력"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />

@@ -23,7 +23,7 @@ const Board_business = () => {
 
 
     useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
+        const token = sessionStorage.getItem('jwtToken');
     
         if (!token) {
             console.warn("❌ JWT 토큰이 없습니다. 로그인 필요.");
@@ -49,16 +49,15 @@ const Board_business = () => {
         console.log("📦 API 호출 시작", {
             userId: userInfo?.emp_name,
             boardId: numericBoardId,
-            currentPage
+            currentPage,
+            userInfo
         });
 
-        axios.get(`http://10.5.5.12/board/navigator`, {
-            params: {
+        axios.post(`http://10.5.5.12/board/navigator`, {
                 page: currentPage,
                 size: 10,
-                parent_board: numericBoardId, 
-                emp_info: userInfo
-            }
+                parent_board: numericBoardId
+            
         })
         .then(res => {
             console.log("🟡 응답 데이터 전체:", res.data);
@@ -131,7 +130,7 @@ const Board_business = () => {
     return (
         <div className={bstyle.SBoardContainer}>
             <div className={bstyle.subcontainer}>
-                <h2>📄 게시판</h2>
+                <h2>게시판</h2>
                 <div className={bstyle.approval}>
                     <table className={bstyle.container}>
                         <thead>
@@ -143,7 +142,7 @@ const Board_business = () => {
                                     <div className={bstyle.boardgasyfound}>
                                         <input
                                             type="text"
-                                            placeholder="🔍게시글 입력"
+                                            placeholder="게시글 입력"
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                         />
@@ -160,7 +159,7 @@ const Board_business = () => {
                                 </td>
                             </tr>
                             <tr className={bstyle.list}>
-                                <th>번호</th>
+                            <th>번호</th>
                                 <th>제목</th>
                                 <th>작성자</th>
                                 <th>작성일</th>

@@ -42,7 +42,7 @@ const Board_write_button = () => {
 
     // 로그인 토큰을 디코딩하고, 사용자 이름(emp_name)을 가져와 defaultBoardData 업데이트
     useEffect(() => {
-        const token = localStorage.getItem('jwtToken');
+        const token = sessionStorage.getItem('jwtToken');
     
         let userId = 'anonymous';
         if (token) {
@@ -147,10 +147,7 @@ const Board_write_button = () => {
                             <button onClick={handleBoardwrite}>등록</button>
                             <button onClick={() => navigate(-1)}>취소</button>
                         </div>
-                        <div className={bstyle.gasyselect}>
-                            <div className={bstyle.gasywrite}>게시판</div>
                         
-                        </div>
                         <div className={bstyle.titlewrtie}>
                             <div className={bstyle.title4}>작성자</div>
                             <div className={bstyle.text4}>
