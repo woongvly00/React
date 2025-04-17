@@ -29,15 +29,6 @@ const Mypage = () => {
                     address1: res.data.address1,
                     address2: res.data.address2,
                 });
-<<<<<<< HEAD
-                
-                
-                const path = res.data.profileDTO?.profile_path;
-                console.log(path)
-                if (path) {
-                    setProfileImage(`http://10.5.5.6${path}`);
-=======
->>>>>>> 6ac93835bcd9e040ae1062d689406b2ccd5c2b3b
 
                 const path = res.data.profileDTO?.profile_path;
                 if (path) {
@@ -137,11 +128,7 @@ const Mypage = () => {
                 <div className={style.profileSection}>
                     <div className={style.imageContainer}>
                         <img 
-<<<<<<< HEAD
-                            src={`${profileImage}`} 
-=======
                             src={profileImage}
->>>>>>> 6ac93835bcd9e040ae1062d689406b2ccd5c2b3b
                             alt="프로필" 
                             className={style.profileImage}
                             onError={handleImageError}

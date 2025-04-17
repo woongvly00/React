@@ -96,7 +96,7 @@ function ChattingRoom({ openChat }) {
                     <div className={style.imgbox}>
                         <div className={style.anotherimg}>
                             <img
-                                src={`http://10.10.55.69${room.profileImg}`}
+                                src={`http://10.5.5.6${room.profileImg}`}
                                 style={{
                                     width: '100%',
                                     height: '100%',
