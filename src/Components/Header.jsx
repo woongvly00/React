@@ -26,13 +26,13 @@ const Header = () => {
   useEffect(()=>{
     const userId = sessionStorage.getItem("userId");
 
-     axios.get(`http://10.10.55.6/Employee/SelectMine`,{
+     axios.get(`http://10.5.5.2/Employee/SelectMine`,{
       params:{userId:userId}
      })
      .then((resp) => {
         const id = resp.data.emp_code_id;
 
-         return axios.get(`http://10.10.55.6/Employee/ProfileImg`,{
+         return axios.get(`http://10.5.5.2/Employee/ProfileImg`,{
           params: { empId: id }
           }).then((imgResp)=>{
             

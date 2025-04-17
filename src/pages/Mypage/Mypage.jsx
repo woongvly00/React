@@ -30,7 +30,9 @@ const Mypage = () => {
                     address2: res.data.address2,
                 });
                 
-                const path = res.data.profsileDTO?.profile_path;
+                
+                const path = res.data.profileDTO?.profile_path;
+                console.log(path)
                 if (path) {
                     setProfileImage(`http://10.5.5.6${path}`);
 
@@ -119,7 +121,7 @@ const Mypage = () => {
                 <div className={style.profileSection}>
                     <div className={style.imageContainer}>
                         <img 
-                            src={`http://10.10.55.69/files/upload/profile${profileImage}`} 
+                            src={`${profileImage}`} 
                             alt="프로필" 
                             className={style.profileImage}
                             onError={handleImageError}
