@@ -54,9 +54,11 @@ const Board_business = () => {
         });
 
         axios.post(`http://10.5.5.12/board/navigator`, {
+         
                 page: currentPage,
                 size: 10,
                 parent_board: numericBoardId
+            
             
         })
         .then(res => {
@@ -173,11 +175,7 @@ const Board_business = () => {
                                     <td>
                                         <div
                                             onClick={() => increaseViewCount(message.post_id)}
-                                            style={{
-                                                cursor: "pointer",
-                                                color: "blue",
-                                                textDecoration: "underline"
-                                            }}
+                                            
                                         >
                                             {message.post_title}
                                         </div>

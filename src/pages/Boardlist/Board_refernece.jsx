@@ -42,15 +42,16 @@ const Board_reference = () => {
         console.log("📦 API 호출 시작", {
             userId: userInfo?.emp_name,
             boardId: numericBoardId,
-            currentPage
+            currentPage,
+            userInfo
         });
 
         axios.post(`http://10.5.5.12/board/navigator`, {
-            params: {
+    
                 page: currentPage,
                 size: 10,
                 parent_board: numericBoardId
-            }
+            
         })
             .then(res => {
                 console.log("🟡 응답 데이터 전체:", res.data);
