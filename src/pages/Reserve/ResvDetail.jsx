@@ -11,7 +11,7 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
     const [ empName, setEmpName ] = useState('');
     const [ resvId, setResvId ] = useState(0);
     const [ resvDetail, setResvDetail ] = useState({});
-    console.log("selected정보 : " , selectedResv)
+    console.log("selected정보 : " , selectedResv.id);
     useEffect(() => {
       caxios.get(`/reserve/getEmpName/${selectedResv.extendedProps.emp_id}`)
       .then(resp =>{
@@ -19,8 +19,7 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
       })
 
       setResvId(selectedResv.id);
-
-      caxios.get(`/reserve/getDetail/${resvId}`)
+      caxios.get(`/reserve/getDetail/${selectedResv.id}`)
       .then(resp => {
         setResvDetail(resp.data);
       })
@@ -28,9 +27,6 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
     }, [selectedResv])
 
     if (!selectedResv) return null;
-    const startDateStr = resvDetail?.resv_date ? new Date(resvDetail.resv_date).toISOString().substring(0, 10) : '';
-    const startTimeStr = resvDetail?.resv_stime ? new Date(resvDetail.resv_stime).toISOString().substring(11, 16) : '';
-    const endTimeStr = resvDetail?.resv_etime ? new Date(resvDetail.resv_etime).toISOString().substring(11, 16) : '';
 
     const handleDelete = () => {
         removeEvent(selectedResv.id);
@@ -58,8 +54,8 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
                     <>
                     <div>예약 내용</div>
                     <div><strong>예약자:</strong>{empName}</div>
-                    <div><strong>날짜:</strong> {startDateStr}</div>
-                    <div><strong>시간:</strong> {startTimeStr} ~ {endTimeStr}</div>
+                    <div><strong>날짜:</strong> {resvDetail.resv_date}</div>
+                    <div><strong>시간:</strong> {resvDetail.resv_stime} ~ {resvDetail.resv_etime}</div>
                     <div><strong>사용 목적:</strong> {resvDetail.resv_title}</div>
                     </>
                 }
