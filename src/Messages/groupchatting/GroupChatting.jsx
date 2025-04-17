@@ -167,7 +167,7 @@ function GroupChatting({ openChat }) {
                             <img src={`http://10.5.5.6/files/upload/profile/groupdefault.png`} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}></img>
                         </div>
                     </div>
-                    <div className={style.namebox} >
+                    <div className={style.namebox} title={formatGroupName(room.group_name)} >
                         <div className={style.anothername}>{formatGroupName(room.group_name)}</div>
                         <div className={style.chatinfo}>
                             <div className={style.lastMessage}>{room.last_message}</div>
