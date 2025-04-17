@@ -1,5 +1,5 @@
 import bstyle from './Board_titlelink.module.css';
-import { useParams, useNavigate, useLocation} from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Editor } from 'react-draft-wysiwyg';
@@ -12,12 +12,12 @@ import { jwtDecode } from 'jwt-decode';
 const Board_titellink = () => {
 
     const { boardId: paramBoardId } = useParams();
-  const location = useLocation();
+    const location = useLocation();
     const navigate = useNavigate();
 
- // router별 넘겨주는 boardId 처리
- const stateBoardId = location.state?.boardId;
- const numericBoardId = parseInt(stateBoardId ?? paramBoardId ?? 0, 10);
+    // router별 넘겨주는 boardId 처리
+    const stateBoardId = location.state?.boardId;
+    const numericBoardId = parseInt(stateBoardId ?? paramBoardId ?? 0, 10);
 
     const [boardData, setBoardData] = useState({});
     const [message, setMessage] = useState({ post_title: "" });
@@ -44,42 +44,42 @@ const Board_titellink = () => {
     const [showUploadInput, setShowUploadInput] = useState(false);
 
 
-// 작성자 정보용 state (한 번만 선언)
-const [defaultBoardData, setDefaultBoardData] = useState({
-    post_writer: 0,
-    emp_name: '',
-    parent_board: parseInt(numericBoardId, 10),
-    post_view: 0,
-    post_like: 0,
-    post_per: 'a',
-   post_tag: numericBoardId === 107 ? '자유 게시판' : numericBoardId === 108 ? '동아리 게시판' : ''
-});
+    // 작성자 정보용 state (한 번만 선언)
+    const [defaultBoardData, setDefaultBoardData] = useState({
+        post_writer: 0,
+        emp_name: '',
+        parent_board: parseInt(numericBoardId, 10),
+        post_view: 0,
+        post_like: 0,
+        post_per: 'a',
+        post_tag: numericBoardId === 107 ? '자유 게시판' : numericBoardId === 108 ? '동아리 게시판' : ''
+    });
 
 
-  // 디버깅: 상태 확인
-  useEffect(() => {
-    console.log('최종 parent_board 값:', defaultBoardData.parent_board);
-    console.log('최종 emp_name 값:', defaultBoardData.emp_name);
-}, [defaultBoardData]);
+    // 디버깅: 상태 확인
+    useEffect(() => {
+        console.log('최종 parent_board 값:', defaultBoardData.parent_board);
+        console.log('최종 emp_name 값:', defaultBoardData.emp_name);
+    }, [defaultBoardData]);
 
- // 사용자 정보 업데이트 (로그인 토큰 이용)
- useEffect(() => {
-    const token = sessionStorage.getItem('jwtToken');
-    if (token) {
-      try {
-        const { emp_code_id, emp_name } = jwtDecode(token);
-        axios.get('http://10.5.5.12/mypage/info', {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(resp => setDefaultBoardData(prev => ({ ...prev, post_writer: resp.data.emp_code_id, emp_name: resp.data.emp_name })))
-        .catch(() => setDefaultBoardData(prev => ({ ...prev, emp_name: '익명' })));
-      } catch {
-        setDefaultBoardData(prev => ({ ...prev, emp_name: '익명' }));
-      }
-    } else {
-      setDefaultBoardData(prev => ({ ...prev, emp_name: '익명' }));
-    }
-  }, []);
+    // 사용자 정보 업데이트 (로그인 토큰 이용)
+    useEffect(() => {
+        const token = sessionStorage.getItem('jwtToken');
+        if (token) {
+            try {
+                const { emp_code_id, emp_name } = jwtDecode(token);
+                axios.get('http://10.5.5.12/mypage/info', {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                    .then(resp => setDefaultBoardData(prev => ({ ...prev, post_writer: resp.data.emp_code_id, emp_name: resp.data.emp_name })))
+                    .catch(() => setDefaultBoardData(prev => ({ ...prev, emp_name: '익명' })));
+            } catch {
+                setDefaultBoardData(prev => ({ ...prev, emp_name: '익명' }));
+            }
+        } else {
+            setDefaultBoardData(prev => ({ ...prev, emp_name: '익명' }));
+        }
+    }, []);
 
     // 게시글 조회
     useEffect(() => {
@@ -223,7 +223,7 @@ const [defaultBoardData, setDefaultBoardData] = useState({
         axios.post(`http://10.5.5.12/board/increaseLikeCount/${numericBoardId}`)
             .then(response => {
                 setPostLike(prev => prev + 1);
-                
+
             })
             .catch(error => {
                 console.error("추천수 증가 실패:", error);
@@ -309,7 +309,7 @@ const [defaultBoardData, setDefaultBoardData] = useState({
                     });
 
 
-                axios.get(`http://10.5.5.12/files`, { params: { post_id:numericBoardId } })
+                axios.get(`http://10.5.5.12/files`, { params: { post_id: numericBoardId } })
                     .then((res) => {
                         setFileList(res.data);
                     });
@@ -334,7 +334,7 @@ const [defaultBoardData, setDefaultBoardData] = useState({
         }
     }, [fileList, editMode]);
 
-  
+
 
     //댓글 ui
     const renderRepliesSection = () => (
@@ -343,14 +343,26 @@ const [defaultBoardData, setDefaultBoardData] = useState({
             <div>댓글</div>
             {Array.isArray(replies) && replies.map((reply) => (
                 <div key={reply.reply_id} className={bstyle.commentwrite}>
-              
+
                     <div className={bstyle.userwrite}>
                         <div className={bstyle.nametime}>
                             <div className={bstyle.name3}>{reply.reply_writer}</div>
                             <div className={bstyle.writetime3}>{reply.reply_date}</div>
                             <div className={bstyle.actionButtons}>
-                                <button onClick={() => handleEdit(reply)} className={bstyle.editBtn}>수정</button>
-                                <button onClick={() => handleReplyDelete(reply.reply_id)} className={bstyle.deleteBtn}>삭제</button>
+                            {
+        reply.reply_writer === defaultBoardData.emp_name 
+        ? (
+          <>
+            <button onClick={() => handleEdit(reply)} className={bstyle.editBtn}>
+              수정
+            </button>
+            <button onClick={() => handleReplyDelete(reply.reply_id)} className={bstyle.deleteBtn}>
+              삭제
+            </button>
+          </>
+        )
+        : null
+      }
                             </div>
                         </div>
 
@@ -386,16 +398,17 @@ const [defaultBoardData, setDefaultBoardData] = useState({
 
 
 
-    
+
     return (
         <div className={bstyle.gasyclick}>
             <div className={bstyle.standardwrite10}>글쓰기</div>
 
             <div className={bstyle.titlewrite}>
                 <div className={bstyle.title2}>작성자</div>
-                <div className={bstyle.text2}> 
-                                            {defaultBoardData.emp_name || defaultBoardData.post_writer}
-                                            </div>
+                <div className={bstyle.text2}>
+                {boardData.emp_name /* 실제 작성자 이름 */ 
+    ?? boardData.post_writer /* emp_name이 없으면 ID라도 표시 */}
+                </div>
             </div>
 
             <div className={bstyle.titlewrite}>
@@ -485,22 +498,32 @@ const [defaultBoardData, setDefaultBoardData] = useState({
                 </div>
             )}
             <div className={bstyle.buttoncontainer}>
-              
-                <div className={bstyle.list3}><button onClick={() => navigate(-1)}>목록으로</button></div>
-            
-                <div className={bstyle.rightbuttons}>
-                    <div className={bstyle.list4}>
-                        {!editMode && <button onClick={() => setEditMode(true)}>수정</button>}
-                        {editMode && <button onClick={handleFileUpdate}>저장</button>}
-                    </div>
-                    <div className={bstyle.list5}>
-                        {!editMode ? (
-                            <button onClick={handleDelete}>삭제</button>
-                        ) : (
-                            <button onClick={() => setEditMode(false)}>취소</button>
-                        )}
 
-                    </div>
+                <div className={bstyle.list3}><button onClick={() => navigate(-1)}>목록으로</button></div>
+
+                <div className={bstyle.rightbuttons}>
+                
+                    {
+                        /* 작성자가 본인인지 비교 (boardData.post_writer는 작성자 ID) */
+                        defaultBoardData.post_writer === boardData.post_writer
+                            ? (
+                                <>
+                                 <div className={bstyle.list4}>
+                                    {!editMode
+                                        ? <button onClick={() => setEditMode(true)}>수정</button>
+                                        : <button onClick={handleFileUpdate}>저장</button>
+                                    }
+                                    </div>
+                                    <div className={bstyle.list5}>
+                                    {!editMode
+                                        ? <button onClick={handleDelete}>삭제</button>
+                                        : <button onClick={() => setEditMode(false)}>취소</button>
+                                    }
+                                     </div>
+                                </>
+                            )
+                            : null  /* 본인이 아니면 아무것도 렌더링하지 않음 */
+                    }
                 </div>
             </div>
 
