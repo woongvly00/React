@@ -117,7 +117,7 @@ const Board_business = () => {
     const increaseViewCount = (post_id) => {
         axios.get(`http://10.5.5.12/board/increaseViewCount/${post_id}`)
         .then(() => {
-            navigate(`/mainpage/maincontent/titlelink/${post_id}`);
+            navigate(`/mainpage/maincontent/board/titlelink/${post_id}`);
         })
         .catch(error => {
             console.error('조회수 증가 실패:', error);
@@ -202,7 +202,7 @@ const Board_business = () => {
 
                     <div className={bstyle.writeButton}>
                         <Link
-                            to="/mainpage/maincontent/write_button"
+                            to="/mainpage/maincontent/board/write_button"
                             state={{ boardId: numericBoardId }}
                         >
                             <button>작성하기</button>
