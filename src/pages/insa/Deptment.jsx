@@ -53,7 +53,7 @@ const DeptAttendance = () => {
       });
   }, [selectedDept, page]);
 
-  // 📌 스크롤 하단 도달 시 다음 페이지 로딩ㄷ
+  // 📌 스크롤 하단 도달 시 다음 페이지 로딩
   const handleScroll = (e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     if (scrollTop + clientHeight >= scrollHeight - 20 && hasMore) {
