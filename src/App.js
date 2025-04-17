@@ -20,7 +20,7 @@ const App = () => {
   const setProfileImagePath = useProfileStore((state) => state.setProfileImagePath); // ✅ 상태 setter
 
   useEffect(() => {
-    initialize(); // ✅ 인증 초기화
+    initialize();
   }, []);
 
   // ✅ 로그인 완료 후 프로필 이미지 상태에 설정
