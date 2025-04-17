@@ -17,8 +17,8 @@ const InsaPage = () => {
   const [summary, setSummary] = useState({
     weeklyWorkedDays: 0,
     weeklyWorkHours: 0,
-    averageCheckIn: "-",
-    averageCheckOut: "-",
+    averageCheckIn: "00:00",
+    averageCheckOut: "00:00",
     consecutiveDays: 0,
     totalAnnual: 0,
     usedAnnual: 0,
@@ -34,7 +34,7 @@ const InsaPage = () => {
         const token = sessionStorage.getItem('jwtToken');
         console.log("📦 토큰 확인 (insaPage):", token);
 
-        const res = await daxios.get("http://10.10.55.69/insa/summary", {
+        const res = await daxios.get("http://10.10.55.66/insa/summary", {
           headers: {
             Authorization: `Bearer ${token}`
           }
