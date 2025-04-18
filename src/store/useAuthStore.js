@@ -29,7 +29,7 @@ const useAuthStore = create((set) => ({
         sessionStorage.removeItem("per_function");
         sessionStorage.removeItem("per_secure");
 
-        useProfileStore.getState().setProfileImagePath("/Default2.png"); // ✅ 상태 초기화
+        useProfileStore.getState().setProfileImagePath("/Default2.png"); // ✅ 상태 초기화w
     },
 
     initialize: () => {
