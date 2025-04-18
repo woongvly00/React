@@ -46,6 +46,7 @@ const Home = () => {
         <div className={style.homeMain}>
 
           {/* 🎈 오늘 생일자 카드 */}
+
           <div className={style.homeCard}>
             <h2>🎈 오늘 생일인 직원</h2>
             {todayList.length === 0 ? (
