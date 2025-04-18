@@ -21,7 +21,7 @@ const DeptAttendance = () => {
       });
   }, []);
 
-  // 📌 부서 변경 시 목록 초기화
+  // 📌 부서 변경 시 목록 초기화ㄷ
   useEffect(() => {
     if (selectedDept) {
       setAttendanceList([]);
