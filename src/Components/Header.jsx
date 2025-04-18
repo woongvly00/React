@@ -9,10 +9,10 @@ import useProfileStore from '../store/useProfileStore';
 
 const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [notice, setNotice] = useState(false);
+  const noticeRef = useRef(null);
   const userMenuRef = useRef(null);
-  // const {userId} = useAuthStore.getState();
   const { setEvents } = useScheduleStore();
-  // const [profileImg, setProfileImg] = useState(null);
   const [chatWindow, setChatWindow] = useState(null);
   const [isPopup, setIsPopup] = useState(false);
   const profileImagePath = useProfileStore(state => state.profileImagePath);
@@ -44,6 +44,19 @@ const Header = () => {
           })
     
   },[])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (noticeRef.current && !noticeRef.current.contains(e.target)) {
+        setNotice(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const closeNotice = () => setNotice(false);
 
 
   // Close dropdown when clicking outside
@@ -88,15 +101,18 @@ const Header = () => {
 
   };
 
-  
+  const openNotice = () => {
+    setNotice(!notice);
+  }
 
  
 
   return (
     <header className="header">
-      <div className="logo">🌐 GroupWare</div>
+      <div className="header-content">
+      <div className="logo">CODEBREAKER</div>
       <div className="header-buttons">
-        <button><i className="fa-regular fa-bell"></i></button>
+        <button><i className="fa-regular fa-bell" onMouseEnter={openNotice}></i></button>
         <button><i className="fa-regular fa-comment" onClick={openMessenger}></i></button>
         <div className="user-menu-container" ref={userMenuRef}>
           <button className="user-icon-button" onClick={toggleUserMenu}>
@@ -106,15 +122,22 @@ const Header = () => {
             <div className="user-dropdown">
               <ul>
                <Link to= "/mainpage/maincontent/mypage"> <li><i className="fa-solid fa-user"></i> 마이페이지</li></Link>
-               {/* <Link to="/home/header/test"> <li><i className="fa-solid fa-vial"></i> 테스트 페이지</li></Link>
-               <Link to="/home/header/setting"> <li><i className="fa-solid fa-gear"></i> 설정</li></Link>  */}
                 <li onClick={() => { logout(); navi("/"); setEvents([]);}}>
                   <i className="fa-solid fa-right-from-bracket"></i> 로그아웃
                 </li>
               </ul>
             </div>
           )}
+
+          {notice && (
+            <div className="user-dropdown" ref={noticeRef} onMouseLeave={closeNotice}>
+              <ul>
+               <p>기능을 준비 중입니다.</p>
+              </ul>
+            </div>
+          )}
         </div>
+      </div>
       </div>
     </header>
   );
