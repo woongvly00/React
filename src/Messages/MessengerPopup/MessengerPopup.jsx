@@ -28,7 +28,7 @@ function MessengerPopup({ onClose }) {
 
     let mine = null;
     
-    axios.get("http://10.5.5.2/Employee/SelectMine", {
+    axios.get("http://10.5.5.6/Employee/SelectMine", {
       params: {
         userId: userId
       }
@@ -49,7 +49,7 @@ function MessengerPopup({ onClose }) {
   const openChatWindow = (target, me, name) => {
 
 
-    axios.get("http://10.5.5.2/Employee/checkRoomExist", {
+    axios.get("http://10.5.5.6/Employee/checkRoomExist", {
       params: {
         targetname: target,
         myname: me
@@ -60,7 +60,7 @@ function MessengerPopup({ onClose }) {
 
       if (exist === false) {
 
-        axios.post("http://10.5.5.2/Employee/madeChatRoom", {
+        axios.post("http://10.5.5.6/Employee/madeChatRoom", {
           targetname: target,
           myname: me
         }).then((resp) => {
@@ -69,7 +69,7 @@ function MessengerPopup({ onClose }) {
           navigate(`/messenger/chatting?chat=${name}&from=${me}&to=${target}&seq=${seq}`);
         });
       } else {
-        axios.get("http://10.5.5.2/Employee/checkRoomSeqExist", {
+        axios.get("http://10.5.5.6/Employee/checkRoomSeqExist", {
           params: {
             targetId: target,
             myId: me
@@ -129,7 +129,7 @@ function MessengerPopup({ onClose }) {
 
   useEffect(() => {
     if (showPopup) {
-      axios.get("http://10.5.5.2/Employee/SelectEmp")
+      axios.get("http://10.5.5.6/Employee/SelectEmp")
         .then((resp) => {
           const filtered = resp.data.filter(emp => emp.emp_code_id !== myInfo.emp_code_id);
           setEmployees(filtered);
@@ -162,7 +162,7 @@ function MessengerPopup({ onClose }) {
 
 
 
-    axios.post("http://10.5.5.2/Employee/madeGroupChat",{
+    axios.post("http://10.5.5.6/Employee/madeGroupChat",{
      myId:myInfo.emp_code_id,
      selected: selected
     }).then((resp)=>{
@@ -211,7 +211,7 @@ function MessengerPopup({ onClose }) {
       {currentChat ? (<Chatting userName={currentChat} />) : (
         <div className={style.contentStyle}>
           <div className={style.left}>
-            <button className={style.empbtn} title="사원 목록" onClick={() => navigate("/messenger/employee")} translate="no">사원</button>
+            <button className={style.empbtn} title="사원 목록" onClick={() => navigate("/messenger/employee")}  translate="no">사원</button>
             <button className={style.chatbtn} title="1:1 채팅방 목록" onClick={() => navigate("/messenger/chattingroom")}>1:1</button>
             <button className={style.groupbtn} title="그룹 채팅방 목록" onClick={() => navigate("/messenger/groupchatting")}>그룹</button>
           </div>
