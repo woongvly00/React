@@ -29,7 +29,7 @@ const Board_club =()=>{
 
      // 📌 게시판 목록 불러오기
      const getBoardList = () => {
-        axios.post(`http://10.5.5.12/board/navigator`, {
+        axios.post(`http://10.5.5.6/board/navigator`, {
          
                 page: currentPage,
                 size: 5,
@@ -70,7 +70,7 @@ const Board_club =()=>{
 
     // 📌 조회수 증가 후 상세 페이지로 이동
     const increaseViewCount = (post_id) => {
-        axios.get(`http://10.5.5.12/board/increaseViewCount/${post_id}`)
+        axios.get(`http://10.5.5.6/board/increaseViewCount/${post_id}`)
             .then(() => {
                 navigate(`/mainpage/maincontent/board/titlelink/${post_id}`);
             })
@@ -89,7 +89,7 @@ const Board_club =()=>{
     return (
         <div className={bstyle.SBoardContainer}>
             <div className={bstyle.subcontainer}>
-                <h2>📄 게시판</h2>
+                <h2>게시판</h2>
                 <div className={bstyle.approval}>
                     <div className={bstyle.navi}>
                         <div>자유 게시판</div>
@@ -98,7 +98,7 @@ const Board_club =()=>{
                         <div className={bstyle.navibelowleft}>
                             <input
                                 type="text"
-                                placeholder="🔍게시글 입력"
+                                placeholder="게시글 입력"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
