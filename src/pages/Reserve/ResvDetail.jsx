@@ -63,7 +63,7 @@ const ResvDetail = ({selectedResv, closeDetail, userInfo, onDeleteSuccess }) => 
         
               <div id="editBtns" className={detailStyle['detail-buttons']}>
                 {
-                  userInfo && selectedResv.extendedProps?.emp_id == userInfo.emp_code_id ? <button onClick={handleDelete}>삭제</button> : <></>
+                  userInfo && selectedResv.extendedProps?.emp_id == userInfo.emp_code_id ? <button onClick={handleDelete} className={detailStyle['delete-button']}>삭제</button> : <></>
                 }
               </div>
             </div>

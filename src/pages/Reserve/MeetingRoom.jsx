@@ -45,7 +45,7 @@ const MeetingRoom = ({ userInfo })=> {
             setResourceList(resources);
             const firstEquipment = resources.find(r => r.resc_type_id === 110);
             if (firstEquipment) {
-                setTargetResc(firstEquipment.resc_id); // 자동으로 첫 번째 비품 자원 선택
+                setTargetResc(firstEquipment.resc_id); 
             }
         }).catch((error) => {
             console.error("자원 정보 불러오기 실패", error);
@@ -198,7 +198,7 @@ const MeetingRoom = ({ userInfo })=> {
             eventDidMount={(info) => {
                 info.el.style.backgroundColor = info.event.extendedProps.emp_id === userInfo.emp_code_id ? '#4f7fd8' : '#d5e8fa';
                 info.el.style.borderRadius = '4px';
-                info.el.style.color = '#1a3c6c';
+                info.el.style.color = info.event.extendedProps.emp_id === userInfo.emp_code_id ? '#1a3c6c' :'#4f7fd8';
                 info.el.style.border = 'none';
               }}
             />
