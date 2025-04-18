@@ -97,6 +97,7 @@ function Chatting() {
 
         stompClient.onConnect = () => {
 
+
             stompClient.subscribe(`/topic/messages/${seq}`, (msg) => {
                 const receivedMessage = JSON.parse(msg.body);
                 const isMine = receivedMessage.msg_emp_id === myId;
