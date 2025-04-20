@@ -1,5 +1,7 @@
 import './fullcalendar.css';
 import React, { useEffect,  useState } from 'react'
+import '@fullcalendar/common/main.css';
+import '@fullcalendar/timegrid/main.css';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -56,19 +58,18 @@ const MeetingRoom = ({ userInfo })=> {
         caxios.get(`/reserve/reservations`).then((resp) => {
             console.log("🔥 서버에서 받아온 예약 목록 원본:", resp.data);
           
-            const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
+            
           
             const formatResev = resp.data.map((resv) => {
                 const formatTime = (time) => {
                     const [h, m] = time.split(':');
-                    return `${h.padStart(2, '0')}:${m.padStart(2, '0')}:00`;
+                    return `${h.padStart(2, '0')}:${m.padStart(2, '0')}:00+09:00`;
                   };
-                  
+                  const fixDate = (dateStr) => dateStr.replace(/[./]/g, '-');
                   const startStr = `${fixDate(resv.resv_date)}T${formatTime(resv.resv_stime)}`;
                   const endStr = `${fixDate(resv.resv_date)}T${formatTime(resv.resv_etime)}`;
-                  
-          
-               return {
+               
+                  return {
                 id: resv.resv_id,
                 title: resv.resv_title,
                 start: startStr,
@@ -80,9 +81,13 @@ const MeetingRoom = ({ userInfo })=> {
                   resource_id: resv.resource_id
                 }
               };
+           
+
+
             });
-          
-            setTargetResc(1001);
+
+            
+            //setTargetResc(1001);
             setReservations(formatResev);
           }).catch((error) => {
             console.error("예약목록 불러오기 실패", error);
@@ -158,7 +163,14 @@ const MeetingRoom = ({ userInfo })=> {
                 </table>
             </div>
             
-        <div>
+        <div style={{
+            fontFamily: 'initial',
+            fontSize: '14px',
+            lineHeight: 'normal',
+            boxSizing: 'content-box',
+            position: 'relative',
+            overflow: 'visible',
+        }}>
             <FullCalendar
             key={targetResc} 
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -168,6 +180,7 @@ const MeetingRoom = ({ userInfo })=> {
             slotMaxTime="21:00:00"
             slotDuration="00:30:00"
             snapDuration="00:30:00"
+            timeZone="local"
             locales={[koLocale]}
             locale="ko"
             titleFormat={{
